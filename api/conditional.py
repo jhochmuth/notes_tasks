@@ -6,16 +6,7 @@ class Conditional:
 
 class NumberConditional(Conditional):
     def __call__(self, query):
-        if self.condition == "gt":
-            return query > self.target
-        elif self.condition == "egt":
-            return query >= self.target
-        elif self.condition == "lt":
-            return query < self.target
-        elif self.condition == "elt":
-            return query <= self.target
-        else:
-            return query == self.target
+        return self.condition(query, self.target)
 
 
 class StringConditional(Conditional):
@@ -24,4 +15,3 @@ class StringConditional(Conditional):
             return self.target in query
         else:
             return self.target not in query
-

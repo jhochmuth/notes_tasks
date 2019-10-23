@@ -1,4 +1,4 @@
-from api.note import Note, URL
+from api.old_note import Note, URL
 
 from urllib import request
 
@@ -29,3 +29,16 @@ class Connection:
     def open_endpoint_two(self):
         if type(self.endpoint_two) is URL:
             request.urlopen(self.endpoint_two.address)
+
+    def serialize(self):
+        data = dict()
+        data["endpoint_one"] = self.endpoint_one
+        data["endpoint_two"] = self.endpoint_two
+        data["text"] = self.text
+        return data
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(text=data["text"],
+                   endpoint_one=data["endpoint_one"],
+                   endpoint_two=data["endpoint_two"])

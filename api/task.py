@@ -2,7 +2,7 @@ import requests
 
 from bs4 import BeautifulSoup
 
-from api.note import Note
+from api.old_note import Note
 
 
 class Task:

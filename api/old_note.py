@@ -7,25 +7,29 @@ default_note = dict()
 class Note:
     """Basic note class."""
     def __init__(self,
-                 id,
                  title,
-                 text,
+                 text=str(),
+                 settings=default_note,
                  attrs=None,
+                 tags=None,
                  parent_container=None,
                  prototype=None,
-                 inherited_attrs=None):
+                 inherited_attrs=None,
+                 id=None):
         """Note constructor.
 
         Parameters
         ----------
-        id : int
-            UID for this object.
         title : str
             The title of the note.
         text : str
             The text of the note.
+        settings : dict, optional
+            A dictionary specifying settings for this note. Default note settings are used if not specified.
         attrs : dict, optional
             A dictionary containing key-value pairs of attributes.
+        tags : set, optional
+            A set containing tags for this note.
         parent_container : Container, optional
             The parent container holding this note.
         prototype : Note, optional
@@ -34,19 +38,25 @@ class Note:
             Any attribute specified in this set will be inherited from the prototype.
 
         """
+        self.title = title
+        self.text = text
+
+        self.settings = settings
+
         if attrs is None:
-            self.attrs = dict()
+            self.attributes = dict()
         else:
-            self.attrs = attrs
+            self.attributes = attrs
 
-        self.attrs["id"] = id
-        self.attrs["title"] = title
-        self.attrs["text"] = text
+        self.attributes["date_created"] = datetime.utcnow()
+        self.attributes["last_changed"] = datetime.utcnow()
+        self.attributes["text_char_len"] = len(self.text)
+        self.attributes["text_word_len"] = len(self.text.split())
 
-        self.attrs["date_created"] = datetime.utcnow()
-        self.attrs["last_changed"] = datetime.utcnow()
-        self.attrs["text_char_len"] = len(self.text)
-        self.attrs["text_word_len"] = len(self.text.split())
+        if tags is None:
+            self.tags = set()
+        else:
+            self.tags = tags
 
         self.connections = list()
 
@@ -63,13 +73,15 @@ class Note:
 
         self.search_priority = None
 
+        self.id = id
+
     def update_text(self, new_text):
         """Used to update the text of a note."""
-        if new_text != self.attrs["text"]:
-            self.attrs["text"] = new_text
-            self.attrs["last_changed"] = datetime.utcnow()
-            self.attrs["text_char_len"] = len(self.text)
-            self.attrs["text_word_len"] = len(self.text.split())
+        if new_text != self.text:
+            self.text = new_text
+            self.attributes["last_changed"] = datetime.utcnow()
+            self.attributes["text_char_len"] = len(self.text)
+            self.attributes["text_word_len"] = len(self.text.split())
 
             for descendant in self.descendant_notes:
                 if "text" in descendant.inherited_attrs:
@@ -77,16 +89,34 @@ class Note:
 
     def update_title(self, new_title):
         """Changes the title of a note."""
-        if new_title != self.attrs["title"]:
-            self.attrs["title"] = new_title
-            self.attrs["last_changed"] = datetime.utcnow()
+        if new_title != self.title:
+            self.title = new_title
+            self.attributes["last_changed"] = datetime.utcnow()
 
             for descendant in self.descendant_notes:
                 if "title" in descendant.inherited_attrs:
                     descendant.update_title(new_title)
 
+    def remove_tags(self, tags):
+        self.attributes["last_changed"] = datetime.utcnow()
+
+        for tag in tags:
+            self.tags.remove(tag)
+
+        for descendant in self.descendant_notes:
+            if "tags" in descendant.inherited_attrs:
+                descendant.remove_tags(tags)
+
+    def add_tag(self, tag):
+        self.attributes["last_changed"] = datetime.utcnow()
+        self.tags.add(tag)
+
+        for descendant in self.descendant_notes:
+            if "tags" in descendant.inherited_attrs:
+                descendant.add_tag(tag)
+
     def remove_attrs(self, attrs):
-        self.attrs["last_changed"] = datetime.utcnow()
+        self.attributes["last_changed"] = datetime.utcnow()
 
         for attr in attrs:
             del self.attribute[attr]
@@ -97,8 +127,8 @@ class Note:
                     descendant.remove_attrs()
 
     def add_attr(self, attr, value, prototypal=False):
-        self.attrs["last_changed"] = datetime.utcnow()
-        self.attrs[attr] = value
+        self.attributes["last_changed"] = datetime.utcnow()
+        self.attributes[attr] = value
 
         if prototypal:
             for descendant in self.descendant_notes:
@@ -106,8 +136,8 @@ class Note:
                 descendant.add_attr(attr, value, True)
 
     def update_attr(self, attr, value):
-        self.attrs["last_changed"] = datetime.utcnow()
-        self.attrs[attr] = value
+        self.attributes["last_changed"] = datetime.utcnow()
+        self.attributes[attr] = value
 
         for descendant in self.descendant_notes:
             if attr in descendant.inherited_attrs:
@@ -115,26 +145,30 @@ class Note:
 
     def create_duplicate(self):
         """Copies a note without creating an inheritance link."""
-        new = Note(title=self.attrs["title"],
-                   text=self.attrs["text"],
-                   attrs=self.attrs.copy(),
+        new = Note(title=self.title,
+                   text=self.text,
+                   settings=self.settings,
+                   attrs=self.attributes,
+                   tags=self.tags,
                    parent_container=self.parent_container)
-        new.attrs["date_created"] = datetime.utcnow()
-        new.attrs["last_changed"] = datetime.utcnow()
+        new.attributes["date_created"] = datetime.utcnow()
+        new.attributes["last_changed"] = datetime.utcnow()
 
         return new
 
     def create_descendant(self, inherited_attrs):
         """Creates a descendant note using prototypal inheritance."""
-        new = Note(title=self.attrs["title"],
-                   text=self.attrs["text"],
-                   attrs=self.attrs.copy(),
+        new = Note(title=self.title,
+                   text=self.text,
+                   settings=self.settings.copy(),
+                   attrs=self.attributes.copy(),
+                   tags=self.tags.copy(),
                    prototype=self,
                    inherited_attrs=inherited_attrs,
                    parent_container=self.parent_container)
 
-        new.attrs["date_created"] = datetime.utcnow()
-        new.attrs["last_changed"] = datetime.utcnow()
+        new.attributes["date_created"] = datetime.utcnow()
+        new.attributes["last_changed"] = datetime.utcnow()
 
         self.descendant_notes.append(new)
 
@@ -163,26 +197,35 @@ class Note:
 
         """
         if attrs is None:
-            for _, val in self.attrs.items():
+            for _, val in self.attributes.items():
                 if condition(val):
                     return True
 
         else:
             for attr in attrs:
-                if condition(self.attrs[attr]):
+                if condition(self.attributes[attr]):
                     return True
 
         return False
 
     def has_attr(self, attr):
         """Checks for the existence of an attribute in this note."""
-        return attr in self.attrs
+        return attr in self.attributes
+
+    def search_tags(self, condition):
+        # Implement with container conditional?
+        return condition(self.tags)
+
+    def search_text(self, condition):
+        return condition(self.text)
 
     def __str__(self):
-        return self.attrs["title"]
+        return self.title
 
     def __repr__(self):
-        for key, val in self.attrs.items():
+        repr = "Title: {}\n".format(self.title)
+        repr += "Text: {}\n".format(self.text)
+        for key, val in self.attributes.items():
             repr += "{}: {}\n".format(key, val)
         return repr
 

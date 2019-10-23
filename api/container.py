@@ -3,13 +3,18 @@ default_search_order = tuple()
 
 
 class Container:
-    def __init__(self, settings=default_container, notes=None, data=None):
-        self.settings = settings
+    def __init__(self, id=None, attrs=default_container, notes=None, data=None):
+        self.id = id
+
+        if attrs is None:
+            self.attrs = default_container
+        else:
+            self.attrs = attrs
 
         if notes is None:
             self.notes = list()
         else:
-            self.notes = notes
+            self.notes = list(notes)
 
         if data is None:
             self.data = dict()
@@ -28,26 +33,6 @@ class Container:
 
         return contains
 
-    def search_child_note_texts(self, condition):
-        """Search all child note texts for a specified query."""
-        contains = list()
-
-        for note in self.notes:
-            if note.search_text(condition):
-                contains.append(note)
-
-        return contains
-
-    def search_child_note_tags(self, condition):
-        """Search all child note tags for a specified query."""
-        contains = list()
-
-        for note in self.notes:
-            if note.search_tags(condition):
-                contains.append(note)
-
-        return contains
-
     def add_note(self, new_note):
         """Add a note to this container."""
         for rule in self.rules:
@@ -59,6 +44,19 @@ class Container:
         for note in self.notes:
             new_rule.apply(note)
         self.rules.append(new_rule)
+
+    def serialize(self):
+        data = dict()
+        data["id"] = self.id
+        data["type"] = "container"
+        data["attrs"] = self.attrs
+        data["notes"] = [note.id for note in self.notes]
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(data["id"],
+                   data["attrs"],
+                   data["notes"])
 
     def __str__(self):
         string = "Container contents:\n"
