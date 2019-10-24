@@ -25,13 +25,13 @@ class Container:
 
     def search_child_note_attrs(self, condition, attrs=None):
         """Search child note attributes for a specified condition."""
-        contains = list()
+        results = list()
 
         for note in self.notes:
             if note.search_attrs(condition, attrs):
-                contains.append(note)
+                results.append(note)
 
-        return contains
+        return results
 
     def add_note(self, new_note):
         """Add a note to this container."""

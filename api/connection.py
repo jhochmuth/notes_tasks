@@ -4,7 +4,8 @@ from urllib import request
 
 
 class Connection:
-    def __init__(self, text=None, endpoint_one=None, endpoint_two=None):
+    def __init__(self, id, endpoint_one, endpoint_two, text=None):
+        self.id = id
         self.endpoint_one = endpoint_one
         self.endpoint_two = endpoint_two
 
@@ -39,6 +40,7 @@ class Connection:
 
     @classmethod
     def from_dict(cls, data):
-        return cls(text=data["text"],
+        return cls(id=data["id"],
                    endpoint_one=data["endpoint_one"],
-                   endpoint_two=data["endpoint_two"])
+                   endpoint_two=data["endpoint_two"],
+                   text=data["text"])

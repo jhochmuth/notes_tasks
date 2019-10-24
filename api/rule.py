@@ -1,5 +1,6 @@
 class Rule:
-    def __init__(self, target, add_text, effect_location=None):
+    def __init__(self, id, target, add_text, effect_location=None):
+        self.id = id
         self.target = target
         self.add_text = add_text
         self.effect_location = effect_location

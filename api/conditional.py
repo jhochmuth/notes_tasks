@@ -1,5 +1,6 @@
 class Conditional:
-    def __init__(self, target, condition):
+    def __init__(self, id, target, condition):
+        self.id = id
         self.target = target
         self.condition = condition
 

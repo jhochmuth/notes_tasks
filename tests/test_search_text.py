@@ -1,6 +1,6 @@
 from api.conditional import StringConditional
 from api.container import Container
-from api.note import Note
+from api.old_note import Note
 
 
 def test_search_text():

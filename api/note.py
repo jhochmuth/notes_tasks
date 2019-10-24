@@ -191,13 +191,13 @@ class Note:
 
     @classmethod
     def from_dict(cls, data):
-        return cls(data["id"],
-                   data["attrs"]["title"],
-                   data["attrs"]["text"],
-                   data["attrs"],
-                   data["parent_container"],
-                   data["prototype"],
-                   data["inherited_attrs"])
+        return cls(id=data["id"],
+                   title=data["attrs"]["title"],
+                   text=data["attrs"]["text"],
+                   attrs=data["attrs"],
+                   parent_container=data["parent_container"],
+                   prototype=data["prototype"],
+                   inherited_attrs=data["inherited_attrs"])
 
     def __str__(self):
         return self.attrs["title"]
