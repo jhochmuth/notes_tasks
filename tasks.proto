@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+message Note {
+    map<string, string> attrs = 1;
+    Container parent_container = 2;
+}
+
+message Container {
+    map<string, string> attrs = 1;
+    repeated Note notes = 2;
+}
+
+message Connection {
+    Note endpoint_one = 1;
+    Note endpoint_two = 2;
+    string text = 3;
+}
+
+message Document {
+    repeated Note notes = 1;
+    repeated Container containers = 2;
+}
