@@ -1,22 +1,42 @@
 syntax = "proto3";
 
-message Note {
+import "google/protobuf/wrappers.proto";
+
+
+message NoteRequest {
     map<string, string> attrs = 1;
-    Container parent_container = 2;
+    google.protobuf.Int32Value parent_container = 2;
 }
 
-message Container {
+message NoteReply {
+    int32 id = 1;
+    map<string, string> attrs = 2;
+    int32 parent_container = 3;
+}
+
+message ContainerRequest {
     map<string, string> attrs = 1;
-    repeated Note notes = 2;
+    repeated int32 notes = 2;
+}
+
+message ContainerReply {
+    int32 id = 1;
+    map<string, string> attrs = 2;
+    repeated int32 notes = 3;
 }
 
 message Connection {
-    Note endpoint_one = 1;
-    Note endpoint_two = 2;
-    string text = 3;
+    int32 id = 1;
+    int64 endpoint_one = 2;
+    int64 endpoint_two = 3;
+    string text = 4;
 }
 
 message Document {
-    repeated Note notes = 1;
-    repeated Container containers = 2;
+    repeated int32 notes = 1;
+    repeated int32 containers = 2;
+}
+
+service NoteManager {
+    rpc CreateNote (NoteRequest) returns (NoteReply) {}
 }

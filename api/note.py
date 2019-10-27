@@ -4,6 +4,7 @@ from datetime import datetime
 default_note = dict()
 
 
+# TODO: Fix functionality for dates when using GRPC.
 class Note:
     """Basic note class."""
     def __init__(self,
@@ -44,10 +45,10 @@ class Note:
         self.attrs["title"] = title
         self.attrs["text"] = text
 
-        self.attrs["date_created"] = datetime.utcnow()
-        self.attrs["last_changed"] = datetime.utcnow()
-        self.attrs["text_char_len"] = len(self.text)
-        self.attrs["text_word_len"] = len(self.text.split())
+        #self.attrs["date_created"] = datetime.utcnow()
+        #self.attrs["last_changed"] = datetime.utcnow()
+        self.attrs["text_char_len"] = str(len(self.attrs["text"]))
+        self.attrs["text_word_len"] = str(len(self.attrs["text"].split()))
 
         self.connections = list()
 

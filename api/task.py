@@ -15,12 +15,12 @@ class Task:
     def attr_analysis(self, feature_attr, output_label, notes, model_file):
         model = keras.models.load_model(model_file)
 
-        x = [note.attributes[feature_attr] for note in notes]
+        x = [note.attrs[feature_attr] for note in notes]
         x = np.array(x)
         predictions = model.predict(x)
 
         for note, prediction in zip(notes, predictions):
-            note.attributes[output_label] = prediction
+            note.attrs[output_label] = prediction
     """
     def web_scrape(self, target_url, location_tag, location_attrs=None):
         response = requests.get(target_url)
@@ -48,13 +48,13 @@ class Task:
             for ind in indices_dict["text"]:
                 text += node[ind]
 
-            attributes = dict()
+            attrs = dict()
             for attr, val in indices_dict["attrs"].items():
                 attr_text = ""
                 for ind in val:
                     attr_text += node[ind]
-                attributes[attr] = attr_text
+                attrs[attr] = attr_text
 
-            notes.append(Note(title=title, text=text, attrs=attributes))
+            notes.append(Note(title=title, text=text, attrs=attrs))
 
         return notes

@@ -39,7 +39,7 @@ def create_note(ctx, id, title, text, attr_keys, attr_vals):
 @click.option("--text", required=True)
 @click.pass_obj
 def modify_attr(ctx, note_id, attr, text):
-    ctx[note_id].attributes[attr] = text
+    ctx[note_id].attrs[attr] = text
 
 
 @main.command()
