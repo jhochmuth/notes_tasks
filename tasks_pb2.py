@@ -13,7 +13,6 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -21,9 +20,8 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0btasks.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x9a\x01\n\x0bNoteRequest\x12&\n\x05\x61ttrs\x18\x01 \x03(\x0b\x32\x17.NoteRequest.AttrsEntry\x12\x35\n\x10parent_container\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x85\x01\n\tNoteReply\x12\n\n\x02id\x18\x01 \x01(\x05\x12$\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x15.NoteReply.AttrsEntry\x12\x18\n\x10parent_container\x18\x03 \x01(\x05\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"|\n\x10\x43ontainerRequest\x12+\n\x05\x61ttrs\x18\x01 \x03(\x0b\x32\x1c.ContainerRequest.AttrsEntry\x12\r\n\x05notes\x18\x02 \x03(\x05\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x84\x01\n\x0e\x43ontainerReply\x12\n\n\x02id\x18\x01 \x01(\x05\x12)\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x1a.ContainerReply.AttrsEntry\x12\r\n\x05notes\x18\x03 \x03(\x05\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"R\n\nConnection\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x14\n\x0c\x65ndpoint_one\x18\x02 \x01(\x03\x12\x14\n\x0c\x65ndpoint_two\x18\x03 \x01(\x03\x12\x0c\n\x04text\x18\x04 \x01(\t\"-\n\x08\x44ocument\x12\r\n\x05notes\x18\x01 \x03(\x05\x12\x12\n\ncontainers\x18\x02 \x03(\x05\x32\x37\n\x0bNoteManager\x12(\n\nCreateNote\x12\x0c.NoteRequest\x1a\n.NoteReply\"\x00\x62\x06proto3')
-  ,
-  dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
+  serialized_pb=_b('\n\x0btasks.proto\"\x8c\x01\n\x0bNoteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12&\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x17.NoteRequest.AttrsEntry\x12\x1b\n\x13parent_container_id\x18\x03 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x88\x01\n\tNoteReply\x12\n\n\x02id\x18\x01 \x01(\t\x12$\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x15.NoteReply.AttrsEntry\x12\x1b\n\x13parent_container_id\x18\x03 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"E\n\x11UpdateAttrRequest\x12\x0f\n\x07note_id\x18\x01 \x01(\t\x12\x0c\n\x04\x61ttr\x18\x02 \x01(\t\x12\x11\n\tnew_value\x18\x03 \x01(\t\"\x85\x01\n\x10\x43ontainerRequest\x12+\n\x05\x61ttrs\x18\x01 \x03(\x0b\x32\x1c.ContainerRequest.AttrsEntry\x12\x16\n\x0e\x63hild_note_ids\x18\x02 \x03(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8d\x01\n\x0e\x43ontainerReply\x12\n\n\x02id\x18\x01 \x01(\t\x12)\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x1a.ContainerReply.AttrsEntry\x12\x16\n\x0e\x63hild_note_ids\x18\x03 \x03(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"7\n\x0e\x41\x64\x64NoteRequest\x12\x14\n\x0c\x63ontainer_id\x18\x01 \x01(\t\x12\x0f\n\x07note_id\x18\x02 \x01(\t\"_\n\x11\x43onnectionRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0f\x65ndpoint_one_id\x18\x02 \x01(\t\x12\x17\n\x0f\x65ndpoint_two_id\x18\x03 \x01(\t\x12\x0c\n\x04text\x18\x04 \x01(\t\"]\n\x0f\x43onnectionReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0f\x65ndpoint_one_id\x18\x02 \x01(\t\x12\x17\n\x0f\x65ndpoint_two_id\x18\x03 \x01(\t\x12\x0c\n\x04text\x18\x04 \x01(\t\"T\n\x0bRuleRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x10\n\x08\x61\x64\x64_text\x18\x03 \x01(\t\x12\x17\n\x0f\x65\x66\x66\x65\x63t_location\x18\x04 \x01(\t\"R\n\tRuleReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x10\n\x08\x61\x64\x64_text\x18\x03 \x01(\t\x12\x17\n\x0f\x65\x66\x66\x65\x63t_location\x18\x04 \x01(\t\"Q\n\x12\x43onditionalRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x11\n\tcondition\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\"O\n\x10\x43onditionalReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x11\n\tcondition\x18\x03 \x01(\t\x12\x0c\n\x04type\x18\x04 \x01(\t\"U\n\x16\x43ontainerSearchRequest\x12\x14\n\x0c\x63ontainer_id\x18\x01 \x01(\t\x12\x16\n\x0e\x63onditional_id\x18\x02 \x01(\t\x12\r\n\x05\x61ttrs\x18\x03 \x03(\t\"&\n\x14\x43ontainerSearchReply\x12\x0e\n\x06result\x18\x01 \x03(\t2k\n\x0bNoteManager\x12(\n\nCreateNote\x12\x0c.NoteRequest\x1a\n.NoteReply\"\x00\x12\x32\n\x0eUpdateNoteAttr\x12\x12.UpdateAttrRequest\x1a\n.NoteReply\"\x00\x32\xc4\x01\n\x10\x43ontainerManager\x12\x37\n\x0f\x43reateContainer\x12\x11.ContainerRequest\x1a\x0f.ContainerReply\"\x00\x12-\n\x07\x41\x64\x64Note\x12\x0f.AddNoteRequest\x1a\x0f.ContainerReply\"\x00\x12H\n\x14SearchChildNoteAttrs\x12\x17.ContainerSearchRequest\x1a\x15.ContainerSearchReply\"\x00\x32S\n\x12\x43onditionalManager\x12=\n\x11\x43reateConditional\x12\x13.ConditionalRequest\x1a\x11.ConditionalReply\"\x00\x62\x06proto3')
+)
 
 
 
@@ -61,8 +59,8 @@ _NOTEREQUEST_ATTRSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=158,
-  serialized_end=202,
+  serialized_start=112,
+  serialized_end=156,
 )
 
 _NOTEREQUEST = _descriptor.Descriptor(
@@ -73,16 +71,23 @@ _NOTEREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='attrs', full_name='NoteRequest.attrs', index=0,
-      number=1, type=11, cpp_type=10, label=3,
+      name='id', full_name='NoteRequest.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='attrs', full_name='NoteRequest.attrs', index=1,
+      number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='parent_container', full_name='NoteRequest.parent_container', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
+      name='parent_container_id', full_name='NoteRequest.parent_container_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -98,8 +103,8 @@ _NOTEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=48,
-  serialized_end=202,
+  serialized_start=16,
+  serialized_end=156,
 )
 
 
@@ -136,8 +141,8 @@ _NOTEREPLY_ATTRSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=158,
-  serialized_end=202,
+  serialized_start=112,
+  serialized_end=156,
 )
 
 _NOTEREPLY = _descriptor.Descriptor(
@@ -149,8 +154,8 @@ _NOTEREPLY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='id', full_name='NoteReply.id', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -162,9 +167,9 @@ _NOTEREPLY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='parent_container', full_name='NoteReply.parent_container', index=2,
-      number=3, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      name='parent_container_id', full_name='NoteReply.parent_container_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -180,8 +185,53 @@ _NOTEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=205,
-  serialized_end=338,
+  serialized_start=159,
+  serialized_end=295,
+)
+
+
+_UPDATEATTRREQUEST = _descriptor.Descriptor(
+  name='UpdateAttrRequest',
+  full_name='UpdateAttrRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='note_id', full_name='UpdateAttrRequest.note_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='attr', full_name='UpdateAttrRequest.attr', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='new_value', full_name='UpdateAttrRequest.new_value', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=297,
+  serialized_end=366,
 )
 
 
@@ -218,8 +268,8 @@ _CONTAINERREQUEST_ATTRSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=158,
-  serialized_end=202,
+  serialized_start=112,
+  serialized_end=156,
 )
 
 _CONTAINERREQUEST = _descriptor.Descriptor(
@@ -237,8 +287,8 @@ _CONTAINERREQUEST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='notes', full_name='ContainerRequest.notes', index=1,
-      number=2, type=5, cpp_type=1, label=3,
+      name='child_note_ids', full_name='ContainerRequest.child_note_ids', index=1,
+      number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -255,8 +305,8 @@ _CONTAINERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=340,
-  serialized_end=464,
+  serialized_start=369,
+  serialized_end=502,
 )
 
 
@@ -293,8 +343,8 @@ _CONTAINERREPLY_ATTRSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=158,
-  serialized_end=202,
+  serialized_start=112,
+  serialized_end=156,
 )
 
 _CONTAINERREPLY = _descriptor.Descriptor(
@@ -306,8 +356,8 @@ _CONTAINERREPLY = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='id', full_name='ContainerReply.id', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -319,8 +369,8 @@ _CONTAINERREPLY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='notes', full_name='ContainerReply.notes', index=2,
-      number=3, type=5, cpp_type=1, label=3,
+      name='child_note_ids', full_name='ContainerReply.child_note_ids', index=2,
+      number=3, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -337,41 +387,79 @@ _CONTAINERREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=467,
-  serialized_end=599,
+  serialized_start=505,
+  serialized_end=646,
 )
 
 
-_CONNECTION = _descriptor.Descriptor(
-  name='Connection',
-  full_name='Connection',
+_ADDNOTEREQUEST = _descriptor.Descriptor(
+  name='AddNoteRequest',
+  full_name='AddNoteRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='id', full_name='Connection.id', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
+      name='container_id', full_name='AddNoteRequest.container_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='endpoint_one', full_name='Connection.endpoint_one', index=1,
-      number=2, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
+      name='note_id', full_name='AddNoteRequest.note_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=648,
+  serialized_end=703,
+)
+
+
+_CONNECTIONREQUEST = _descriptor.Descriptor(
+  name='ConnectionRequest',
+  full_name='ConnectionRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='ConnectionRequest.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='endpoint_two', full_name='Connection.endpoint_two', index=2,
-      number=3, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
+      name='endpoint_one_id', full_name='ConnectionRequest.endpoint_one_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='text', full_name='Connection.text', index=3,
+      name='endpoint_two_id', full_name='ConnectionRequest.endpoint_two_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='text', full_name='ConnectionRequest.text', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -389,28 +477,295 @@ _CONNECTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=601,
-  serialized_end=683,
+  serialized_start=705,
+  serialized_end=800,
 )
 
 
-_DOCUMENT = _descriptor.Descriptor(
-  name='Document',
-  full_name='Document',
+_CONNECTIONREPLY = _descriptor.Descriptor(
+  name='ConnectionReply',
+  full_name='ConnectionReply',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='notes', full_name='Document.notes', index=0,
-      number=1, type=5, cpp_type=1, label=3,
-      has_default_value=False, default_value=[],
+      name='id', full_name='ConnectionReply.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='containers', full_name='Document.containers', index=1,
-      number=2, type=5, cpp_type=1, label=3,
+      name='endpoint_one_id', full_name='ConnectionReply.endpoint_one_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='endpoint_two_id', full_name='ConnectionReply.endpoint_two_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='text', full_name='ConnectionReply.text', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=802,
+  serialized_end=895,
+)
+
+
+_RULEREQUEST = _descriptor.Descriptor(
+  name='RuleRequest',
+  full_name='RuleRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='RuleRequest.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='target', full_name='RuleRequest.target', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='add_text', full_name='RuleRequest.add_text', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='effect_location', full_name='RuleRequest.effect_location', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=897,
+  serialized_end=981,
+)
+
+
+_RULEREPLY = _descriptor.Descriptor(
+  name='RuleReply',
+  full_name='RuleReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='RuleReply.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='target', full_name='RuleReply.target', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='add_text', full_name='RuleReply.add_text', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='effect_location', full_name='RuleReply.effect_location', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=983,
+  serialized_end=1065,
+)
+
+
+_CONDITIONALREQUEST = _descriptor.Descriptor(
+  name='ConditionalRequest',
+  full_name='ConditionalRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='ConditionalRequest.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='target', full_name='ConditionalRequest.target', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='condition', full_name='ConditionalRequest.condition', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='type', full_name='ConditionalRequest.type', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1067,
+  serialized_end=1148,
+)
+
+
+_CONDITIONALREPLY = _descriptor.Descriptor(
+  name='ConditionalReply',
+  full_name='ConditionalReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='ConditionalReply.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='target', full_name='ConditionalReply.target', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='condition', full_name='ConditionalReply.condition', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='type', full_name='ConditionalReply.type', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1150,
+  serialized_end=1229,
+)
+
+
+_CONTAINERSEARCHREQUEST = _descriptor.Descriptor(
+  name='ContainerSearchRequest',
+  full_name='ContainerSearchRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='container_id', full_name='ContainerSearchRequest.container_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='conditional_id', full_name='ContainerSearchRequest.conditional_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='attrs', full_name='ContainerSearchRequest.attrs', index=2,
+      number=3, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -427,13 +782,43 @@ _DOCUMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=685,
-  serialized_end=730,
+  serialized_start=1231,
+  serialized_end=1316,
+)
+
+
+_CONTAINERSEARCHREPLY = _descriptor.Descriptor(
+  name='ContainerSearchReply',
+  full_name='ContainerSearchReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='result', full_name='ContainerSearchReply.result', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1318,
+  serialized_end=1356,
 )
 
 _NOTEREQUEST_ATTRSENTRY.containing_type = _NOTEREQUEST
 _NOTEREQUEST.fields_by_name['attrs'].message_type = _NOTEREQUEST_ATTRSENTRY
-_NOTEREQUEST.fields_by_name['parent_container'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT32VALUE
 _NOTEREPLY_ATTRSENTRY.containing_type = _NOTEREPLY
 _NOTEREPLY.fields_by_name['attrs'].message_type = _NOTEREPLY_ATTRSENTRY
 _CONTAINERREQUEST_ATTRSENTRY.containing_type = _CONTAINERREQUEST
@@ -442,10 +827,18 @@ _CONTAINERREPLY_ATTRSENTRY.containing_type = _CONTAINERREPLY
 _CONTAINERREPLY.fields_by_name['attrs'].message_type = _CONTAINERREPLY_ATTRSENTRY
 DESCRIPTOR.message_types_by_name['NoteRequest'] = _NOTEREQUEST
 DESCRIPTOR.message_types_by_name['NoteReply'] = _NOTEREPLY
+DESCRIPTOR.message_types_by_name['UpdateAttrRequest'] = _UPDATEATTRREQUEST
 DESCRIPTOR.message_types_by_name['ContainerRequest'] = _CONTAINERREQUEST
 DESCRIPTOR.message_types_by_name['ContainerReply'] = _CONTAINERREPLY
-DESCRIPTOR.message_types_by_name['Connection'] = _CONNECTION
-DESCRIPTOR.message_types_by_name['Document'] = _DOCUMENT
+DESCRIPTOR.message_types_by_name['AddNoteRequest'] = _ADDNOTEREQUEST
+DESCRIPTOR.message_types_by_name['ConnectionRequest'] = _CONNECTIONREQUEST
+DESCRIPTOR.message_types_by_name['ConnectionReply'] = _CONNECTIONREPLY
+DESCRIPTOR.message_types_by_name['RuleRequest'] = _RULEREQUEST
+DESCRIPTOR.message_types_by_name['RuleReply'] = _RULEREPLY
+DESCRIPTOR.message_types_by_name['ConditionalRequest'] = _CONDITIONALREQUEST
+DESCRIPTOR.message_types_by_name['ConditionalReply'] = _CONDITIONALREPLY
+DESCRIPTOR.message_types_by_name['ContainerSearchRequest'] = _CONTAINERSEARCHREQUEST
+DESCRIPTOR.message_types_by_name['ContainerSearchReply'] = _CONTAINERSEARCHREPLY
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 NoteRequest = _reflection.GeneratedProtocolMessageType('NoteRequest', (_message.Message,), {
@@ -478,6 +871,13 @@ NoteReply = _reflection.GeneratedProtocolMessageType('NoteReply', (_message.Mess
 _sym_db.RegisterMessage(NoteReply)
 _sym_db.RegisterMessage(NoteReply.AttrsEntry)
 
+UpdateAttrRequest = _reflection.GeneratedProtocolMessageType('UpdateAttrRequest', (_message.Message,), {
+  'DESCRIPTOR' : _UPDATEATTRREQUEST,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:UpdateAttrRequest)
+  })
+_sym_db.RegisterMessage(UpdateAttrRequest)
+
 ContainerRequest = _reflection.GeneratedProtocolMessageType('ContainerRequest', (_message.Message,), {
 
   'AttrsEntry' : _reflection.GeneratedProtocolMessageType('AttrsEntry', (_message.Message,), {
@@ -508,19 +908,68 @@ ContainerReply = _reflection.GeneratedProtocolMessageType('ContainerReply', (_me
 _sym_db.RegisterMessage(ContainerReply)
 _sym_db.RegisterMessage(ContainerReply.AttrsEntry)
 
-Connection = _reflection.GeneratedProtocolMessageType('Connection', (_message.Message,), {
-  'DESCRIPTOR' : _CONNECTION,
+AddNoteRequest = _reflection.GeneratedProtocolMessageType('AddNoteRequest', (_message.Message,), {
+  'DESCRIPTOR' : _ADDNOTEREQUEST,
   '__module__' : 'tasks_pb2'
-  # @@protoc_insertion_point(class_scope:Connection)
+  # @@protoc_insertion_point(class_scope:AddNoteRequest)
   })
-_sym_db.RegisterMessage(Connection)
+_sym_db.RegisterMessage(AddNoteRequest)
 
-Document = _reflection.GeneratedProtocolMessageType('Document', (_message.Message,), {
-  'DESCRIPTOR' : _DOCUMENT,
+ConnectionRequest = _reflection.GeneratedProtocolMessageType('ConnectionRequest', (_message.Message,), {
+  'DESCRIPTOR' : _CONNECTIONREQUEST,
   '__module__' : 'tasks_pb2'
-  # @@protoc_insertion_point(class_scope:Document)
+  # @@protoc_insertion_point(class_scope:ConnectionRequest)
   })
-_sym_db.RegisterMessage(Document)
+_sym_db.RegisterMessage(ConnectionRequest)
+
+ConnectionReply = _reflection.GeneratedProtocolMessageType('ConnectionReply', (_message.Message,), {
+  'DESCRIPTOR' : _CONNECTIONREPLY,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:ConnectionReply)
+  })
+_sym_db.RegisterMessage(ConnectionReply)
+
+RuleRequest = _reflection.GeneratedProtocolMessageType('RuleRequest', (_message.Message,), {
+  'DESCRIPTOR' : _RULEREQUEST,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:RuleRequest)
+  })
+_sym_db.RegisterMessage(RuleRequest)
+
+RuleReply = _reflection.GeneratedProtocolMessageType('RuleReply', (_message.Message,), {
+  'DESCRIPTOR' : _RULEREPLY,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:RuleReply)
+  })
+_sym_db.RegisterMessage(RuleReply)
+
+ConditionalRequest = _reflection.GeneratedProtocolMessageType('ConditionalRequest', (_message.Message,), {
+  'DESCRIPTOR' : _CONDITIONALREQUEST,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:ConditionalRequest)
+  })
+_sym_db.RegisterMessage(ConditionalRequest)
+
+ConditionalReply = _reflection.GeneratedProtocolMessageType('ConditionalReply', (_message.Message,), {
+  'DESCRIPTOR' : _CONDITIONALREPLY,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:ConditionalReply)
+  })
+_sym_db.RegisterMessage(ConditionalReply)
+
+ContainerSearchRequest = _reflection.GeneratedProtocolMessageType('ContainerSearchRequest', (_message.Message,), {
+  'DESCRIPTOR' : _CONTAINERSEARCHREQUEST,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:ContainerSearchRequest)
+  })
+_sym_db.RegisterMessage(ContainerSearchRequest)
+
+ContainerSearchReply = _reflection.GeneratedProtocolMessageType('ContainerSearchReply', (_message.Message,), {
+  'DESCRIPTOR' : _CONTAINERSEARCHREPLY,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:ContainerSearchReply)
+  })
+_sym_db.RegisterMessage(ContainerSearchReply)
 
 
 _NOTEREQUEST_ATTRSENTRY._options = None
@@ -534,8 +983,8 @@ _NOTEMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=732,
-  serialized_end=787,
+  serialized_start=1358,
+  serialized_end=1465,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateNote',
@@ -546,9 +995,84 @@ _NOTEMANAGER = _descriptor.ServiceDescriptor(
     output_type=_NOTEREPLY,
     serialized_options=None,
   ),
+  _descriptor.MethodDescriptor(
+    name='UpdateNoteAttr',
+    full_name='NoteManager.UpdateNoteAttr',
+    index=1,
+    containing_service=None,
+    input_type=_UPDATEATTRREQUEST,
+    output_type=_NOTEREPLY,
+    serialized_options=None,
+  ),
 ])
 _sym_db.RegisterServiceDescriptor(_NOTEMANAGER)
 
 DESCRIPTOR.services_by_name['NoteManager'] = _NOTEMANAGER
+
+
+_CONTAINERMANAGER = _descriptor.ServiceDescriptor(
+  name='ContainerManager',
+  full_name='ContainerManager',
+  file=DESCRIPTOR,
+  index=1,
+  serialized_options=None,
+  serialized_start=1468,
+  serialized_end=1664,
+  methods=[
+  _descriptor.MethodDescriptor(
+    name='CreateContainer',
+    full_name='ContainerManager.CreateContainer',
+    index=0,
+    containing_service=None,
+    input_type=_CONTAINERREQUEST,
+    output_type=_CONTAINERREPLY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='AddNote',
+    full_name='ContainerManager.AddNote',
+    index=1,
+    containing_service=None,
+    input_type=_ADDNOTEREQUEST,
+    output_type=_CONTAINERREPLY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='SearchChildNoteAttrs',
+    full_name='ContainerManager.SearchChildNoteAttrs',
+    index=2,
+    containing_service=None,
+    input_type=_CONTAINERSEARCHREQUEST,
+    output_type=_CONTAINERSEARCHREPLY,
+    serialized_options=None,
+  ),
+])
+_sym_db.RegisterServiceDescriptor(_CONTAINERMANAGER)
+
+DESCRIPTOR.services_by_name['ContainerManager'] = _CONTAINERMANAGER
+
+
+_CONDITIONALMANAGER = _descriptor.ServiceDescriptor(
+  name='ConditionalManager',
+  full_name='ConditionalManager',
+  file=DESCRIPTOR,
+  index=2,
+  serialized_options=None,
+  serialized_start=1666,
+  serialized_end=1749,
+  methods=[
+  _descriptor.MethodDescriptor(
+    name='CreateConditional',
+    full_name='ConditionalManager.CreateConditional',
+    index=0,
+    containing_service=None,
+    input_type=_CONDITIONALREQUEST,
+    output_type=_CONDITIONALREPLY,
+    serialized_options=None,
+  ),
+])
+_sym_db.RegisterServiceDescriptor(_CONDITIONALMANAGER)
+
+DESCRIPTOR.services_by_name['ConditionalManager'] = _CONDITIONALMANAGER
 
 # @@protoc_insertion_point(module_scope)

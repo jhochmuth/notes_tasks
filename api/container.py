@@ -1,10 +1,12 @@
+from api.uid import UID
+
 default_container = dict()
 default_search_order = tuple()
 
 
 class Container:
-    def __init__(self, id=None, attrs=default_container, notes=None, data=None):
-        self.id = id
+    def __init__(self, attrs=default_container, notes=None, data=None):
+        self.id = UID().assign_uid()
 
         if attrs is None:
             self.attrs = default_container

@@ -3,7 +3,7 @@ import json
 
 class Document:
     def __init__(self):
-        self.children = list()
+        self.children = dict()
 
     def save_document(self):
         data = dict()

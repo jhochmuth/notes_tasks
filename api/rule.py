@@ -1,6 +1,9 @@
+from api.uid import UID
+
+
 class Rule:
-    def __init__(self, id, target, add_text, effect_location=None):
-        self.id = id
+    def __init__(self, target, add_text, effect_location=None):
+        self.id = UID().assign_uid()
         self.target = target
         self.add_text = add_text
         self.effect_location = effect_location

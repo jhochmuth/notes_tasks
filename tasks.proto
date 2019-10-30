@@ -1,42 +1,103 @@
 syntax = "proto3";
 
-import "google/protobuf/wrappers.proto";
-
 
 message NoteRequest {
-    map<string, string> attrs = 1;
-    google.protobuf.Int32Value parent_container = 2;
+    string id = 1;
+    map<string, string> attrs = 2;
+    string parent_container_id = 3;
 }
 
 message NoteReply {
-    int32 id = 1;
+    string id = 1;
     map<string, string> attrs = 2;
-    int32 parent_container = 3;
+    string parent_container_id = 3;
+}
+
+message UpdateAttrRequest {
+    string note_id = 1;
+    string attr = 2;
+    string new_value = 3;
 }
 
 message ContainerRequest {
     map<string, string> attrs = 1;
-    repeated int32 notes = 2;
+    repeated string child_note_ids = 2;
 }
 
 message ContainerReply {
-    int32 id = 1;
+    string id = 1;
     map<string, string> attrs = 2;
-    repeated int32 notes = 3;
+    repeated string child_note_ids = 3;
 }
 
-message Connection {
-    int32 id = 1;
-    int64 endpoint_one = 2;
-    int64 endpoint_two = 3;
+message AddNoteRequest {
+    string container_id = 1;
+    string note_id = 2;
+}
+
+message ConnectionRequest {
+    string id = 1;
+    string endpoint_one_id = 2;
+    string endpoint_two_id = 3;
     string text = 4;
 }
 
-message Document {
-    repeated int32 notes = 1;
-    repeated int32 containers = 2;
+message ConnectionReply {
+    string id = 1;
+    string endpoint_one_id = 2;
+    string endpoint_two_id = 3;
+    string text = 4;
+}
+
+message RuleRequest {
+    string id = 1;
+    string target = 2;
+    string add_text = 3;
+    string effect_location = 4;
+}
+
+message RuleReply {
+    string id = 1;
+    string target = 2;
+    string add_text = 3;
+    string effect_location = 4;
+}
+
+message ConditionalRequest {
+    string id = 1;
+    string target = 2;
+    string condition = 3;
+    string type = 4;
+}
+
+message ConditionalReply {
+    string id = 1;
+    string target = 2;
+    string condition = 3;
+    string type = 4;
+}
+
+message ContainerSearchRequest {
+    string container_id = 1;
+    string conditional_id = 2;
+    repeated string attrs = 3;
+}
+
+message ContainerSearchReply {
+    repeated string result = 1;
 }
 
 service NoteManager {
     rpc CreateNote (NoteRequest) returns (NoteReply) {}
+    rpc UpdateNoteAttr (UpdateAttrRequest) returns (NoteReply) {}
+}
+
+service ContainerManager {
+    rpc CreateContainer (ContainerRequest) returns (ContainerReply) {}
+    rpc AddNote (AddNoteRequest) returns (ContainerReply) {}
+    rpc SearchChildNoteAttrs (ContainerSearchRequest) returns (ContainerSearchReply) {}
+}
+
+service ConditionalManager {
+    rpc CreateConditional (ConditionalRequest) returns (ConditionalReply) {}
 }

@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from api.uid import UID
+
 
 default_note = dict()
 
@@ -8,7 +10,6 @@ default_note = dict()
 class Note:
     """Basic note class."""
     def __init__(self,
-                 id,
                  title,
                  text,
                  attrs=None,
@@ -19,8 +20,6 @@ class Note:
 
         Parameters
         ----------
-        id : int
-            UID for this object.
         title : str
             The title of the note.
         text : str
@@ -35,7 +34,7 @@ class Note:
             Any attribute specified in this set will be inherited from the prototype.
 
         """
-        self.id = id
+        self.id = UID().assign_uid()
 
         if attrs is None:
             self.attrs = dict()
@@ -45,8 +44,9 @@ class Note:
         self.attrs["title"] = title
         self.attrs["text"] = text
 
-        #self.attrs["date_created"] = datetime.utcnow()
-        #self.attrs["last_changed"] = datetime.utcnow()
+        self.attrs["date_created"] = datetime.utcnow().strftime("%Y/%m/%d %I:%M %p")
+        self.update_last_changed()
+
         self.attrs["text_char_len"] = str(len(self.attrs["text"]))
         self.attrs["text_word_len"] = str(len(self.attrs["text"].split()))
 
@@ -64,6 +64,9 @@ class Note:
         self.descendant_notes = list()
 
         self.search_priority = None
+
+    def update_last_changed(self):
+        self.attrs["last_changed"] = datetime.utcnow().strftime("%Y/%m/%d %I:%M %p")
 
     def update_text(self, new_text):
         """Used to update the text of a note."""
@@ -108,7 +111,7 @@ class Note:
                 descendant.add_attr(attr, value, True)
 
     def update_attr(self, attr, value):
-        self.attrs["last_changed"] = datetime.utcnow()
+        self.update_last_changed()
         self.attrs[attr] = value
 
         for descendant in self.descendant_notes:

@@ -20,17 +20,16 @@ def main(ctx):
 
 
 @main.command()
-@click.option("--id", required=True)
 @click.option("--title", required=True)
 @click.option("--text", required=True)
 @click.argument("attr_keys", nargs=-1)
 @click.argument("attr_vals", nargs=-1)
 @click.pass_obj
-def create_note(ctx, id, title, text, attr_keys, attr_vals):
+def create_note(ctx, title, text, attr_keys, attr_vals):
     attrs = dict(zip(attr_keys, attr_vals))
-    note = Note(id=id, title=title, text=text, attrs=attrs)
+    note = Note(title=title, text=text, attrs=attrs)
     print("Note created: {}".format(note.title))
-    ctx[id] = note
+    ctx[note.id] = note
 
 
 @main.command()
@@ -47,22 +46,20 @@ def modify_attr(ctx, note_id, attr, text):
 @click.option("--endpoint_two_id", required=True)
 @click.option("--text")
 @click.pass_obj
-def create_connection(ctx, id, endpoint_one_id, endpoint_two_id, text):
-    connection = Connection(id=id,
-                            endpoint_one=ctx[endpoint_one_id],
+def create_connection(ctx, endpoint_one_id, endpoint_two_id, text):
+    connection = Connection(endpoint_one=ctx[endpoint_one_id],
                             endpoint_two=ctx[endpoint_two_id],
                             text=text)
-    ctx[id] = connection
+    ctx[connection.id] = connection
 
 
 @main.command()
-@click.option("--id", required=True)
 @click.argument("note_ids", nargs=-1)
 @click.pass_obj
-def create_container(ctx, id, note_ids):
+def create_container(ctx, note_ids):
     notes = [ctx[id] for id in note_ids]
-    container = Container(id=id, notes=notes)
-    ctx[id] = container
+    container = Container(notes=notes)
+    ctx[container.id] = container
 
 
 @main.command()
@@ -74,16 +71,17 @@ def add_note_to_container(ctx, container_id, note_id):
 
 
 @main.command()
-@click.option("--id", required=True)
 @click.option("--target", required=True)
 @click.option("--condition", required=True)
 @click.option("--type", required=True)
 @click.pass_obj
-def create_conditional(ctx, id, target, condition, type):
+def create_conditional(ctx, target, condition, type):
     if type == "number":
-        ctx[id] = NumberConditional(id=id, target=target, condition=condition)
+        cond = NumberConditional(target=target, condition=condition)
+        ctx[cond.id] = cond
     else:
-        ctx[id] = StringConditional(id=id, target=target, condition=condition)
+        cond = StringConditional(target=target, condition=condition)
+        ctx[cond.id] = cond
 
 
 @main.command()
@@ -97,13 +95,13 @@ def search_container(ctx, container_id, condition_id, attrs):
 
 
 @main.command()
-@click.option("--id", required=True)
 @click.option("--target", required=True)
 @click.option("--add_text", required=True)
 @click.option("--effect_location")
 @click.pass_obj
-def create_rule(ctx, id, target, add_text, effect_location):
-    ctx[id] = Rule(id=id, target=target, add_text=add_text, effect_location=effect_location)
+def create_rule(ctx, target, add_text, effect_location):
+    rule = Rule(target=target, add_text=add_text, effect_location=effect_location)
+    ctx[rule.id] = rule
 
 
 @main.command()

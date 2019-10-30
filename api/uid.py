@@ -4,4 +4,4 @@ class UID:
     @classmethod
     def assign_uid(cls):
         cls.__uid_index += 1
-        return cls.__uid_index
+        return str(cls.__uid_index)

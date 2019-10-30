@@ -1,11 +1,12 @@
-from api.old_note import Note, URL
+from api.note import Note, URL
+from api.uid import UID
 
 from urllib import request
 
 
 class Connection:
-    def __init__(self, id, endpoint_one, endpoint_two, text=None):
-        self.id = id
+    def __init__(self, endpoint_one, endpoint_two, text=None):
+        self.id = UID().assign_uid()
         self.endpoint_one = endpoint_one
         self.endpoint_two = endpoint_two
 
