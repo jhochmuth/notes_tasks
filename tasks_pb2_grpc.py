@@ -63,6 +63,48 @@ def add_NoteManagerServicer_to_server(servicer, server):
   server.add_generic_rpc_handlers((generic_handler,))
 
 
+class ConnectionManagerStub(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def __init__(self, channel):
+    """Constructor.
+
+    Args:
+      channel: A grpc.Channel.
+    """
+    self.CreateConnection = channel.unary_unary(
+        '/ConnectionManager/CreateConnection',
+        request_serializer=tasks__pb2.ConnectionRequest.SerializeToString,
+        response_deserializer=tasks__pb2.ConnectionReply.FromString,
+        )
+
+
+class ConnectionManagerServicer(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def CreateConnection(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+
+def add_ConnectionManagerServicer_to_server(servicer, server):
+  rpc_method_handlers = {
+      'CreateConnection': grpc.unary_unary_rpc_method_handler(
+          servicer.CreateConnection,
+          request_deserializer=tasks__pb2.ConnectionRequest.FromString,
+          response_serializer=tasks__pb2.ConnectionReply.SerializeToString,
+      ),
+  }
+  generic_handler = grpc.method_handlers_generic_handler(
+      'ConnectionManager', rpc_method_handlers)
+  server.add_generic_rpc_handlers((generic_handler,))
+
+
 class ContainerManagerStub(object):
   # missing associated documentation comment in .proto file
   pass

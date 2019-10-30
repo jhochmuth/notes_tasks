@@ -92,6 +92,10 @@ service NoteManager {
     rpc UpdateNoteAttr (UpdateAttrRequest) returns (NoteReply) {}
 }
 
+service ConnectionManager {
+    rpc CreateConnection (ConnectionRequest) returns (ConnectionReply) {}
+}
+
 service ContainerManager {
     rpc CreateContainer (ContainerRequest) returns (ContainerReply) {}
     rpc AddNote (AddNoteRequest) returns (ContainerReply) {}

@@ -7,6 +7,7 @@ import tasks_pb2_grpc
 def run():
     with grpc.insecure_channel("localhost:50051") as channel:
         note_stub = tasks_pb2_grpc.NoteManagerStub(channel)
+        connection_stub = tasks_pb2_grpc.ConnectionManagerStub(channel)
         container_stub = tasks_pb2_grpc.ContainerManagerStub(channel)
         conditional_stub = tasks_pb2_grpc.ConditionalManagerStub(channel)
 
@@ -51,6 +52,11 @@ def run():
         print("Removing note from container.")
         response = container_stub.RemoveNote(tasks_pb2.AddNoteRequest(container_id="2", note_id="1"))
         print(response.id, response.child_note_ids)
+
+        print("Creating connection.")
+        response = connection_stub.CreateConnection(tasks_pb2.ConnectionRequest(endpoint_one_id="0",
+                                                                                endpoint_two_id="1",))
+        print(response.endpoint_one_id, response.endpoint_two_id)
 
 
 run()

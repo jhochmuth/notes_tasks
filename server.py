@@ -4,6 +4,7 @@ import time
 import grpc
 
 from api.conditional import Conditional
+from api.connection import Connection
 from api.container import Container
 from api.document import Document
 from api.note import Note
@@ -36,6 +37,20 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
 
         return tasks_pb2.NoteReply(id=note.id,
                                    attrs=note.attrs)
+
+
+class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):
+    def CreateConnection(self, request, context):
+        connection = Connection(endpoint_one=document.children[request.endpoint_one_id],
+                                endpoint_two=document.children[request.endpoint_two_id],
+                                text=request.text)
+
+        document.children[connection.id] = connection
+
+        return tasks_pb2.ConnectionReply(id=connection.id,
+                                         endpoint_one_id=request.endpoint_one_id,
+                                         endpoint_two_id=request.endpoint_two_id,
+                                         text=request.text)
 
 
 class ContainerServicer(tasks_pb2_grpc.ContainerManagerServicer):
@@ -94,6 +109,7 @@ class ConditionalServicer(tasks_pb2_grpc.ConditionalManagerServicer):
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     tasks_pb2_grpc.add_NoteManagerServicer_to_server(NoteServicer(), server)
+    tasks_pb2_grpc.add_ConnectionManagerServicer_to_server(ConnectionServicer(), server)
     tasks_pb2_grpc.add_ContainerManagerServicer_to_server(ContainerServicer(), server)
     tasks_pb2_grpc.add_ConditionalManagerServicer_to_server(ConditionalServicer(), server)
     server.add_insecure_port('[::]:50051')
