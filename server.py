@@ -3,7 +3,7 @@ import time
 
 import grpc
 
-from api.conditional import NumberConditional, StringConditional
+from api.conditional import Conditional
 from api.container import Container
 from api.document import Document
 from api.note import Note
@@ -57,7 +57,15 @@ class ContainerServicer(tasks_pb2_grpc.ContainerManagerServicer):
         child_note_ids = [note.id for note in container.notes]
 
         return tasks_pb2.ContainerReply(id=container.id,
-                                        attrs=container.attrs,
+                                        child_note_ids=child_note_ids)
+
+    def RemoveNote(self, request, context):
+        container = document.children[request.container_id]
+        note = document.children[request.note_id]
+        container.remove_note(note)
+        child_note_ids = [note.id for note in container.notes]
+
+        return tasks_pb2.ContainerReply(id=container.id,
                                         child_note_ids=child_note_ids)
 
     def SearchChildNoteAttrs(self, request, context):
@@ -74,25 +82,20 @@ class ContainerServicer(tasks_pb2_grpc.ContainerManagerServicer):
 
 class ConditionalServicer(tasks_pb2_grpc.ConditionalManagerServicer):
     def CreateConditional(self, request, context):
-        if request.type == "number":
-            condition = NumberConditional(target=int(request.target),
-                                          condition=request.condition)
-        else:
-            condition = StringConditional(target=request.target,
-                                          condition=request.condition)
+        condition = Conditional(target=request.target, condition=request.condition)
 
         document.children[condition.id] = condition
 
         return tasks_pb2.ConditionalReply(id=condition.id,
                                           target=request.target,
-                                          condition=request.condition,
-                                          type=request.type)
+                                          condition=request.condition)
 
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     tasks_pb2_grpc.add_NoteManagerServicer_to_server(NoteServicer(), server)
     tasks_pb2_grpc.add_ContainerManagerServicer_to_server(ContainerServicer(), server)
+    tasks_pb2_grpc.add_ConditionalManagerServicer_to_server(ConditionalServicer(), server)
     server.add_insecure_port('[::]:50051')
     server.start()
     try:

@@ -2,7 +2,7 @@ import logging
 
 import click
 
-from api.conditional import NumberConditional, StringConditional
+from api.conditional import Conditional
 from api.connection import Connection
 from api.container import Container
 from api.old_note import Note
@@ -73,15 +73,10 @@ def add_note_to_container(ctx, container_id, note_id):
 @main.command()
 @click.option("--target", required=True)
 @click.option("--condition", required=True)
-@click.option("--type", required=True)
 @click.pass_obj
-def create_conditional(ctx, target, condition, type):
-    if type == "number":
-        cond = NumberConditional(target=target, condition=condition)
-        ctx[cond.id] = cond
-    else:
-        cond = StringConditional(target=target, condition=condition)
-        ctx[cond.id] = cond
+def create_conditional(ctx, target, condition):
+    cond = Conditional(target=target, condition=condition)
+    ctx[cond.id] = cond
 
 
 @main.command()

@@ -1,6 +1,6 @@
 from api.conditional import NumberConditional
 from api.container import Container
-from api.old_note import Note
+from api.note import Note
 
 
 def test_search_text():
@@ -11,7 +11,6 @@ def test_search_text():
                         "nationality": "British-Polish",
                         "novels": ["Nostromo", "The Secret Agent"]
                         },
-                 tags=["primary"]
                  )
 
     note2 = Note("Charles Dickens",
@@ -21,12 +20,11 @@ def test_search_text():
                         "nationality": "British",
                         "novels": ["Great Expectations"]
                         },
-                 tags=["primary"]
                  )
 
     container = Container(notes=[note1, note2])
 
-    condition = NumberConditional(target=1850, condition="lt")
+    condition = NumberConditional(target=1850, condition="le")
 
     query = container.search_child_note_attrs(condition, attrs=["birth"])
 

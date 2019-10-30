@@ -7,7 +7,9 @@ conditions = {"gt": operator.gt,
               "ge": operator.ge,
               "lt": operator.lt,
               "le": operator.le,
-              "eq": operator.eq}
+              "eq": operator.eq,
+              "in": str.__contains__,
+              "not in": not str.__contains__}
 
 
 class Conditional:
@@ -15,6 +17,9 @@ class Conditional:
         self.id = UID().assign_uid()
         self.target = target
         self.condition = condition
+
+    def __call__(self, query):
+        return conditions[self.condition](query, self.target)
 
 
 class NumberConditional(Conditional):

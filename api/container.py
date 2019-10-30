@@ -41,6 +41,9 @@ class Container:
             rule.apply(new_note)
         self.notes.append(new_note)
 
+    def remove_note(self, note):
+        self.notes.remove(note)
+
     def add_rule(self, new_rule):
         """Add a rule to this container that all child notes must adhere to."""
         for note in self.notes:
@@ -67,7 +70,3 @@ class Container:
             string += note.__str__()
             string += "\n"
         return string
-
-
-def note_ordering(notes, search_order=default_search_order):
-    return sorted(notes, key=search_order)

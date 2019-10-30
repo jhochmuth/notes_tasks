@@ -1,6 +1,6 @@
 import pytest
 
-from api.old_note import Note
+from api.note import Note
 
 
 pytest.main()
@@ -14,7 +14,6 @@ def test_prototype():
                             "nationality": "British-Polish",
                             "novels": ["Nostromo", "The Secret Agent"]
                             },
-                     tags=["primary"]
                      )
 
     inherited_attrs = {"title", "birth"}
@@ -24,6 +23,6 @@ def test_prototype():
     prototype.update_title("blah")
     prototype.update_attr("birth", 10)
 
-    assert prototype.attributes["death"] != descendant.attributes["death"]
-    assert prototype.attributes["birth"] == descendant.attributes["birth"]
-    assert prototype.title == descendant.title
+    assert prototype.attrs["death"] != descendant.attrs["death"]
+    assert prototype.attrs["birth"] == descendant.attrs["birth"]
+    assert prototype.attrs["title"] == descendant.attrs["title"]
