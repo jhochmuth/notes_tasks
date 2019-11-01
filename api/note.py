@@ -193,6 +193,12 @@ class Note:
         data["inherited_attrs"] = self.inherited_attrs
         return data
 
+    def delete(self):
+        self.parent_container.remove_note(self)
+        for descendant in self.descendant_notes:
+            descendant.prototype = None
+        del self
+
     @classmethod
     def from_dict(cls, data):
         return cls(id=data["id"],

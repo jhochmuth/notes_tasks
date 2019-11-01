@@ -38,6 +38,11 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
         return tasks_pb2.NoteReply(id=note.id,
                                    attrs=note.attrs)
 
+    def DeleteNote(self, request, context):
+        note = document.children[request.id]
+        note.delete()
+        return tasks_pb2.BoolWrapper(val=True)
+
 
 class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):
     def CreateConnection(self, request, context):
@@ -93,6 +98,9 @@ class ContainerServicer(tasks_pb2_grpc.ContainerManagerServicer):
 
         result = [note.id for note in result]
         return tasks_pb2.ContainerSearchReply(result=result)
+
+    def DeleteContainer(self, request, context):
+        container = document.children
 
 
 class ConditionalServicer(tasks_pb2_grpc.ConditionalManagerServicer):

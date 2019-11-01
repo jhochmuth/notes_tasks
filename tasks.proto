@@ -87,9 +87,14 @@ message ContainerSearchReply {
     repeated string result = 1;
 }
 
+message BoolWrapper {
+    bool val = 1;
+}
+
 service NoteManager {
     rpc CreateNote (NoteRequest) returns (NoteReply) {}
     rpc UpdateNoteAttr (UpdateAttrRequest) returns (NoteReply) {}
+    rpc DeleteNote (NoteRequest) returns (BoolWrapper) {}
 }
 
 service ConnectionManager {
@@ -101,8 +106,13 @@ service ContainerManager {
     rpc AddNote (AddNoteRequest) returns (ContainerReply) {}
     rpc RemoveNote (AddNoteRequest) returns (ContainerReply) {}
     rpc SearchChildNoteAttrs (ContainerSearchRequest) returns (ContainerSearchReply) {}
+    rpc DeleteContainer (ContainerRequest) returns (BoolWrapper) {}
 }
 
 service ConditionalManager {
     rpc CreateConditional (ConditionalRequest) returns (ConditionalReply) {}
+}
+
+service RuleManager {
+    rpc CreateRule (RuleRequest) returns (RuleReply) {}
 }

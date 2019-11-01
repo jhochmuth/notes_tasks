@@ -24,6 +24,11 @@ class NoteManagerStub(object):
         request_serializer=tasks__pb2.UpdateAttrRequest.SerializeToString,
         response_deserializer=tasks__pb2.NoteReply.FromString,
         )
+    self.DeleteNote = channel.unary_unary(
+        '/NoteManager/DeleteNote',
+        request_serializer=tasks__pb2.NoteRequest.SerializeToString,
+        response_deserializer=tasks__pb2.BoolWrapper.FromString,
+        )
 
 
 class NoteManagerServicer(object):
@@ -44,6 +49,13 @@ class NoteManagerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def DeleteNote(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_NoteManagerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -56,6 +68,11 @@ def add_NoteManagerServicer_to_server(servicer, server):
           servicer.UpdateNoteAttr,
           request_deserializer=tasks__pb2.UpdateAttrRequest.FromString,
           response_serializer=tasks__pb2.NoteReply.SerializeToString,
+      ),
+      'DeleteNote': grpc.unary_unary_rpc_method_handler(
+          servicer.DeleteNote,
+          request_deserializer=tasks__pb2.NoteRequest.FromString,
+          response_serializer=tasks__pb2.BoolWrapper.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
@@ -237,4 +254,46 @@ def add_ConditionalManagerServicer_to_server(servicer, server):
   }
   generic_handler = grpc.method_handlers_generic_handler(
       'ConditionalManager', rpc_method_handlers)
+  server.add_generic_rpc_handlers((generic_handler,))
+
+
+class RuleManagerStub(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def __init__(self, channel):
+    """Constructor.
+
+    Args:
+      channel: A grpc.Channel.
+    """
+    self.CreateRule = channel.unary_unary(
+        '/RuleManager/CreateRule',
+        request_serializer=tasks__pb2.RuleRequest.SerializeToString,
+        response_deserializer=tasks__pb2.RuleReply.FromString,
+        )
+
+
+class RuleManagerServicer(object):
+  # missing associated documentation comment in .proto file
+  pass
+
+  def CreateRule(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+
+def add_RuleManagerServicer_to_server(servicer, server):
+  rpc_method_handlers = {
+      'CreateRule': grpc.unary_unary_rpc_method_handler(
+          servicer.CreateRule,
+          request_deserializer=tasks__pb2.RuleRequest.FromString,
+          response_serializer=tasks__pb2.RuleReply.SerializeToString,
+      ),
+  }
+  generic_handler = grpc.method_handlers_generic_handler(
+      'RuleManager', rpc_method_handlers)
   server.add_generic_rpc_handlers((generic_handler,))

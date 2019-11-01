@@ -57,6 +57,9 @@ class Container:
         data["attrs"] = self.attrs
         data["notes"] = [note.id for note in self.notes]
 
+    def delete(self):
+        pass
+
     @classmethod
     def from_dict(cls, data):
         return cls(data["id"],
