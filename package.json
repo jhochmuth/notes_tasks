@@ -1,0 +1,22 @@
+{
+  "name": "tasks",
+  "version": "1.0.0",
+  "description": "Mind mapping software",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "Electron",
+    "Python",
+    "zerorpc",
+    "demo"
+  ],
+  "dependencies": {
+    "grpc": "git+https://github.com/grpc/grpc-node.git"
+  },
+  "devDependencies": {
+    "electron": "^1.7.6",
+    "electron-packager": "^9.0.1"
+  }
+}
