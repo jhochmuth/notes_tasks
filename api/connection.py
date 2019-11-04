@@ -1,7 +1,7 @@
 from api.note import Note, URL
 from api.uid import UID
 
-from urllib import request
+#from urllib import request
 
 
 class Connection:
@@ -23,7 +23,7 @@ class Connection:
 
     def change_second_endpoint(self, new_target):
         self.endpoint_two = new_target
-
+    """
     def open_endpoint_one(self):
         if type(self.endpoint_one) is URL:
             request.urlopen(self.endpoint_one.address)
@@ -31,7 +31,7 @@ class Connection:
     def open_endpoint_two(self):
         if type(self.endpoint_two) is URL:
             request.urlopen(self.endpoint_two.address)
-
+    """
     def serialize(self):
         data = dict()
         data["endpoint_one"] = self.endpoint_one

@@ -10,7 +10,7 @@ const path = require('path')
 
 const PY_DIST_FOLDER = 'pycalcdist'
 const PY_FOLDER = ''
-const PY_MODULE = 'api' // without .py suffix
+const PY_MODULE = 'server' // without .py suffix
 
 let pyProc = null
 let pyPort = null
@@ -31,7 +31,7 @@ const getScriptPath = () => {
 }
 
 const selectPort = () => {
-  pyPort = 4242
+  pyPort = 50051
   return pyPort
 }
 
@@ -40,9 +40,9 @@ const createPyProc = () => {
   let port = '' + selectPort()
 
   if (guessPackaged()) {
-    pyProc = require('child_process').execFile(script, [port])
+    pyProc = require('child_process').execFile(script)
   } else {
-    pyProc = require('child_process').spawn('python', [script, port])
+    pyProc = require('child_process').spawn('python', [script])
   }
 
   if (pyProc != null) {

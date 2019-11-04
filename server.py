@@ -1,6 +1,5 @@
 from concurrent import futures
 import time
-
 import grpc
 
 from api.conditional import Conditional
@@ -14,16 +13,14 @@ import tasks_pb2_grpc
 
 document = Document()
 
-
 class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
     def CreateNote(self, request, context):
         note = Note(title=request.attrs["title"],
                     text=request.attrs["text"],
-                    attrs=request.attrs,
+                    attrs=dict(request.attrs),
                     parent_container=document.children[request.parent_container_id]
-                    if request.parent_container_id != "None"
+                    if request.parent_container_id != "none"
                     else None)
-
         document.children[note.id] = note
 
         return tasks_pb2.NoteReply(id=note.id,

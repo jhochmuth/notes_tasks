@@ -1,8 +1,8 @@
-var PROTO_PATH = __dirname + '/tasks.proto';
-var grpc = require('grpc');
-var protoLoader = require('@grpc/proto-loader');
+const PROTO_PATH = __dirname + '/tasks.proto';
+const grpc = require('grpc');
+const protoLoader = require('@grpc/proto-loader');
 
-var packageDefinition = protoLoader.loadSync(
+const packageDefinition = protoLoader.loadSync(
     PROTO_PATH,
     {keepCase: true,
      longs: String,
@@ -11,14 +11,22 @@ var packageDefinition = protoLoader.loadSync(
      oneofs: true
     }
 );
-var protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
-var routeguide = protoDescriptor.routeguide;
 
-stub = new routeguide.RouteGuide('localhost:50051', grpc.credentials.createInsecure());
+const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
+const notemanager = protoDescriptor.NoteManager;
+stub = new notemanager('localhost:50051', grpc.credentials.createInsecure());
 
-let result = document.querySelector('#result')
+const attrs = {title: "Joseph Conrad", text: "British author."}
+const note = {attrs: attrs, parent_container_id: "none"};
 
-result.textContent = "123"
-var note = stub.CreateNote(title="blah", text="blahblah")
-
-result.textContent = note.title
+stub.createNote(note, function(err, response) {
+  if (err) {
+    console.log(err);
+  }
+  else {
+    console.log(response);
+    document.getElementById('title').innerHTML = response.attrs.title;
+    document.getElementById('text').innerHTML = response.attrs.text;
+    document.getElementById('created').innerHTML = response.attrs.date_created;
+  }
+});

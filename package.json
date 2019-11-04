@@ -1,22 +1,18 @@
 {
   "name": "tasks",
   "version": "1.0.0",
-  "description": "Mind mapping software",
+  "description": "Mind-mapping software",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "postinstall": "npm rebuild --target=1.8.8 --runtime=electron --dist-url=https://atom.io/download/electron"
   },
-  "keywords": [
-    "Electron",
-    "Python",
-    "zerorpc",
-    "demo"
-  ],
   "dependencies": {
-    "grpc": "git+https://github.com/grpc/grpc-node.git"
+    "grpc": "^1.24.2",
+    "@grpc/proto-loader": "^0.5.2"
   },
   "devDependencies": {
-    "electron": "^1.7.6",
+    "electron": "^1.8.8",
     "electron-packager": "^9.0.1"
   }
 }
