@@ -40,7 +40,6 @@ class Note:
 
         """
         self.id = UID().assign_uid()
-
         if attrs is None:
             self.attrs = dict()
         else:
@@ -58,7 +57,6 @@ class Note:
         self.connections = list()
 
         self.parent_container = parent_container
-
         self.prototype = prototype
 
         if inherited_attrs is None:
@@ -70,7 +68,7 @@ class Note:
 
         self.search_priority = None
 
-        for key, val in default_note_settings:
+        for key, val in default_note_settings.items():
             if key not in self.attrs:
                 self.attrs[key] = val
 
