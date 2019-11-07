@@ -3,7 +3,12 @@ from datetime import datetime
 from api.uid import UID
 
 
-default_note = dict()
+default_note_settings = {"width": "300",
+                         "height": "300",
+                         "pos_x": "0",
+                         "pos_y": "0",
+                         "background": "white",
+                         "text": "black"}
 
 
 # TODO: Fix functionality for dates when using GRPC.
@@ -64,6 +69,10 @@ class Note:
         self.descendant_notes = list()
 
         self.search_priority = None
+
+        for key, val in default_note_settings:
+            if key not in self.attrs:
+                self.attrs[key] = val
 
     def update_last_changed(self):
         self.attrs["last_changed"] = datetime.utcnow().strftime("%Y/%m/%d %I:%M %p")

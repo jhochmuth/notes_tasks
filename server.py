@@ -13,13 +13,14 @@ import tasks_pb2_grpc
 
 document = Document()
 
+
 class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
     def CreateNote(self, request, context):
         note = Note(title=request.attrs["title"],
                     text=request.attrs["text"],
                     attrs=dict(request.attrs),
                     parent_container=document.children[request.parent_container_id]
-                    if request.parent_container_id != "none"
+                    if len(request.parent_container_id) > 0
                     else None)
         document.children[note.id] = note
 

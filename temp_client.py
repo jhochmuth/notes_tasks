@@ -14,8 +14,7 @@ def run():
         print("Creating note.")
         response = note_stub.CreateNote(tasks_pb2.NoteRequest(attrs={"title": "Joseph Conrad",
                                                                      "text": "British author.",
-                                                                     "birth": "1857"},
-                                                              parent_container_id="None"))
+                                                                     "birth": "1857"}))
         print(response.id, response.attrs["title"], response.attrs["text"])
 
         print("Updating note.")
@@ -27,8 +26,7 @@ def run():
         print("Creating note.")
         response = note_stub.CreateNote(tasks_pb2.NoteRequest(attrs={"title": "Edith Wharton",
                                                                      "text": "American author.",
-                                                                     "birth": "1862"},
-                                                              parent_container_id="None"))
+                                                                     "birth": "1862"}))
 
         print("Creating container.")
         response = container_stub.CreateContainer(tasks_pb2.ContainerRequest(child_note_ids=["0"]))
