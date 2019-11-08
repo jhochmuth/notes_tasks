@@ -1,6 +1,10 @@
 const PROTO_PATH = __dirname + '/tasks.proto';
 const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
+const React = require('react');
+const ReactDOM = require('react-dom');
+//const App = require('./src/index.js')
+
 
 const packageDefinition = protoLoader.loadSync(
     PROTO_PATH,
@@ -23,10 +27,12 @@ stub.createNote(note, function(err, response) {
   if (err) {
     console.log(err);
   }
+
   else {
-    console.log(response);
-    document.getElementById('title').innerHTML = response.attrs.title;
-    document.getElementById('text').innerHTML = response.attrs.text;
+    var e = React.createElement("div", null, response.attrs.title);
+    ReactDOM.render(e, document.getElementById('title'))
+    var e = React.createElement("div", null, response.attrs.text);
+    ReactDOM.render(e, document.getElementById('text'))
     document.getElementById('created').innerHTML = response.attrs.date_created;
   }
 });

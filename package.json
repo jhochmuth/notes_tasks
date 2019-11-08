@@ -4,12 +4,16 @@
   "description": "Mind-mapping software",
   "main": "main.js",
   "scripts": {
+    "react": "react-scripts start",
     "start": "electron .",
     "postinstall": "npm rebuild --target=1.8.8 --runtime=electron --dist-url=https://atom.io/download/electron"
   },
   "dependencies": {
     "grpc": "^1.24.2",
-    "@grpc/proto-loader": "^0.5.2"
+    "@grpc/proto-loader": "^0.5.2",
+    "react": "^16.4.2",
+    "react-dom": "16.4.2",
+    "react-scripts": "1.1.5"
   },
   "devDependencies": {
     "electron": "^1.8.8",
