@@ -17,7 +17,7 @@ const notemanager = protoDescriptor.NoteManager;
 stub = new notemanager('localhost:50051', grpc.credentials.createInsecure());
 
 const attrs = {title: "Joseph Conrad", text: "British author."}
-const note = {attrs: attrs, parent_container_id: "none"};
+const note = {attrs: attrs};
 
 stub.createNote(note, function(err, response) {
   if (err) {
