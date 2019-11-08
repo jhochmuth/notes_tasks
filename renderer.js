@@ -3,7 +3,8 @@ const grpc = require('grpc');
 const protoLoader = require('@grpc/proto-loader');
 const React = require('react');
 const ReactDOM = require('react-dom');
-//const App = require('./src/index.js')
+require('@babel/register');
+const App = require('./App.js')
 
 
 const packageDefinition = protoLoader.loadSync(
@@ -30,7 +31,7 @@ stub.createNote(note, function(err, response) {
 
   else {
     var e = React.createElement("div", null, response.attrs.title);
-    ReactDOM.render(e, document.getElementById('title'))
+    ReactDOM.render(App(), document.getElementById('title'))
     var e = React.createElement("div", null, response.attrs.text);
     ReactDOM.render(e, document.getElementById('text'))
     document.getElementById('created').innerHTML = response.attrs.date_created;
