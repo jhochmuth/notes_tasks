@@ -4,6 +4,7 @@
   "description": "Mind-mapping software",
   "main": "main.js",
   "scripts": {
+    "react": "react-scripts start",
     "start": "electron .",
     "postinstall": "npm rebuild --target=1.8.8 --runtime=electron --dist-url=https://atom.io/download/electron"
   },

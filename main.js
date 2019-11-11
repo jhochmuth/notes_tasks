@@ -2,6 +2,7 @@ const electron = require('electron')
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const path = require('path')
+const React = require('react');
 
 
 /*************************************************************
@@ -68,7 +69,7 @@ app.on('will-quit', exitPyProc)
 let mainWindow = null
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 1500, height: 1250})
 
   mainWindow.loadURL(require('url').format({
     pathname: path.join(__dirname, 'index.html'),
@@ -76,6 +77,7 @@ const createWindow = () => {
     slashes: true
   }))
 
+  //mainWindow.loadURL('http://localhost:3000/')
   mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', () => {

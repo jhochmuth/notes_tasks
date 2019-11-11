@@ -3,8 +3,8 @@ from datetime import datetime
 from api.uid import UID
 
 
-default_note_settings = {"width": "300",
-                         "height": "300",
+default_note_settings = {"width": "200",
+                         "height": "250",
                          "pos_x": "0",
                          "pos_y": "0",
                          "background": "white",
@@ -48,7 +48,7 @@ class Note:
         self.attrs["title"] = title
         self.attrs["text"] = text
 
-        self.attrs["date_created"] = datetime.utcnow().strftime("%Y/%m/%d %I:%M %p")
+        self.attrs["date_created"] = datetime.now().strftime("%Y/%m/%d %I:%M %p")
         self.update_last_changed()
 
         self.attrs["text_char_len"] = str(len(self.attrs["text"]))
