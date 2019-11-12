@@ -1,13 +1,6 @@
 const React = require('react');
 const clickdrag = require('react-clickdrag');
 
-let mainStyle = {
-  borderStyle: "solid",
-  height: "300px",
-  width: "300px",
-  position: "relative"
-}
-
 let titleStyle = {
   textAlign: "center"
 }
@@ -43,6 +36,18 @@ class Note extends React.Component {
     }
   }
 
+  renderAttrs() {
+    let obj = this;
+    return Object.keys(obj.state.attrs).map(function(x) {
+      if (x == 'title' || x == 'text') {
+        return null;
+      }
+      else {
+        return <li>{x}: {obj.state.attrs[x]}</li>;
+      }
+    })
+  }
+
   render() {
     let translation = 'translate('+this.state.currentX+'px, '+this.state.currentY+'px)';
 
@@ -58,9 +63,7 @@ class Note extends React.Component {
       <div style={mainStyle}>
         <h3 style={titleStyle}>{this.state.attrs.title}</h3>
         <p style={textStyle}>{this.state.attrs.text}</p>
-        <ul>
-          <li>Created: {this.state.attrs.date_created}</li>
-        </ul>
+        <ul>{this.renderAttrs()}</ul>
       </div>
     )
   }

@@ -48,11 +48,11 @@ class Note:
         self.attrs["title"] = title
         self.attrs["text"] = text
 
-        self.attrs["date_created"] = datetime.now().strftime("%Y/%m/%d %I:%M %p")
+        self.attrs["Date created"] = datetime.now().strftime("%Y/%m/%d %I:%M %p")
         self.update_last_changed()
 
-        self.attrs["text_char_len"] = str(len(self.attrs["text"]))
-        self.attrs["text_word_len"] = str(len(self.attrs["text"].split()))
+        self.attrs["Text char len"] = str(len(self.attrs["text"]))
+        self.attrs["Text word len"] = str(len(self.attrs["text"].split()))
 
         self.connections = list()
 
@@ -67,21 +67,21 @@ class Note:
         self.descendant_notes = list()
 
         self.search_priority = None
-
+        """
         for key, val in default_note_settings.items():
             if key not in self.attrs:
                 self.attrs[key] = val
-
+        """
     def update_last_changed(self):
-        self.attrs["last_changed"] = datetime.utcnow().strftime("%Y/%m/%d %I:%M %p")
+        self.attrs["Last changed"] = datetime.now().strftime("%Y/%m/%d %I:%M %p")
 
     def update_text(self, new_text):
         """Used to update the text of a note."""
         if new_text != self.attrs["text"]:
             self.attrs["text"] = new_text
-            self.attrs["last_changed"] = datetime.utcnow()
-            self.attrs["text_char_len"] = len(self.text)
-            self.attrs["text_word_len"] = len(self.text.split())
+            self.update_last_changed()
+            self.attrs["Text char len"] = len(self.text)
+            self.attrs["Text word len"] = len(self.text.split())
 
             for descendant in self.descendant_notes:
                 if "text" in descendant.inherited_attrs:
@@ -91,14 +91,14 @@ class Note:
         """Changes the title of a note."""
         if new_title != self.attrs["title"]:
             self.attrs["title"] = new_title
-            self.attrs["last_changed"] = datetime.utcnow()
+            self.update_last_changed()
 
             for descendant in self.descendant_notes:
                 if "title" in descendant.inherited_attrs:
                     descendant.update_title(new_title)
 
     def remove_attrs(self, attrs):
-        self.attrs["last_changed"] = datetime.utcnow()
+        self.update_last_changed()
 
         for attr in attrs:
             del self.attribute[attr]
@@ -109,7 +109,7 @@ class Note:
                     descendant.remove_attrs()
 
     def add_attr(self, attr, value, prototypal=False):
-        self.attrs["last_changed"] = datetime.utcnow()
+        self.update_last_changed()
         self.attrs[attr] = value
 
         if prototypal:
@@ -131,8 +131,8 @@ class Note:
                    text=self.attrs["text"],
                    attrs=self.attrs.copy(),
                    parent_container=self.parent_container)
-        new.attrs["date_created"] = datetime.utcnow()
-        new.attrs["last_changed"] = datetime.utcnow()
+        new.attrs["Date created"] = datetime.now()
+        new.attrs["Last changed"] = datetime.now()
 
         return new
 
@@ -145,8 +145,8 @@ class Note:
                    inherited_attrs=inherited_attrs,
                    parent_container=self.parent_container)
 
-        new.attrs["date_created"] = datetime.utcnow()
-        new.attrs["last_changed"] = datetime.utcnow()
+        new.attrs["Date created"] = datetime.now()
+        new.attrs["Last changed"] = datetime.now()
 
         self.descendant_notes.append(new)
 
