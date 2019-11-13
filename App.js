@@ -1,7 +1,7 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const Note = require('./Note.js');
-const NoteCreationForm = require('./NoteCreationForm.js')
+const NoteCreationForm = require('./NoteCreationForm.js');
 
 const appStyle = {
   height: "100%",

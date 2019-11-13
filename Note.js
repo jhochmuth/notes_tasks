@@ -1,6 +1,27 @@
 const React = require('react');
+const Resizable = require('re-resizable').Resizable;
 const clickdrag = require('react-clickdrag');
+const stubs = require('./stubs.js')
+/*
+class NoteAttrUpdateForm extends React.Component {
+  constructor(props) {
+    super();
+    this.state = {
+      key: "Key",
+      value: "Value"
+    }
+  }
 
+  render() {
+    return (
+      <form onSubmit={this.onSubmit}>
+        <input type="text" name="key" onChange={this.onChange} value=this.state.key />
+        <input type="text" name="value" onChange={this.onChange} value=this.state.value />
+      </form>
+    )
+  }
+}
+*/
 let titleStyle = {
   textAlign: "center"
 }
@@ -53,18 +74,16 @@ class Note extends React.Component {
 
     let mainStyle = {
       borderStyle: "solid",
-      height: "300px",
-      width: "300px",
       position: "relative",
       transform: [translation]
     }
 
     return (
-      <div style={mainStyle}>
+      <Resizable style={mainStyle} size={{width: 300, height: 300}}>
         <h3 style={titleStyle}>{this.state.attrs.title}</h3>
         <p style={textStyle}>{this.state.attrs.text}</p>
         <ul>{this.renderAttrs()}</ul>
-      </div>
+      </Resizable>
     )
   }
 

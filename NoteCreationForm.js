@@ -37,8 +37,8 @@ class NoteCreationForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.onSubmit}>
-        <input type="text" name="title" onChange={this.onChange} value={this.state.title}/>
-        <input type="text" name="text" onChange={this.onChange} value={this.state.text}/>
+        <input type="text" name="title" onChange={this.onChange} value={this.state.title} />
+        <input type="text" name="text" onChange={this.onChange} value={this.state.text} />
         <input type="submit" value="Submit" />
       </form>
     );
