@@ -28,13 +28,14 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
                                    attrs=note.attrs,
                                    parent_container_id=request.parent_container_id)
 
+    """Returns: NoteReply with attrs dict that contains only the updated attr."""
     def UpdateNoteAttr(self, request, context):
         note = document.children[request.note_id]
 
         note.update_attr(request.attr, request.new_value)
 
-        return tasks_pb2.NoteReply(id=note.id,
-                                   attrs=note.attrs)
+        return tasks_pb2.NoteReply(id=request.note_id,
+                                   attrs={request.attr: request.new_value})
 
     def DeleteNote(self, request, context):
         note = document.children[request.id]

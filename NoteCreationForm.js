@@ -28,7 +28,7 @@ class NoteCreationForm extends React.Component {
         console.log(err);
       }
       else {
-        let note = <Note key={noteResponse.id} noteData={noteResponse} />;
+        let note = <Note key={noteResponse.id} id={noteResponse.id} noteData={noteResponse} />;
         obj.props.onSubmit(note);
       }
     });
