@@ -8,10 +8,13 @@ class NoteAttrUpdateForm extends React.Component {
     super();
     this.state = {
       key: "Key",
-      value: "Value"
+      value: "Value",
+      hidden: true
     }
+
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.showForm = this.showForm.bind(this);
   }
 
   onChange(event) {
@@ -25,11 +28,13 @@ class NoteAttrUpdateForm extends React.Component {
   onSubmit(event) {
     let obj = this;
     event.preventDefault();
+
     let updateAttrRequest = {
       note_id: this.props.noteId,
       attr: this.state.key,
       new_value: this.state.value
     }
+
     stubs.noteStub.updateNoteAttr(updateAttrRequest, function(err, noteReply) {
       if (err) {
         console.log(err);
@@ -38,38 +43,47 @@ class NoteAttrUpdateForm extends React.Component {
         obj.props.onSubmit(noteReply);
       }
     })
+
+    this.setState({key: "Key", value: "Value", hidden: true})
+  }
+
+  showForm(event) {
+    event.preventDefault();
+    this.setState({key: "Key", value: "Value", hidden: false})
   }
 
   render() {
+    let formStyle = {visibility: this.state.hidden ? "hidden" : "visible"};
+    let buttonStyle = {visibility: this.state.hidden ? "visible" : "hidden"};
+
     return (
-      <form onSubmit={this.onSubmit}>
-        <input type="text" name="key" onChange={this.onChange} value={this.state.key} />
-        <input type="text" name="value" onChange={this.onChange} value={this.state.value} />
-        <input type="submit" value="Submit" />
-      </form>
+      <div>
+        <button onClick={this.showForm} style={buttonStyle}>Add/Edit Attributes</button>
+        <form onSubmit={this.onSubmit} style={formStyle}>
+          <input type="text" name="key" onChange={this.onChange} value={this.state.key} />
+          <input type="text" name="value" onChange={this.onChange} value={this.state.value} />
+          <br />
+          <input variant="primary" type="submit" value="Submit" />
+        </form>
+      </div>
     )
   }
-}
-
-let titleStyle = {
-  textAlign: "center"
-}
-
-let textStyle = {
-  margin: "10px"
 }
 
 class Note extends React.Component {
   constructor(props) {
     super();
+
     this.state = {
       attrs: props.noteData.attrs,
-      lastPositionX: 0,
-      lastPositionY: 0,
-      currentX: 0,
-      currentY: 0
+      lastPositionX: 250,
+      lastPositionY: 50,
+      currentX: 250,
+      currentY: 50
     }
+
     this.updateAttr = this.updateAttr.bind(this);
+    this.deleteAttr = this.deleteAttr.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -79,6 +93,7 @@ class Note extends React.Component {
         currentY: this.state.lastPositionY + nextProps.dataDrag.moveDeltaY
       });
     }
+
     else {
       this.setState({
         lastPositionX: this.state.currentX,
@@ -87,14 +102,45 @@ class Note extends React.Component {
     }
   }
 
+  deleteAttr(event) {
+    event.preventDefault();
+  }
+
   renderAttrs() {
+    let listStyle = {
+      display: "grid",
+      gridTemplateColumns: "90% 10%"
+    }
+
+    let textStyle = {
+      display: "block",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+      gridColumnStart: 1,
+      gridColumnEnd: "span 1"
+    }
+
+    let buttonStyle = {
+      gridColumnStart: 2,
+      gridColumnEnd: "span 1"
+    }
+
     let obj = this;
+
     return Object.keys(obj.state.attrs).map(function(x) {
       if (x == 'title' || x == 'text') {
         return null;
       }
       else {
-        return <li key={x}>{x}: {obj.state.attrs[x]}</li>;
+        return (
+          <li key={x} style={listStyle}>
+            <span style={textStyle}>
+              {x}: {obj.state.attrs[x]}
+            </span>
+            <button style={buttonStyle} onClick={obj.deleteAttr}>✖</button>
+          </li>
+        );
       }
     })
   }
@@ -106,15 +152,24 @@ class Note extends React.Component {
     newState.attrs = Object.assign({}, this.state.attrs);
     newState.attrs[newKey] = newVal;
     this.setState(newState);
-    console.log(newState);
   }
 
   render() {
     let translation = 'translate('+this.state.currentX+'px, '+this.state.currentY+'px)';
+
     let mainStyle = {
       borderStyle: "solid",
       position: "relative",
-      transform: [translation]
+      transform: [translation],
+      backgroundColor: "white"
+    }
+
+    let titleStyle = {
+      textAlign: "center"
+    }
+
+    let textStyle = {
+      margin: "10px"
     }
 
     return (
@@ -122,7 +177,7 @@ class Note extends React.Component {
         <h3 style={titleStyle}>{this.state.attrs.title}</h3>
         <p style={textStyle}>{this.state.attrs.text}</p>
         <ul>{this.renderAttrs()}</ul>
-        <NoteAttrUpdateForm style={{bottom: "10px", position: "relative"}} noteId={this.props.id} onSubmit={this.updateAttr} />
+        <NoteAttrUpdateForm style={{margin: "10px"}} noteId={this.props.id} onSubmit={this.updateAttr} />
       </Resizable>
     )
   }

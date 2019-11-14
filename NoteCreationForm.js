@@ -32,6 +32,7 @@ class NoteCreationForm extends React.Component {
         obj.props.onSubmit(note);
       }
     });
+    this.setState({title: "Title", text: "Text"})
   }
 
   render() {
@@ -39,6 +40,7 @@ class NoteCreationForm extends React.Component {
       <form onSubmit={this.onSubmit}>
         <input type="text" name="title" onChange={this.onChange} value={this.state.title} />
         <input type="text" name="text" onChange={this.onChange} value={this.state.text} />
+        <br />
         <input type="submit" value="Submit" />
       </form>
     );

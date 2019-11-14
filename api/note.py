@@ -97,16 +97,14 @@ class Note:
                 if "title" in descendant.inherited_attrs:
                     descendant.update_title(new_title)
 
-    def remove_attrs(self, attrs):
+    def remove_attr(self, attr):
         self.update_last_changed()
 
-        for attr in attrs:
-            del self.attribute[attr]
+        del self.attrs[attr]
 
         for descendant in self.descendant_notes:
-            for attr in attrs:
-                if attr in descendant.inherited_attrs:
-                    descendant.remove_attrs()
+            if attr in descendant.inherited_attrs:
+                descendant.remove_attr(attr)
 
     def add_attr(self, attr, value, prototypal=False):
         self.update_last_changed()

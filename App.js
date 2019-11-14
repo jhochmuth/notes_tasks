@@ -5,7 +5,14 @@ const NoteCreationForm = require('./NoteCreationForm.js');
 
 const appStyle = {
   height: "100%",
-  width: "1000%"
+  width: "1000%",
+}
+
+const leftWindow = {
+  height: "100%",
+  width: "20%",
+  position: "fixed",
+  backgroundColor: "lightGray",
 }
 
 class App extends React.Component {
@@ -23,8 +30,12 @@ class App extends React.Component {
   render() {
     return (
       <div style={appStyle}>
-        <NoteCreationForm onSubmit={this.addNote}/>
-        {this.state.notes}
+        <div style={leftWindow}>
+          <NoteCreationForm onSubmit={this.addNote} />
+        </div>
+        <div>
+          {this.state.notes}
+        </div>
       </div>
     );
   }
