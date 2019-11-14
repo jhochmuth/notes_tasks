@@ -102,8 +102,31 @@ class Note extends React.Component {
     }
   }
 
-  deleteAttr(event) {
+  deleteAttr(attr, event) {
+    let obj = this;
     event.preventDefault();
+
+    let deleteAttrRequest = {
+      note_id: this.props.id,
+      attr: attr
+    }
+
+    stubs.noteStub.deleteNoteAttr(deleteAttrRequest, function(err, response) {
+      if (err) {
+        console.log(err)
+      }
+
+      else {
+        if (response.val) {
+          let attrs = Object.assign({}, obj.state.attrs);
+          let newState = Object.assign({}, obj.state);
+          delete attrs[attr];
+          newState.attrs = attrs;
+
+          obj.setState(newState);
+        }
+      }
+    })
   }
 
   renderAttrs() {
@@ -138,7 +161,7 @@ class Note extends React.Component {
             <span style={textStyle}>
               {x}: {obj.state.attrs[x]}
             </span>
-            <button style={buttonStyle} onClick={obj.deleteAttr}>✖</button>
+            <button style={buttonStyle} onClick={obj.deleteAttr.bind(obj, x)}>✖</button>
           </li>
         );
       }
