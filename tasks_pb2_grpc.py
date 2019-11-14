@@ -24,6 +24,11 @@ class NoteManagerStub(object):
         request_serializer=tasks__pb2.UpdateAttrRequest.SerializeToString,
         response_deserializer=tasks__pb2.NoteReply.FromString,
         )
+    self.DeleteNoteAttr = channel.unary_unary(
+        '/NoteManager/DeleteNoteAttr',
+        request_serializer=tasks__pb2.DeleteAttrRequest.SerializeToString,
+        response_deserializer=tasks__pb2.BoolWrapper.FromString,
+        )
     self.DeleteNote = channel.unary_unary(
         '/NoteManager/DeleteNote',
         request_serializer=tasks__pb2.NoteRequest.SerializeToString,
@@ -49,6 +54,13 @@ class NoteManagerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def DeleteNoteAttr(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def DeleteNote(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -68,6 +80,11 @@ def add_NoteManagerServicer_to_server(servicer, server):
           servicer.UpdateNoteAttr,
           request_deserializer=tasks__pb2.UpdateAttrRequest.FromString,
           response_serializer=tasks__pb2.NoteReply.SerializeToString,
+      ),
+      'DeleteNoteAttr': grpc.unary_unary_rpc_method_handler(
+          servicer.DeleteNoteAttr,
+          request_deserializer=tasks__pb2.DeleteAttrRequest.FromString,
+          response_serializer=tasks__pb2.BoolWrapper.SerializeToString,
       ),
       'DeleteNote': grpc.unary_unary_rpc_method_handler(
           servicer.DeleteNote,
@@ -152,6 +169,11 @@ class ContainerManagerStub(object):
         request_serializer=tasks__pb2.ContainerSearchRequest.SerializeToString,
         response_deserializer=tasks__pb2.ContainerSearchReply.FromString,
         )
+    self.DeleteContainer = channel.unary_unary(
+        '/ContainerManager/DeleteContainer',
+        request_serializer=tasks__pb2.ContainerRequest.SerializeToString,
+        response_deserializer=tasks__pb2.BoolWrapper.FromString,
+        )
 
 
 class ContainerManagerServicer(object):
@@ -186,6 +208,13 @@ class ContainerManagerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def DeleteContainer(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_ContainerManagerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -208,6 +237,11 @@ def add_ContainerManagerServicer_to_server(servicer, server):
           servicer.SearchChildNoteAttrs,
           request_deserializer=tasks__pb2.ContainerSearchRequest.FromString,
           response_serializer=tasks__pb2.ContainerSearchReply.SerializeToString,
+      ),
+      'DeleteContainer': grpc.unary_unary_rpc_method_handler(
+          servicer.DeleteContainer,
+          request_deserializer=tasks__pb2.ContainerRequest.FromString,
+          response_serializer=tasks__pb2.BoolWrapper.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

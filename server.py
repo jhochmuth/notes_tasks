@@ -37,6 +37,13 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
         return tasks_pb2.NoteReply(id=request.note_id,
                                    attrs={request.attr: request.new_value})
 
+    def DeleteNoteAttr(self, request, context):
+        note = document.children[request.note_id]
+
+        note.delete_attr(request.attr)
+
+        return tasks_pb2.BoolWrapper(val=True)
+
     def DeleteNote(self, request, context):
         note = document.children[request.id]
         note.delete()

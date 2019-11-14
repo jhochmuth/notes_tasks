@@ -13,11 +13,15 @@ message NoteReply {
     string parent_container_id = 3;
 }
 
-// TODO: Consider removing and using NoteRequest
 message UpdateAttrRequest {
     string note_id = 1;
     string attr = 2;
     string new_value = 3;
+}
+
+message DeleteAttrRequest {
+    string note_id = 1;
+    string attr = 2;
 }
 
 message ContainerRequest {
@@ -94,6 +98,7 @@ message BoolWrapper {
 service NoteManager {
     rpc CreateNote (NoteRequest) returns (NoteReply) {}
     rpc UpdateNoteAttr (UpdateAttrRequest) returns (NoteReply) {}
+    rpc DeleteNoteAttr (DeleteAttrRequest) returns (BoolWrapper) {}
     rpc DeleteNote (NoteRequest) returns (BoolWrapper) {}
 }
 
