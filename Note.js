@@ -84,6 +84,7 @@ class Note extends React.Component {
 
     this.updateAttr = this.updateAttr.bind(this);
     this.deleteAttr = this.deleteAttr.bind(this);
+    this.deleteNote = this.deleteNote.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -151,17 +152,17 @@ class Note extends React.Component {
 
     let obj = this;
 
-    return Object.keys(obj.state.attrs).map(function(x) {
-      if (x == 'title' || x == 'text') {
+    return Object.keys(obj.state.attrs).map(function(attr) {
+      if (attr == 'title' || attr == 'text') {
         return null;
       }
       else {
         return (
-          <li key={x} style={listStyle}>
+          <li key={attr} style={listStyle}>
             <span style={textStyle}>
-              {x}: {obj.state.attrs[x]}
+              {attr}: {obj.state.attrs[attr]}
             </span>
-            <button style={buttonStyle} onClick={obj.deleteAttr.bind(obj, x)}>✖</button>
+            <button style={buttonStyle} onClick={obj.deleteAttr.bind(obj, attr)}>✖</button>
           </li>
         );
       }
@@ -169,12 +170,17 @@ class Note extends React.Component {
   }
 
   updateAttr(noteReply) {
+    let obj = this;
     let newKey = Object.keys(noteReply.attrs)[0];
     let newVal = noteReply.attrs[newKey];
     let newState = Object.assign({}, this.state);
     newState.attrs = Object.assign({}, this.state.attrs);
     newState.attrs[newKey] = newVal;
     this.setState(newState);
+  }
+
+  deleteNote() {
+    this.props.deleteNote(this.props.id);
   }
 
   render() {
@@ -187,6 +193,13 @@ class Note extends React.Component {
       backgroundColor: "white"
     }
 
+    let closeButtonStyle = {
+      backgroundColor: "red",
+      position: "absolute",
+      right: "5px",
+      top: "5px"
+    }
+
     let titleStyle = {
       textAlign: "center"
     }
@@ -197,10 +210,11 @@ class Note extends React.Component {
 
     return (
       <Resizable style={mainStyle} size={{width: 300, height: 300}}>
+        <button style={closeButtonStyle} onClick={this.deleteNote}>✖</button>
         <h3 style={titleStyle}>{this.state.attrs.title}</h3>
         <p style={textStyle}>{this.state.attrs.text}</p>
         <ul>{this.renderAttrs()}</ul>
-        <NoteAttrUpdateForm style={{margin: "10px"}} noteId={this.props.id} onSubmit={this.updateAttr} />
+        <NoteAttrUpdateForm noteId={this.props.id} onSubmit={this.updateAttr} />
       </Resizable>
     )
   }

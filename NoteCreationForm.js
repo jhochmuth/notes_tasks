@@ -1,5 +1,5 @@
 const React = require('react');
-const Note = require('./Note.js');
+const Note = require('./Note2.js');
 const stubs = require('./stubs.js')
 
 class NoteCreationForm extends React.Component {
@@ -28,7 +28,7 @@ class NoteCreationForm extends React.Component {
         console.log(err);
       }
       else {
-        let note = <Note key={noteResponse.id} id={noteResponse.id} noteData={noteResponse} />;
+        let note = <Note key={noteResponse.id} id={noteResponse.id} noteData={noteResponse} deleteNote={obj.props.deleteNote}/>;
         obj.props.onSubmit(note);
       }
     });

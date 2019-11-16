@@ -199,7 +199,9 @@ class Note:
         return data
 
     def delete(self):
-        self.parent_container.remove_note(self)
+        if self.parent_container:
+            self.parent_container.remove_note(self)
+
         for descendant in self.descendant_notes:
             descendant.prototype = None
         del self
