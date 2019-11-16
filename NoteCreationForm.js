@@ -1,5 +1,5 @@
 const React = require('react');
-const Note = require('./Note2.js');
+const Note = require('./Note.js');
 const stubs = require('./stubs.js')
 
 class NoteCreationForm extends React.Component {
