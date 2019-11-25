@@ -1,3 +1,13 @@
 {
-  "presets": ["@babel/env", "@babel/react"]
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": true
+        }
+      }
+    ],
+    "@babel/react"
+  ],
 }
