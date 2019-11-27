@@ -3,10 +3,15 @@ const stubs = require('../stubs.js');
 import {PortWidget} from '@projectstorm/react-diagrams';
 import {Button, Form, FormGroup, Input, Label, Popover, PopoverBody, PopoverHeader, UncontrolledTooltip} from 'reactstrap';
 
+const shapeSettings = {
+  rectangle: 15,
+  circle: "50%"
+}
+
 class NoteWidget extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {attrs: this.props.node.content.attrs, displayAttrs: false, width: 200, showAttrForm: false};
+    this.state = {attrs: this.props.node.content.attrs, displayAttrs: false, width: 200, showAttrForm: false, borderRadius: "15px"};
     this.toggleAttrs = this.toggleAttrs.bind(this);
     this.toggleEditNote = this.toggleEditNote.bind(this);
     this.editNoteAttr = this.editNoteAttr.bind(this);
@@ -30,6 +35,12 @@ class NoteWidget extends React.Component {
     const attr = event.target.attr.value;
     const val = event.target.val.value;
     event.preventDefault();
+
+    if (attr =="shape") {
+      const newState = Object.assign({}, this.state);
+      newState.borderRadius = shapeSettings[val];
+      this.setState(newState);
+    }
 
     const updateAttrRequest = {
       note_id: this.props.node.content.id,
@@ -97,7 +108,7 @@ class NoteWidget extends React.Component {
     const attrs = this.state.attrs;
     const height = this.state.displayAttrs ? 100 + (25 * (Object.keys(this.state.attrs).length - 1)) : 80;
     return (
-      <div className="note" style={{height: height, width: this.state.width}}>
+      <div className="note" style={{height: height, width: this.state.width, borderRadius: this.state.borderRadius}}>
         <h3 className="note-title">{attrs.title}</h3>
         <div style={{textAlign: "center", visibility: this.state.displayAttrs ? "visible" : "hidden"}}>{attrs.text}</div>
         <div style={{visibility: this.state.displayAttrs ? "visible" : "hidden", margin: 10}}>{this.renderAttrs()}</div>
@@ -120,8 +131,11 @@ class NoteWidget extends React.Component {
             </Form>
           </PopoverBody>
         </Popover>
-        <div style={{position: "absolute", bottom: 0}}>
+        <div style={{position: "absolute", bottom: 0, border: "solid"}}>
           <PortWidget name="bottom" node={this.props.node}/>
+        </div>
+        <div style={{position: "absolute", bottom: 0, left: 25, border: "solid"}}>
+          <PortWidget name="left" node={this.props.node}/>
         </div>
       </div>
     )
