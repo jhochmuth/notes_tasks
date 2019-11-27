@@ -10,18 +10,12 @@ class NoteWidget extends React.Component {
     this.toggleAttrs = this.toggleAttrs.bind(this);
     this.toggleEditNote = this.toggleEditNote.bind(this);
     this.editNoteAttr = this.editNoteAttr.bind(this);
+    this.deleteNote = this.deleteNote.bind(this);
   }
 
   toggleAttrs() {
     const newState = Object.assign({}, this.state);
-
-    if (this.state.displayAttrs) {
-      newState.displayAttrs = false;
-    }
-    else {
-      newState.displayAttrs = true;
-    }
-
+    newState.displayAttrs = !this.state.displayAttrs;
     this.setState(newState);
   }
 
@@ -61,17 +55,6 @@ class NoteWidget extends React.Component {
   renderAttrs() {
     const attrs = this.state.attrs;
     const obj = this;
-
-    let textStyle = {
-      display: "block",
-      overflow: "hidden",
-      textOverflow: "ellipsis",
-      whiteSpace: "nowrap",
-      textAlign: "left",
-      //gridColumnStart: 1,
-      //gridColumnEnd: "span 1",
-    }
-
     let idDigit = 0;
 
     return Object.keys(attrs).map(function(attr) {
@@ -82,7 +65,7 @@ class NoteWidget extends React.Component {
         idDigit += 1;
         return (
             <div key={attr} id={"note" + obj.props.node.content.id + "attr" + idDigit}>
-              <span style={textStyle}>
+              <span className="attr-text">
                 <b>{attr}:</b> {attrs[attr]}
               </span>
               <UncontrolledTooltip placement="right" target={"note" + obj.props.node.content.id + "attr" + idDigit} delay={{show: 1000, hide: 0}}>{attrs[attr]}</UncontrolledTooltip>
@@ -91,29 +74,47 @@ class NoteWidget extends React.Component {
       }
     })
   }
-  //<button style={buttonStyle} onClick={obj.deleteAttr.bind(obj, attr)}>✖</button>
+
+  deleteNote() {
+    let obj = this;
+    let noteRequest = {id: this.props.node.content.id};
+
+    stubs.noteStub.deleteNote(noteRequest, function(err, response) {
+      if (err) {
+        console.log(err);
+      }
+
+      else {
+        if (response.val) {
+          obj.props.node.model.removeNode(obj.props.node);
+          obj.props.node.app.forceUpdate();
+        }
+      }
+    })
+  }
 
   render() {
     const attrs = this.state.attrs;
     const height = this.state.displayAttrs ? 100 + (25 * (Object.keys(this.state.attrs).length - 1)) : 80;
     return (
-      <div style={{position: "relative", height: height, width: this.state.width, boxShadow: "10px 10px 5px gray", borderRadius: 15, backgroundColor: "#bdcad9", backgroundImage: "linear-gradient(315deg, #bdcad9 0%, #e1dada 74%)"}}>
-        <h3 style={{textAlign: "center", fontFamily: "Oswald"}}>{attrs.title}</h3>
+      <div className="note" style={{height: height, width: this.state.width}}>
+        <h3 className="note-title">{attrs.title}</h3>
         <div style={{textAlign: "center", visibility: this.state.displayAttrs ? "visible" : "hidden"}}>{attrs.text}</div>
         <div style={{visibility: this.state.displayAttrs ? "visible" : "hidden", margin: 10}}>{this.renderAttrs()}</div>
-        <button id={"attrFormControl" + this.props.node.content.id} style={{position: "absolute", margin: 10, right: 0, bottom: 0}} onClick={this.toggleEditNote}>⚙</button>
-        <button style={{position: "absolute", margin: 10, right: "40%", bottom: 0}} onClick={this.toggleAttrs}>{this.state.displayAttrs ? "⤒" : "⤓"}</button>
-        <Popover placement="right" target={"attrFormControl" + this.props.node.content.id} isOpen={this.state.showAttrForm}>
+        <button id={"attrFormControl" + this.props.node.content.id} className="edit-note-button" onClick={this.toggleEditNote}>⚙</button>
+        <button className="toggle-note-display-button" onClick={this.toggleAttrs}>{this.state.displayAttrs ? "⤒" : "⤓"}</button>
+        <Button close className="delete-note-button" style={{color: "red"}} onClick={this.deleteNote}/>
+        <Popover placement="right" trigger="legacy" target={"attrFormControl" + this.props.node.content.id} isOpen={this.state.showAttrForm} toggle={this.toggleEditNote}>
           <PopoverHeader>Edit note</PopoverHeader>
           <PopoverBody>
             <Form onSubmit={this.editNoteAttr}>
               <FormGroup>
-                <Label for={"titleForm" + this.props.node.content.id}>Attribute name</Label>
-                <Input type="textarea" name="attr" id={"titleForm" + this.props.node.content.id} />
+                <Label for={"attrForm" + this.props.node.content.id}>Attribute name</Label>
+                <Input type="textarea" name="attr" id={"attrForm" + this.props.node.content.id} />
               </FormGroup>
               <FormGroup>
                 <Label>Attribute value</Label>
-                <Input type="textarea" name="val" id={"attrForm" + this.props.node.content.id} />
+                <Input type="textarea" name="val" id={"valForm" + this.props.node.content.id} />
               </FormGroup>
               <Button>Submit</Button>
             </Form>

@@ -17,7 +17,7 @@ class App extends React.Component {
   }
 
   addNote(noteResponse) {
-    model.addAll(new NoteModel(noteResponse));
+    model.addAll(new NoteModel(noteResponse, model, this));
     engine.setDiagramModel(model);
     this.forceUpdate();
   }
@@ -25,8 +25,8 @@ class App extends React.Component {
   render() {
     return (
       <div className="app">
-        <div className="toolbar"><Toolbar onSubmit={this.addNote} /></div>
-        <SRD.DiagramWidget diagramEngine={engine} className="srd-diagram" />
+        <div className="toolbar"><Toolbar createNote={this.addNote} /></div>
+        <SRD.DiagramWidget diagramEngine={engine} className="srd-diagram" deleteKeys={[]}/>
       </div>
     );
   }

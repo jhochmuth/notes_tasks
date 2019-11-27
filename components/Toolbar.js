@@ -30,14 +30,13 @@ class Toolbar extends React.Component {
         console.log(err);
       }
       else {
-        obj.props.onSubmit(noteResponse);
+        obj.props.createNote(noteResponse);
       }
     });
 
     const newState = Object.assign({}, this.state);
     newState.showNoteForm = false;
     this.setState(newState);
-    this.forceUpdate();
   }
 
   showNoteForm() {
@@ -58,7 +57,7 @@ class Toolbar extends React.Component {
         <Button id="saveButton" className="toolbar-button" style={{left: 60}}>
           <img src="/home/julius/notes_tasks/icons/save.png" className="toolbar-icon" />
         </Button>
-        <Popover trigger="focus" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm}>
+        <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.showNoteForm}>
           <PopoverHeader>Create new note</ PopoverHeader>
           <PopoverBody>
             <Form onSubmit={this.createNote}>
