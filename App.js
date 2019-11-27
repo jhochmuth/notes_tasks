@@ -1,7 +1,7 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const SRD = require('@projectstorm/react-diagrams');
-const NoteCreationForm = require('./components/NoteCreationForm.js');
+const Toolbar = require('./components/Toolbar.js');
 const NoteModel = require('./components/NoteModel.js');
 const NoteFactory = require('./components/NoteFactory.js');
 
@@ -24,11 +24,11 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <NoteCreationForm onSubmit={this.addNote} />
+      <div className="app">
+        <div className="toolbar"><Toolbar onSubmit={this.addNote} /></div>
         <SRD.DiagramWidget diagramEngine={engine} className="srd-diagram" />
       </div>
-);
+    );
   }
 }
 

@@ -1,3 +1,41 @@
+.app {
+	background-color: #F5F5F5;
+}
+
+.toolbar {
+	border-bottom: thin solid;
+	position: relative;
+	top: 0;
+	height: 8%;
+	background-color: #C0C0C0;
+}
+
+.toolbar-button {
+	position: relative;
+	top: 10;
+	height: 80%;
+}
+
+.toolbar-icon {
+	vertical-align: middle;
+	height: 80%;
+}
+
 .srd-diagram {
 	height: 100%;
+}
+
+.note {
+	position: relative;
+	top: 300;
+	left: 300;
+	box-shadow: 10px 10px 5px gray;
+	border-radius: 15px;
+	background-color: #bdcad9;
+	background-image: linear-gradient(315deg, #bdcad9 0%, #e1dada 74%);
+}
+
+.note-title {
+	text-align: center;
+	font-family: Oswald;
 }
