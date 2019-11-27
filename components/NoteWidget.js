@@ -131,11 +131,8 @@ class NoteWidget extends React.Component {
             </Form>
           </PopoverBody>
         </Popover>
-        <div style={{position: "absolute", bottom: 0, border: "solid"}}>
-          <PortWidget name="bottom" node={this.props.node}/>
-        </div>
-        <div style={{position: "absolute", bottom: 0, left: 25, border: "solid"}}>
-          <PortWidget name="left" node={this.props.node}/>
+        <div style={{position: "absolute", bottom: 0}}>
+          <PortWidget name="bottom" node={this.props.node} />
         </div>
       </div>
     )

@@ -1,9 +1,8 @@
 import {DefaultLinkModel, PortModel} from '@projectstorm/react-diagrams';
 
 class NotePortModel extends PortModel {
-  constructor(pos, isInput) {
+  constructor(pos) {
     super(pos, "note");
-    this.in = isInput;
   }
 
   createLinkModel() {

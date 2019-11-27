@@ -7,8 +7,7 @@ class NoteModel extends SRD.NodeModel {
     this.content = content;
     this.model = model;
     this.app = app;
-    this.addPort(new NotePortModel("bottom", true));
-    this.addPort(new NotePortModel("left", false));
+    this.addPort(new NotePortModel("bottom"));
   }
 }
 
