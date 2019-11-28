@@ -8,6 +8,9 @@ class NotePortModel extends PortModel {
   createLinkModel() {
     const link = new DefaultLinkModel();
     link.color = "black";
+    link.addListener({selectionChanged: function(event) {
+      console.log(event)
+    }})
     return link;
   }
 }

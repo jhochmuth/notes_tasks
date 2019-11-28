@@ -8,6 +8,7 @@ const shapeSettings = {
   circle: "50%"
 }
 
+// TODO: send connection information to backend.
 class NoteWidget extends React.Component {
   constructor(props) {
     super(props);
@@ -87,8 +88,12 @@ class NoteWidget extends React.Component {
   }
 
   deleteNote() {
-    let obj = this;
-    let noteRequest = {id: this.props.node.content.id};
+    const obj = this;
+    const noteRequest = {id: this.props.node.content.id};
+
+    for (let linkId in this.props.node.ports.bottom.links) {
+      this.props.node.ports.bottom.links[linkId].remove();
+    }
 
     stubs.noteStub.deleteNote(noteRequest, function(err, response) {
       if (err) {
@@ -131,7 +136,7 @@ class NoteWidget extends React.Component {
             </Form>
           </PopoverBody>
         </Popover>
-        <div style={{position: "absolute", bottom: 0}}>
+        <div style={{position: "absolute", top: 3, left: 3}}>
           <PortWidget name="bottom" node={this.props.node} />
         </div>
       </div>

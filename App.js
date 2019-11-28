@@ -17,7 +17,8 @@ class App extends React.Component {
   }
 
   addNote(noteResponse) {
-    model.addAll(new NoteModel(noteResponse, model, this));
+    const note = new NoteModel(noteResponse, model, this)
+    const models = model.addAll(note);
     engine.setDiagramModel(model);
     this.forceUpdate();
   }
@@ -26,7 +27,13 @@ class App extends React.Component {
     return (
       <div className="app">
         <div className="toolbar"><Toolbar createNote={this.addNote} /></div>
-        <SRD.DiagramWidget diagramEngine={engine} className="srd-diagram" deleteKeys={[]}/>
+        <SRD.DiagramWidget
+          diagramEngine={engine}
+          smartRouting={true}
+          className="srd-diagram"
+          maxNumberPointsPerLink="0"
+          deleteKeys={[27]}
+        />
       </div>
     );
   }
