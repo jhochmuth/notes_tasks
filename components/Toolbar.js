@@ -21,6 +21,10 @@ class Toolbar extends React.Component {
 
   createNote(event) {
     event.preventDefault();
+    if (!event.target.title.value) {
+      alert('You must specify at least a title for all notes.')
+      return;
+    }
     const obj = this;
     const attrs = {title: event.target.title.value, text: event.target.text.value};
     const noteRequest = {attrs: attrs};

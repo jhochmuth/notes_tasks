@@ -30,14 +30,18 @@
 	top: 300;
 	left: 300;
 	box-shadow: 10px 10px 5px gray;
-	border-radius: 15px;
-	background-color: #bdcad9;
-	background-image: linear-gradient(315deg, #bdcad9 0%, #e1dada 74%);
+	border-radius: 5px;
+	background-color: #686868;
 }
-
+	/*background-color: #bdcad9;
+	background-image: linear-gradient(315deg, #bdcad9 0%, #e1dada 74%);*/
 .note-title {
 	text-align: center;
-	font-family: Oswald;
+	font-family: Arial;
+	background-color: #282828;
+	color: white;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 }
 
 .edit-note-button {
@@ -66,4 +70,5 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	text-align: left;
+	color: white;
 }

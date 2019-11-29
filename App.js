@@ -4,10 +4,12 @@ const SRD = require('@projectstorm/react-diagrams');
 const Toolbar = require('./components/Toolbar.js');
 const NoteModel = require('./components/NoteModel.js');
 const NoteFactory = require('./components/NoteFactory.js');
+const NoteLinkFactory = require('./components/NoteLinkFactory.js');
 
 const engine = new SRD.DiagramEngine();
 engine.installDefaultFactories();
 engine.registerNodeFactory(new NoteFactory());
+engine.registerLinkFactory(new NoteLinkFactory());
 const model = new SRD.DiagramModel();
 
 class App extends React.Component {
@@ -17,7 +19,7 @@ class App extends React.Component {
   }
 
   addNote(noteResponse) {
-    const note = new NoteModel(noteResponse, model, this)
+    const note = new NoteModel(noteResponse, model, this);
     const models = model.addAll(note);
     engine.setDiagramModel(model);
     this.forceUpdate();
