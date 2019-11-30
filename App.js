@@ -7,6 +7,7 @@ const NoteModel = require('./components/NoteModel.js');
 const NoteFactory = require('./components/NoteFactory.js');
 const NoteLinkFactory = require('./components/NoteLinkFactory.js');
 const NotePortFactory = require('./components/NotePortFactory.js');
+const stubs = require('./stubs.js');
 
 const engine = new SRD.DiagramEngine();
 engine.installDefaultFactories();
@@ -34,26 +35,24 @@ class App extends React.Component {
     const that = this;
     const serialized = model.serializeDiagram();
     const str = JSON.stringify(serialized);
+    stubs.documentStub.saveDocument({}, function(err, response) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log("Backend saved")
+      }
+    })
+
 
     fs.writeFile('saved_diagrams/test.txt', str, function(err) {
       if (err) {
         console.log(err);
       }
       else {
-        console.log("File saved");
+        console.log("Frontend saved");
       }
     });
-
-    let model2 = new SRD.DiagramModel();
-    model2.deSerializeDiagram(JSON.parse(str), engine);
-    for (let node in model2.nodes) {
-      model2.nodes[node].app = that;
-      model2.nodes[node].model = model2;
-    }
-    console.log(model2);
-
-    engine.setDiagramModel(model2);
-    this.forceUpdate();
   }
 
   load() {

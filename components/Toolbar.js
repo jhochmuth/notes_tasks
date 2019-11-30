@@ -65,7 +65,7 @@ class Toolbar extends React.Component {
           <img src="/home/julius/notes_tasks/icons/save.png" className="toolbar-icon" />
         </Button>
         <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.showNoteForm}>
-          <PopoverHeader>Create new note</ PopoverHeader>
+          <PopoverHeader>Create new note</PopoverHeader>
           <PopoverBody>
             <Form onSubmit={this.createNote}>
               <FormGroup>

@@ -14,6 +14,9 @@ const packageDefinition = protoLoader.loadSync(
 
 const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 const notemanager = protoDescriptor.NoteManager;
+const documentmanager = protoDescriptor.DocumentManager;
 const noteStub = new notemanager('localhost:50051', grpc.credentials.createInsecure());
+const documentStub = new documentmanager('localhost:50051', grpc.credentials.createInsecure());
 
 module.exports.noteStub = noteStub;
+module.exports.documentStub = documentStub;
