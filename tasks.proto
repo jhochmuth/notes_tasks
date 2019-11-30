@@ -1,6 +1,14 @@
 syntax = "proto3";
 
 
+message Empty {
+
+}
+
+message LoadRequest {
+    string file = 1;
+}
+
 message NoteRequest {
     string id = 1;
     map<string, string> attrs = 2;
@@ -93,6 +101,11 @@ message ContainerSearchReply {
 
 message BoolWrapper {
     bool val = 1;
+}
+
+service DocumentManager {
+    rpc SaveDocument (Empty) returns (BoolWrapper) {}
+    rpc LoadDocument (LoadRequest) returns (BoolWrapper) {}
 }
 
 service NoteManager {

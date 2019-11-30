@@ -17,6 +17,7 @@ class Note:
     def __init__(self,
                  title,
                  text,
+                 id=None,
                  attrs=None,
                  parent_container=None,
                  prototype=None,
@@ -39,7 +40,11 @@ class Note:
             Any attribute specified in this set will be inherited from the prototype.
 
         """
-        self.id = UID().assign_uid()
+        if id is None:
+            self.id = UID().assign_uid()
+        else:
+            self.id = id
+
         if attrs is None:
             self.attrs = dict()
         else:
@@ -193,9 +198,9 @@ class Note:
         data["id"] = self.id
         data["type"] = "note"
         data["attrs"] = self.attrs
-        data["parent_container"] = self.parent_container.id
-        data["prototype"] = self.prototype.id
-        data["inherited_attrs"] = self.inherited_attrs
+        data["parent_container"] = self.parent_container.id if self.parent_container else None
+        data["prototype"] = self.prototype.id if self.prototype else None
+        data["inherited_attrs"] = list(self.inherited_attrs)
         return data
 
     def delete(self):
@@ -214,12 +219,13 @@ class Note:
                    attrs=data["attrs"],
                    parent_container=data["parent_container"],
                    prototype=data["prototype"],
-                   inherited_attrs=data["inherited_attrs"])
+                   inherited_attrs=set(data["inherited_attrs"]))
 
     def __str__(self):
         return self.attrs["title"]
 
     def __repr__(self):
+        repr = ""
         for key, val in self.attrs.items():
             repr += "{}: {}\n".format(key, val)
         return repr

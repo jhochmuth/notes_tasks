@@ -14,6 +14,16 @@ import tasks_pb2_grpc
 document = Document()
 
 
+class DocumentServicer(tasks_pb2_grpc.DocumentManagerServicer):
+    def SaveDocument(self, request, context):
+        document.save_document()
+        return tasks_pb2.BoolWrapper(val=True)
+
+    def LoadDocument(self, request, context):
+        document.load_document()
+        return tasks_pb2.BoolWrapper(val=True)
+
+
 class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
     def CreateNote(self, request, context):
         note = Note(title=request.attrs["title"],

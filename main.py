@@ -5,7 +5,7 @@ import click
 from api.conditional import Conditional
 from api.connection import Connection
 from api.container import Container
-from api.old_note import Note
+from api.note import Note
 from api.rule import Rule
 from api.task import Task
 
