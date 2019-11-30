@@ -132,6 +132,7 @@ class ConditionalServicer(tasks_pb2_grpc.ConditionalManagerServicer):
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+    tasks_pb2_grpc.add_DocumentManagerServicer_to_server(DocumentServicer(), server)
     tasks_pb2_grpc.add_NoteManagerServicer_to_server(NoteServicer(), server)
     tasks_pb2_grpc.add_ConnectionManagerServicer_to_server(ConnectionServicer(), server)
     tasks_pb2_grpc.add_ContainerManagerServicer_to_server(ContainerServicer(), server)
