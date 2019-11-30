@@ -92,7 +92,8 @@ class NoteWidget extends React.Component {
     event.preventDefault();
     this.props.node.display = !this.props.node.display;
     this.props.node.selectedLinkId = null;
-    this.props.node.app.forceUpdate();
+    //this.props.node.app.forceUpdate();
+    this.forceUpdate();
   }
 
   editLabel(id, event) {
@@ -102,7 +103,7 @@ class NoteWidget extends React.Component {
       link.addLabel(event.target.label.value);
       this.props.node.display = false;
       this.props.node.selectedLinkId = null;
-      this.props.node.app.forceUpdate();
+      this.forceUpdate();
     }
   }
 

@@ -9,7 +9,6 @@ class Toolbar extends React.Component {
     this.createNote = this.createNote.bind(this);
     this.onChange = this.onChange.bind(this);
     this.showNoteForm = this.showNoteForm.bind(this);
-    this.save = this.save.bind(this);
   }
 
   onChange(event) {
@@ -50,10 +49,6 @@ class Toolbar extends React.Component {
     this.setState(newState);
   }
 
-  save() {
-    this.props.save();
-  }
-
   render() {
     return (
       <div>
@@ -63,7 +58,10 @@ class Toolbar extends React.Component {
         <Button id="linkButton" className="toolbar-button" color="secondary" style={{left: 40}}>
           <img src="/home/julius/notes_tasks/icons/link.png" className="toolbar-icon" />
         </Button>
-        <Button id="saveButton" className="toolbar-button" style={{left: 60}} onClick={this.save}>
+        <Button id="saveButton" className="toolbar-button" style={{left: 60}} onClick={this.props.save}>
+          <img src="/home/julius/notes_tasks/icons/save.png" className="toolbar-icon" />
+        </Button>
+        <Button id="loadButton" className="toolbar-button" style={{left: 80}} onClick={this.props.load}>
           <img src="/home/julius/notes_tasks/icons/save.png" className="toolbar-icon" />
         </Button>
         <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.showNoteForm}>
