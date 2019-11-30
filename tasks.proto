@@ -104,7 +104,7 @@ message BoolWrapper {
 }
 
 service DocumentManager {
-    rpc SaveDocument (Empty) returns (BoolWrapper) {}
+    rpc SaveDocument (BoolWrapper) returns (BoolWrapper) {}
     rpc LoadDocument (LoadRequest) returns (BoolWrapper) {}
 }
 
