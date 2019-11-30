@@ -5,6 +5,10 @@ message Empty {
 
 }
 
+message SaveRequest {
+    string filename = 1;
+}
+
 message LoadRequest {
     string file = 1;
 }

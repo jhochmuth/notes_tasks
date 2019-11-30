@@ -16,11 +16,11 @@ document = Document()
 
 class DocumentServicer(tasks_pb2_grpc.DocumentManagerServicer):
     def SaveDocument(self, request, context):
-        document.save_document()
+        document.save_document(request.filename)
         return tasks_pb2.BoolWrapper(val=True)
 
     def LoadDocument(self, request, context):
-        document.load_document()
+        document.load_document(request.file)
         return tasks_pb2.BoolWrapper(val=True)
 
 

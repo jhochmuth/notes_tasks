@@ -6,6 +6,7 @@ import tasks_pb2_grpc
 
 def run():
     with grpc.insecure_channel("localhost:50051") as channel:
+        document_stub = tasks_pb2_grpc.DocumentManagerStub(channel)
         note_stub = tasks_pb2_grpc.NoteManagerStub(channel)
         connection_stub = tasks_pb2_grpc.ConnectionManagerStub(channel)
         container_stub = tasks_pb2_grpc.ContainerManagerStub(channel)
@@ -17,6 +18,10 @@ def run():
                                                                      "birth": "1857"}))
         print(response.id, response.attrs["title"], response.attrs["text"])
 
+        response = document_stub.SaveDocument(tasks_pb2.Empty())
+        print(response)
+
+        """
         print("Updating note.")
         response = note_stub.UpdateNoteAttr(tasks_pb2.UpdateAttrRequest(note_id="0",
                                                                         attr="text",
@@ -55,6 +60,6 @@ def run():
         response = connection_stub.CreateConnection(tasks_pb2.ConnectionRequest(endpoint_one_id="0",
                                                                                 endpoint_two_id="1",))
         print(response.endpoint_one_id, response.endpoint_two_id)
-
+        """
 
 run()
