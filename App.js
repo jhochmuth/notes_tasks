@@ -35,47 +35,55 @@ class App extends React.Component {
     const that = this;
     const serialized = model.serializeDiagram();
     const str = JSON.stringify(serialized);
+
     stubs.documentStub.saveDocument({}, function(err, response) {
       if (err) {
         console.log(err);
       }
       else {
         console.log("Backend saved")
+
+        fs.writeFile('saved_diagrams/test.txt', str, function(err) {
+          if (err) {
+            console.log(err);
+          }
+          else {
+            console.log("Frontend saved");
+          }
+        });
       }
     })
-
-
-    fs.writeFile('saved_diagrams/test.txt', str, function(err) {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        console.log("Frontend saved");
-      }
-    });
   }
 
   load() {
     const that = this;
+    const loadRequest = {file: "document.txt"};
 
-    fs.readFile('saved_diagrams/test.txt', function(err, data) {
+    stubs.documentStub.loadDocument(loadRequest, function(err, response) {
       if (err) {
         console.log(err);
       }
       else {
-        const str = data.toString();
-        model = new SRD.DiagramModel();
-        model.deSerializeDiagram(JSON.parse(str), engine);
+        fs.readFile('saved_diagrams/test.txt', function(err, data) {
+          if (err) {
+            console.log(err);
+          }
+          else {
+            const str = data.toString();
+            model = new SRD.DiagramModel();
+            model.deSerializeDiagram(JSON.parse(str), engine);
 
-        for (let node in model.nodes) {
-          model.nodes[node].app = that;
-          model.nodes[node].model = model;
-        }
+            for (let node in model.nodes) {
+              model.nodes[node].app = that;
+              model.nodes[node].model = model;
+            }
 
-        engine.setDiagramModel(model);
-        that.forceUpdate();
+            engine.setDiagramModel(model);
+            that.forceUpdate();
+          }
+        });
       }
-    })
+    });
   }
 
   render() {
