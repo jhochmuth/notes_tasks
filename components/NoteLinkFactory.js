@@ -10,7 +10,7 @@ class NoteLinkFactory extends DefaultLinkFactory {
   }
 
   generateReactWidget(engine, link) {
-    return <NoteLinkWidget link={link} diagramEngine={engine} />;
+    return <NoteLinkWidget link={link} diagramEngine={engine} id="blah"/>;
   }
 }
 

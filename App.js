@@ -1,3 +1,4 @@
+const fs = require('fs');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const SRD = require('@projectstorm/react-diagrams');
@@ -10,7 +11,7 @@ const engine = new SRD.DiagramEngine();
 engine.installDefaultFactories();
 engine.registerNodeFactory(new NoteFactory());
 engine.registerLinkFactory(new NoteLinkFactory());
-const model = new SRD.DiagramModel();
+let model = new SRD.DiagramModel();
 
 class App extends React.Component {
   constructor() {
@@ -25,10 +26,24 @@ class App extends React.Component {
     this.forceUpdate();
   }
 
+  save() {
+    const serialized = model.serializeDiagram();
+    const str = JSON.stringify(serialized);
+
+    fs.writeFile('saved_diagrams/test.txt', str, function(err) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        console.log("File saved");
+      }
+    })  
+  }
+
   render() {
     return (
       <div className="app">
-        <div className="toolbar"><Toolbar createNote={this.addNote} /></div>
+        <div className="toolbar"><Toolbar createNote={this.addNote} save={this.save}/></div>
         <SRD.DiagramWidget
           diagramEngine={engine}
           smartRouting={true}

@@ -1,5 +1,6 @@
 import {DefaultLinkModel, PortModel} from '@projectstorm/react-diagrams';
 const NoteLinkModel = require('./NoteLinkModel.js')
+const _ = require('lodash');
 
 class NotePortModel extends PortModel {
   constructor(pos, note) {
@@ -17,6 +18,16 @@ class NotePortModel extends PortModel {
       }
     })
     return link;
+  }
+
+  serialize() {
+    return _.merge(super.serialize(), {
+      note: this.note.getID()
+    })
+  }
+
+  deSerialize(ob, engine) {
+    super.deSerialize(ob, engine);
   }
 }
 

@@ -87,20 +87,23 @@ class NoteWidget extends React.Component {
       }
     })
   }
-
+  // todo:  is event.preventDefault necessary?
   toggleEditLabel(event) {
     event.preventDefault();
-    console.log("blah")
     this.props.node.display = !this.props.node.display;
+    this.props.node.selectedLinkId = null;
     this.props.node.app.forceUpdate();
   }
 
   editLabel(id, event) {
     event.preventDefault();
-    const link = this.props.node.ports.bottom.links[id];
-    link.addLabel(event.target.label.value);
-    //this.props.node.display = false;
-    this.props.node.app.forceUpdate();
+    if (event.target.label.value !== "") {
+      const link = this.props.node.ports.bottom.links[id];
+      link.addLabel(event.target.label.value);
+      this.props.node.display = false;
+      this.props.node.selectedLinkId = null;
+      this.props.node.app.forceUpdate();
+    }
   }
 
   deleteNote() {
@@ -155,12 +158,13 @@ class NoteWidget extends React.Component {
         <div id={"port" + this.props.node.content.id} style={{position: "absolute", top: 3, left: 3}}>
           <PortWidget name="bottom" node={this.props.node} />
         </div>
-        <Popover placement="left" target={"port" + this.props.node.content.id} isOpen={this.props.node.display}>
+        <Popover placement="left" trigger="legacy" target={"port" + this.props.node.content.id} isOpen={this.props.node.display}>
           <PopoverHeader>Add label to link</PopoverHeader>
           <PopoverBody>
             <Form onSubmit={this.editLabel.bind(this, this.props.node.selectedLinkId)}>
               <Input type="textarea" name="label" id={"labelForm" + this.props.node.content.id} />
               <Button>Submit</Button>
+              <Button onClick={this.toggleEditLabel}>Cancel</Button>
             </Form>
           </PopoverBody>
         </Popover>

@@ -1,5 +1,6 @@
 const SRD = require('@projectstorm/react-diagrams');
 const NotePortModel = require('./NotePortModel.js');
+const _ = require('lodash');
 
 class NoteModel extends SRD.NodeModel {
   constructor(content, model, app) {
@@ -12,14 +13,23 @@ class NoteModel extends SRD.NodeModel {
     this.addPort(new NotePortModel("bottom", this));
   }
 
-  // bug: code fires even when user has clicked inside of label form because of or clause.
-  // bug: target of popover is port, should be link.
+  // todo: fix popover so that clicking outside of popover closes it
   displayLinkPopover(event, linkId) {
-    if (linkId !== this.selectedLinkId || this.display !== event.isSelected) {
-      console.log(event)
+    if (linkId !== this.selectedLinkId) {
+      this.display = !this.display
       this.selectedLinkId = linkId;
-      this.display = !this.display;
     }
+  }
+
+  serialize() {
+    return _.merge(super.serialize(), {
+      content: this.content
+    })
+  }
+
+  deSerialize(ob, engine) {
+    super.deSerialize(ob, engine);
+    this.content = ob.content;
   }
 }
 
