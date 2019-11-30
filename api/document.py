@@ -7,19 +7,19 @@ class Document:
     def __init__(self):
         self.children = dict()
 
-    def save_document(self):
+    def save_document(self, filename):
         data = dict()
 
         for id, obj in self.children.items():
             data[obj.id] = (obj.serialize())
 
-        with open('document.txt', 'w') as outfile:
+        with open(filename, 'w') as outfile:
             json.dump(data, outfile)
 
-    def load_document(self):
+    def load_document(self, file):
         self.children = dict()
 
-        with open('document.txt', 'r') as infile:
+        with open(file, 'r') as infile:
             data = json.load(infile)
             for id, obj in data.items():
                 if obj["type"] == "note":
