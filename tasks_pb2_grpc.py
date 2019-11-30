@@ -16,7 +16,7 @@ class DocumentManagerStub(object):
     """
     self.SaveDocument = channel.unary_unary(
         '/DocumentManager/SaveDocument',
-        request_serializer=tasks__pb2.Empty.SerializeToString,
+        request_serializer=tasks__pb2.SaveRequest.SerializeToString,
         response_deserializer=tasks__pb2.BoolWrapper.FromString,
         )
     self.LoadDocument = channel.unary_unary(
@@ -49,7 +49,7 @@ def add_DocumentManagerServicer_to_server(servicer, server):
   rpc_method_handlers = {
       'SaveDocument': grpc.unary_unary_rpc_method_handler(
           servicer.SaveDocument,
-          request_deserializer=tasks__pb2.Empty.FromString,
+          request_deserializer=tasks__pb2.SaveRequest.FromString,
           response_serializer=tasks__pb2.BoolWrapper.SerializeToString,
       ),
       'LoadDocument': grpc.unary_unary_rpc_method_handler(
