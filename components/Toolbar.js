@@ -30,12 +30,12 @@ class Toolbar extends React.Component {
     const attrs = {title: event.target.title.value, text: event.target.text.value};
     const noteRequest = {attrs: attrs};
 
-    stubs.noteStub.createNote(noteRequest, function(err, noteResponse) {
+    stubs.noteStub.createNote(noteRequest, function(err, noteReply) {
       if (err) {
         console.log(err);
       }
       else {
-        obj.props.createNote(noteResponse);
+        obj.props.createNote(noteReply);
       }
     });
 
@@ -62,13 +62,10 @@ class Toolbar extends React.Component {
         <Button id="noteFormButton" className="toolbar-button" color="secondary" style={{left: 20}} onClick={this.toggleNoteForm}>
           <img src="/home/julius/notes_tasks/icons/note.png" className="toolbar-icon" />
         </Button>
-        <Button id="linkButton" className="toolbar-button" color="secondary" style={{left: 40}}>
-          <img src="/home/julius/notes_tasks/icons/link.png" className="toolbar-icon" />
-        </Button>
-        <Button id="saveButton" className="toolbar-button" style={{left: 60}} onClick={this.props.save}>
+        <Button id="saveButton" className="toolbar-button" style={{left: 880}} onClick={this.props.save}>
           <img src="/home/julius/notes_tasks/icons/save.png" className="toolbar-icon" />
         </Button>
-        <Button id="loadButton" className="toolbar-button" style={{left: 80}} onClick={this.toggleLoadForm}>
+        <Button id="loadButton" className="toolbar-button" style={{left: 900}} onClick={this.toggleLoadForm}>
           <img src="/home/julius/notes_tasks/icons/load.png" className="toolbar-icon" />
         </Button>
         <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.toggleNoteForm}>
@@ -102,3 +99,9 @@ class Toolbar extends React.Component {
 }
 
 module.exports = Toolbar;
+
+/*
+<Button id="linkButton" className="toolbar-button" color="secondary" style={{left: 40}} onClick={this.props.createLink}>
+  <img src="/home/julius/notes_tasks/icons/link.png" className="toolbar-icon" />
+</Button>
+*/

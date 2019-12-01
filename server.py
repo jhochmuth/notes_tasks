@@ -62,8 +62,8 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
 
 class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):
     def CreateConnection(self, request, context):
-        connection = Connection(endpoint_one=document.children[request.endpoint_one_id],
-                                endpoint_two=document.children[request.endpoint_two_id],
+        connection = Connection(endpoint_one=document.children[request.endpoint_one_id] if request.endpoint_one_id else None,
+                                endpoint_two=document.children[request.endpoint_two_id] if request.endpoint_two_id else None,
                                 text=request.text)
 
         document.children[connection.id] = connection
