@@ -28,6 +28,7 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
     def CreateNote(self, request, context):
         note = Note(title=request.attrs["title"],
                     text=request.attrs["text"],
+                    id=request.id,
                     attrs=dict(request.attrs),
                     parent_container=document.children[request.parent_container_id]
                     if len(request.parent_container_id) > 0

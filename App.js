@@ -25,11 +25,24 @@ class App extends React.Component {
     this.load = this.load.bind(this);
   }
 
-  addNote(noteResponse) {
-    const note = new NoteModel(noteResponse, model, this);
-    model.addAll(note);
-    engine.setDiagramModel(model);
-    this.forceUpdate();
+  addNote(event) {
+    const that = this;
+    const note = new NoteModel(null, model, this);
+    const attrs = {title: event.target.title.value, text: event.target.text.value};
+    const noteRequest = {id: note.id, attrs: attrs};
+
+    stubs.noteStub.createNote(noteRequest, function(err, noteReply) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        note.content = noteReply;
+        console.log(note);
+        model.addAll(note);
+        engine.setDiagramModel(model);
+        that.forceUpdate();
+      }
+    });
   }
 
   // todo: increase efficiency by avoiding saving twice
@@ -113,7 +126,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="app">
-        <div className="toolbar"><Toolbar createNote={this.addNote} save={this.save} load={this.load}/></div>
+        <div className="toolbar"><Toolbar addNote={this.addNote} save={this.save} load={this.load}/></div>
         <SRD.DiagramWidget
           diagramEngine={engine}
           smartRouting={true}

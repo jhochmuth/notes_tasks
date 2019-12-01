@@ -6,7 +6,7 @@ class Toolbar extends React.Component {
   constructor() {
     super();
     this.state = {title: "Title", text: "Text", displayNoteForm: false, displayLoadForm: false};
-    this.createNote = this.createNote.bind(this);
+    this.addNote = this.addNote.bind(this);
     this.onChange = this.onChange.bind(this);
     this.toggleNoteForm = this.toggleNoteForm.bind(this);
     this.toggleLoadForm = this.toggleLoadForm.bind(this);
@@ -20,28 +20,19 @@ class Toolbar extends React.Component {
     this.setState({[name]: value});
   }
 
-  createNote(event) {
+  addNote(event) {
     event.preventDefault();
+
     if (!event.target.title.value) {
       alert('You must specify at least a title for all notes.')
       return;
     }
-    const obj = this;
-    const attrs = {title: event.target.title.value, text: event.target.text.value};
-    const noteRequest = {attrs: attrs};
-
-    stubs.noteStub.createNote(noteRequest, function(err, noteReply) {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        obj.props.createNote(noteReply);
-      }
-    });
 
     const newState = Object.assign({}, this.state);
     newState.toggleNoteForm = false;
     this.setState(newState);
+
+    this.props.addNote(event);
   }
 
   toggleNoteForm() {
@@ -71,7 +62,7 @@ class Toolbar extends React.Component {
         <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.toggleNoteForm}>
           <PopoverHeader>Create new note</PopoverHeader>
           <PopoverBody>
-            <Form onSubmit={this.createNote}>
+            <Form onSubmit={this.addNote}>
               <FormGroup>
                 <Label for={"titleForm"}>Title</Label>
                 <Input type="textarea" name="title" id={"titleForm"} />
