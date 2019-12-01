@@ -20,8 +20,6 @@
     "@babel/preset-env": "^7.7.1",
     "@babel/preset-react": "^7.7.0",
     "@babel/register": "^7.7.0",
-    "@syncfusion/ej2-react-diagrams": "^17.3.27",
-    "@syncfusion/ej2-react-inputs": "^17.3.27",
     "closest": "0.0.1",
     "electron": "^1.8.8",
     "electron-packager": "^9.0.1",

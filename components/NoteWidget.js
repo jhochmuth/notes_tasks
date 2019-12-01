@@ -8,16 +8,29 @@ const shapeSettings = {
   circle: "50%"
 }
 
-// TODO: send connection information to backend.
 class NoteWidget extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {attrs: this.props.node.content.attrs, displayAttrs: false, width: 200, showAttrForm: false, borderRadius: "15px"};
+    this.state = {attrs: this.props.node.content.attrs, displayAttrs: false, width: 200, showAttrForm: false, borderRadius: "15px", showButtons: false};
+    this.showButtons = this.showButtons.bind(this);
+    this.hideButtons = this.hideButtons.bind(this);
     this.toggleAttrs = this.toggleAttrs.bind(this);
     this.toggleEditNote = this.toggleEditNote.bind(this);
     this.editNoteAttr = this.editNoteAttr.bind(this);
     this.toggleEditLabel = this.toggleEditLabel.bind(this);
     this.deleteNote = this.deleteNote.bind(this);
+  }
+
+  showButtons() {
+    const newState = Object.assign({}, this.state);
+    newState.showButtons = true;
+    this.setState(newState);
+  }
+
+  hideButtons() {
+    const newState = Object.assign({}, this.state);
+    newState.showButtons = false;
+    this.setState(newState);
   }
 
   toggleAttrs() {
@@ -87,12 +100,11 @@ class NoteWidget extends React.Component {
       }
     })
   }
-  // todo:  is event.preventDefault necessary?
+
   toggleEditLabel(event) {
     event.preventDefault();
     this.props.node.display = !this.props.node.display;
     this.props.node.selectedLinkId = null;
-    //this.props.node.app.forceUpdate();
     this.forceUpdate();
   }
 
@@ -133,13 +145,24 @@ class NoteWidget extends React.Component {
     const attrs = this.state.attrs;
     const height = this.state.displayAttrs ? 100 + (25 * (Object.keys(this.state.attrs).length - 1)) : 80;
     return (
-      <div className="note" style={{height: height, width: this.state.width, borderRadius: this.state.borderRadius}}>
+      <div className="note"
+        style={{height: height, width: this.state.width, borderRadius: this.state.borderRadius}}
+        onMouseEnter={this.showButtons}
+        onMouseLeave={this.hideButtons}>
         <h4 className="note-title">{attrs.title}</h4>
         <div style={{textAlign: "center", visibility: this.state.displayAttrs ? "visible" : "hidden"}}>{attrs.text}</div>
         <div style={{visibility: this.state.displayAttrs ? "visible" : "hidden", margin: 10}}>{this.renderAttrs()}</div>
-        <button id={"attrFormControl" + this.props.node.content.id} className="edit-note-button" onClick={this.toggleEditNote}>⚙</button>
-        <button className="toggle-note-display-button" onClick={this.toggleAttrs}>{this.state.displayAttrs ? "⤒" : "⤓"}</button>
-        <Button close className="delete-note-button" style={{color: "crimson", textShadow: "0px 0px"}} onClick={this.deleteNote}/>
+        <button id={"attrFormControl" + this.props.node.content.id}
+          className="edit-note-button"
+          onClick={this.toggleEditNote}
+          style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>⚙</button>
+        <button className="toggle-note-display-button"
+          onClick={this.toggleAttrs}
+          style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>{this.state.displayAttrs ? "⤒" : "⤓"}</button>
+        <Button close
+          className="delete-note-button"
+          style={{color: "crimson", textShadow: "0px 0px", visibility: this.state.showButtons ? "visible" : "hidden"}}
+          onClick={this.deleteNote}/>
         <Popover placement="right" trigger="legacy" target={"attrFormControl" + this.props.node.content.id} isOpen={this.state.showAttrForm} toggle={this.toggleEditNote}>
           <PopoverHeader>Edit note</PopoverHeader>
           <PopoverBody>
@@ -156,14 +179,20 @@ class NoteWidget extends React.Component {
             </Form>
           </PopoverBody>
         </Popover>
-        <div id={"port" + this.props.node.content.id} style={{position: "absolute", top: 3, left: 3}}>
+        <div id={"port" + this.props.node.content.id}
+          style={{position: "absolute", top: 3, left: 3}}>
           <PortWidget name="bottom" node={this.props.node} />
         </div>
-        <Popover placement="left" trigger="legacy" target={"port" + this.props.node.content.id} isOpen={this.props.node.display}>
+        <Popover placement="left"
+          trigger="legacy"
+          target={"port" + this.props.node.content.id}
+          isOpen={this.props.node.display}>
           <PopoverHeader>Add label to link</PopoverHeader>
           <PopoverBody>
             <Form onSubmit={this.editLabel.bind(this, this.props.node.selectedLinkId)}>
-              <Input type="textarea" name="label" id={"labelForm" + this.props.node.content.id} />
+              <Input type="textarea"
+                name="label"
+                id={"labelForm" + this.props.node.content.id} />
               <Button>Submit</Button>
               <Button onClick={this.toggleEditLabel}>Cancel</Button>
             </Form>
