@@ -10,7 +10,9 @@ class NotePortModel extends PortModel {
 
   createLinkModel() {
     const that = this;
-    const connectionRequest = {endpoint_one_id: this.parent.content.id};
+    const link = new NoteLinkModel();
+    link.color = "black";
+    const connectionRequest = {id: link.id, endpoint_one_id: this.parent.content.id};
 
     stubs.connectionStub.createConnection(connectionRequest, function(err, connectionReply) {
       if (err) {
@@ -20,9 +22,6 @@ class NotePortModel extends PortModel {
         return;
       }
     });
-    
-    const link = new NoteLinkModel();
-    link.color = "black";
 
     link.addListener({
       selectionChanged: function(event) {

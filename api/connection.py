@@ -5,8 +5,8 @@ from api.uid import UID
 
 
 class Connection:
-    def __init__(self, endpoint_one, endpoint_two, text=None):
-        self.id = UID().assign_uid()
+    def __init__(self, endpoint_one, endpoint_two, text=None, id=None):
+        self.id = id if id else UID().assign_uid()
         self.endpoint_one = endpoint_one if endpoint_one else None
         self.endpoint_two = endpoint_two if endpoint_two else None
 

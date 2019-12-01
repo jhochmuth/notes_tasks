@@ -37,7 +37,6 @@ class App extends React.Component {
       }
       else {
         note.content = noteReply;
-        console.log(note);
         model.addAll(note);
         engine.setDiagramModel(model);
         that.forceUpdate();
