@@ -5,7 +5,6 @@ const _ = require('lodash');
 class NotePortModel extends PortModel {
   constructor(pos, note) {
     super(pos, "note");
-    this.note = note;
   }
 
   createLinkModel() {
@@ -14,20 +13,10 @@ class NotePortModel extends PortModel {
     link.color = "black";
     link.addListener({
       selectionChanged: function(event) {
-        link.togglePopover(event, that.note);
+        link.togglePopover(event, that.parent);
       }
     })
     return link;
-  }
-
-  serialize() {
-    return _.merge(super.serialize(), {
-      note: this.note.getID()
-    })
-  }
-
-  deSerialize(ob, engine) {
-    super.deSerialize(ob, engine);
   }
 }
 

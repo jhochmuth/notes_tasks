@@ -5,10 +5,11 @@ import {Button, Form, FormGroup, Input, Label, Popover, PopoverBody, PopoverHead
 class Toolbar extends React.Component {
   constructor() {
     super();
-    this.state = {title: "Title", text: "Text", displayNoteForm: false};
+    this.state = {title: "Title", text: "Text", displayNoteForm: false, displayLoadForm: false};
     this.createNote = this.createNote.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.showNoteForm = this.showNoteForm.bind(this);
+    this.toggleNoteForm = this.toggleNoteForm.bind(this);
+    this.toggleLoadForm = this.toggleLoadForm.bind(this);
   }
 
   onChange(event) {
@@ -39,20 +40,26 @@ class Toolbar extends React.Component {
     });
 
     const newState = Object.assign({}, this.state);
-    newState.showNoteForm = false;
+    newState.toggleNoteForm = false;
     this.setState(newState);
   }
 
-  showNoteForm() {
+  toggleNoteForm() {
     const newState = Object.assign({}, this.state);
     newState.displayNoteForm = !this.state.displayNoteForm;
+    this.setState(newState);
+  }
+
+  toggleLoadForm() {
+    const newState = Object.assign({}, this.state);
+    newState.displayLoadForm = !this.state.displayLoadForm;
     this.setState(newState);
   }
 
   render() {
     return (
       <div>
-        <Button id="noteFormButton" className="toolbar-button" color="secondary" style={{left: 20}} onClick={this.showNoteForm}>
+        <Button id="noteFormButton" className="toolbar-button" color="secondary" style={{left: 20}} onClick={this.toggleNoteForm}>
           <img src="/home/julius/notes_tasks/icons/note.png" className="toolbar-icon" />
         </Button>
         <Button id="linkButton" className="toolbar-button" color="secondary" style={{left: 40}}>
@@ -61,10 +68,10 @@ class Toolbar extends React.Component {
         <Button id="saveButton" className="toolbar-button" style={{left: 60}} onClick={this.props.save}>
           <img src="/home/julius/notes_tasks/icons/save.png" className="toolbar-icon" />
         </Button>
-        <Button id="loadButton" className="toolbar-button" style={{left: 80}} onClick={this.props.load}>
-          <img src="/home/julius/notes_tasks/icons/save.png" className="toolbar-icon" />
+        <Button id="loadButton" className="toolbar-button" style={{left: 80}} onClick={this.toggleLoadForm}>
+          <img src="/home/julius/notes_tasks/icons/load.png" className="toolbar-icon" />
         </Button>
-        <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.showNoteForm}>
+        <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.toggleNoteForm}>
           <PopoverHeader>Create new note</PopoverHeader>
           <PopoverBody>
             <Form onSubmit={this.createNote}>
@@ -76,6 +83,15 @@ class Toolbar extends React.Component {
                 <Label>Text</Label>
                 <Input type="textarea" name="text" id={"textForm"} />
               </FormGroup>
+              <Button>Submit</Button>
+            </Form>
+          </PopoverBody>
+        </Popover>
+        <Popover trigger="legacy" placement="bottom" target="loadButton" isOpen={this.state.displayLoadForm} toggle={this.toggleLoadForm}>
+          <PopoverHeader>Load diagram from file</PopoverHeader>
+          <PopoverBody>
+            <Form onSubmit={this.props.load}>
+              <Input type="file" name="file" />
               <Button>Submit</Button>
             </Form>
           </PopoverBody>

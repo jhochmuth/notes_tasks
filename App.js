@@ -1,4 +1,5 @@
 const fs = require('fs');
+const remote = require('electron').remote;
 const React = require('react');
 const ReactDOM = require('react-dom');
 const SRD = require('@projectstorm/react-diagrams');
@@ -31,47 +32,70 @@ class App extends React.Component {
     this.forceUpdate();
   }
 
+  // todo: increase efficiency by avoiding saving twice
   save() {
     const that = this;
-    const serialized = model.serializeDiagram();
-    const str = JSON.stringify(serialized);
 
-    stubs.documentStub.saveDocument({}, function(err, response) {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        console.log("Backend saved")
+    remote.dialog.showSaveDialog(function(filename) {
+      const saveRequest = {filename: filename};
 
-        fs.writeFile('saved_diagrams/test.txt', str, function(err) {
-          if (err) {
-            console.log(err);
-          }
-          else {
-            console.log("Frontend saved");
-          }
-        });
-      }
-    })
+      stubs.documentStub.saveDocument(saveRequest, function(err, response) {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          let serializedFrontend = model.serializeDiagram();
+
+          fs.readFile(filename, function(err, data) {
+            if (err) {
+              console.log(err);
+            }
+            else {
+              const strPartial = data.toString();
+              const serializedFull = JSON.parse(strPartial);
+              serializedFull.frontend = serializedFrontend;
+              const strFull = JSON.stringify(serializedFull);
+
+              fs.writeFile('saved_diagrams/test.txt', strFull, function(err) {
+                if (err) {
+                  console.log(err);
+                }
+                else {
+                  console.log("Diagram saved.");
+                }
+              });
+            }
+          });
+        }
+      });
+    });
   }
 
-  load() {
+  load(event) {
+    event.preventDefault();
+
+    if (!event.target.file.value) {
+      alert('You must specify a file to load.')
+      return;
+    }
+
+    const file = 'saved_diagrams/' + event.target.file.value.replace('C:\\fakepath\\', '');
     const that = this;
-    const loadRequest = {file: "document.txt"};
+    const loadRequest = {file: file};
 
     stubs.documentStub.loadDocument(loadRequest, function(err, response) {
       if (err) {
         console.log(err);
       }
       else {
-        fs.readFile('saved_diagrams/test.txt', function(err, data) {
+        fs.readFile(file, function(err, data) {
           if (err) {
             console.log(err);
           }
           else {
             const str = data.toString();
             model = new SRD.DiagramModel();
-            model.deSerializeDiagram(JSON.parse(str), engine);
+            model.deSerializeDiagram(JSON.parse(str).frontend, engine);
 
             for (let node in model.nodes) {
               model.nodes[node].app = that;

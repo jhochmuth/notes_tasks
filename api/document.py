@@ -9,9 +9,10 @@ class Document:
 
     def save_document(self, filename):
         data = dict()
+        data["backend"] = dict()
 
         for id, obj in self.children.items():
-            data[obj.id] = (obj.serialize())
+            data["backend"][obj.id] = obj.serialize()
 
         with open(filename, 'w') as outfile:
             json.dump(data, outfile)
@@ -21,7 +22,7 @@ class Document:
 
         with open(file, 'r') as infile:
             data = json.load(infile)
-            for id, obj in data.items():
+            for id, obj in data["backend"].items():
                 if obj["type"] == "note":
                     note = Note.from_dict(obj)
                     self.children[note.id] = note
