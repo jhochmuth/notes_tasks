@@ -73,6 +73,13 @@ class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):
                                          endpoint_two_id=request.endpoint_two_id,
                                          text=request.text)
 
+    def AddEndpoint(self, request, context):
+        connection = document.children[request.id]
+        connection.change_second_endpoint(document.children[request.endpoint_two_id])
+
+        return tasks_pb2.ConnectionReply(id=connection.id,
+                                         endpoint_two_id=request.endpoint_two_id)
+
 
 class ContainerServicer(tasks_pb2_grpc.ContainerManagerServicer):
     def CreateContainer(self, request, context):

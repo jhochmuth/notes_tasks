@@ -171,6 +171,11 @@ class ConnectionManagerStub(object):
         request_serializer=tasks__pb2.ConnectionRequest.SerializeToString,
         response_deserializer=tasks__pb2.ConnectionReply.FromString,
         )
+    self.AddEndpoint = channel.unary_unary(
+        '/ConnectionManager/AddEndpoint',
+        request_serializer=tasks__pb2.ConnectionRequest.SerializeToString,
+        response_deserializer=tasks__pb2.ConnectionReply.FromString,
+        )
 
 
 class ConnectionManagerServicer(object):
@@ -184,11 +189,23 @@ class ConnectionManagerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def AddEndpoint(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_ConnectionManagerServicer_to_server(servicer, server):
   rpc_method_handlers = {
       'CreateConnection': grpc.unary_unary_rpc_method_handler(
           servicer.CreateConnection,
+          request_deserializer=tasks__pb2.ConnectionRequest.FromString,
+          response_serializer=tasks__pb2.ConnectionReply.SerializeToString,
+      ),
+      'AddEndpoint': grpc.unary_unary_rpc_method_handler(
+          servicer.AddEndpoint,
           request_deserializer=tasks__pb2.ConnectionRequest.FromString,
           response_serializer=tasks__pb2.ConnectionReply.SerializeToString,
       ),

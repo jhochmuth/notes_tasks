@@ -121,6 +121,7 @@ service NoteManager {
 
 service ConnectionManager {
     rpc CreateConnection (ConnectionRequest) returns (ConnectionReply) {}
+    rpc AddEndpoint (ConnectionRequest) returns (ConnectionReply) {}
 }
 
 service ContainerManager {
