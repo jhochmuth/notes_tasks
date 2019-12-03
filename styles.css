@@ -1,3 +1,52 @@
+.mainmenu {
+	background-color: #606060;
+	width: 100%;
+	height: 100%;
+}
+
+.mainmenu-icon {
+	top: 8%;
+	left: 48%;
+	position: absolute;
+	height: 150px;
+	width: 150px;
+}
+
+.mainmenu-title {
+	top: 25%;
+	position: absolute;
+	left: 45%;
+	font-size: 48px;
+	color: white;
+	text-align: center;
+}
+
+.mainmenu-button {
+	position: absolute;
+	background-color: transparent;
+	border: none;
+	left: 45%;
+	color: white;
+	font-size: 20px;
+	text-align: center;
+}
+
+.mainmenu-button:focus {
+	outline: 0;
+}
+
+.mainmenu-button:hover {
+	color: orange;
+}
+
+#new-document-button {
+	top: 50%
+}
+
+#load-document-button {
+	top: 55%
+}
+
 .app {
 	background-color: #F5F5F5;
 }
@@ -33,8 +82,7 @@
 	border-radius: 5px;
 	background-color: #686868;
 }
-	/*background-color: #bdcad9;
-	background-image: linear-gradient(315deg, #bdcad9 0%, #e1dada 74%);*/
+
 .note-title {
 	text-align: center;
 	font-family: Arial;

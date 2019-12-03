@@ -49,6 +49,8 @@ class App extends React.Component {
     const that = this;
 
     remote.dialog.showSaveDialog(function(filename) {
+      if (!filename) return;
+
       const saveRequest = {filename: filename};
 
       stubs.documentStub.saveDocument(saveRequest, function(err, response) {
@@ -87,7 +89,7 @@ class App extends React.Component {
     event.preventDefault();
 
     if (!event.target.file.value) {
-      alert('You must specify a file to load.')
+      alert('You must specify a file to load.');
       return;
     }
 

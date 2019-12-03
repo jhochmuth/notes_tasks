@@ -69,10 +69,10 @@ app.on('will-quit', exitPyProc)
 let mainWindow = null
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({width: 1500, height: 1250})
+  mainWindow = new BrowserWindow({width: 1200, height: 900})
 
   mainWindow.loadURL(require('url').format({
-    pathname: path.join(__dirname, 'index.html'),
+    pathname: path.join(__dirname, 'indexMenu.html'),
     protocol: 'file:',
     slashes: true
   }))
