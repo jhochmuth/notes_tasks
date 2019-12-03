@@ -1,5 +1,6 @@
 const fs = require('fs');
 const remote = require('electron').remote;
+const ipcRenderer = require('electron').ipcRenderer;
 const React = require('react');
 const ReactDOM = require('react-dom');
 const SRD = require('@projectstorm/react-diagrams');
@@ -20,9 +21,15 @@ let model = new SRD.DiagramModel();
 class App extends React.Component {
   constructor() {
     super();
+    const that = this;
+    ipcRenderer.on('load', function(event, file) {
+      that.load(file[0])
+    });
+
     this.addNote = this.addNote.bind(this);
     this.save = this.save.bind(this);
     this.load = this.load.bind(this);
+    this.onLoadButtonClick = this.onLoadButtonClick.bind(this);
   }
 
   addNote(event) {
@@ -85,7 +92,7 @@ class App extends React.Component {
     });
   }
 
-  load(event) {
+  onLoadButtonClick(event) {
     event.preventDefault();
 
     if (!event.target.file.value) {
@@ -93,7 +100,10 @@ class App extends React.Component {
       return;
     }
 
-    const file = 'saved_diagrams/' + event.target.file.value.replace('C:\\fakepath\\', '');
+    this.load('saved_diagrams/' + event.target.file.value.replace('C:\\fakepath\\', ''));
+  }
+
+  load(file) {
     const that = this;
     const loadRequest = {file: file};
 
@@ -127,7 +137,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="app">
-        <div className="toolbar"><Toolbar addNote={this.addNote} save={this.save} load={this.load}/></div>
+        <div className="toolbar"><Toolbar addNote={this.addNote} save={this.save} load={this.onLoadButtonClick}/></div>
         <SRD.DiagramWidget
           diagramEngine={engine}
           smartRouting={true}

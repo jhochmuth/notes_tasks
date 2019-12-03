@@ -1,3 +1,4 @@
 *.pyc
 *.AppImage
 node_modules/
+saved_diagrams/

@@ -2,6 +2,7 @@ const React = require('react');
 const stubs = require('../stubs.js');
 import {Button, Form, FormGroup, Input, Label, Popover, PopoverBody, PopoverHeader} from 'reactstrap';
 
+// todo: use electron dialog box for load instead of having react component open it
 class Toolbar extends React.Component {
   constructor() {
     super();
