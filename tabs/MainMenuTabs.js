@@ -1,6 +1,6 @@
 const React = require('react');
-const App = require('./App.js');
-const stubs = require('./stubs.js');
+const App = require('../App.js');
+const stubs = require('../stubs.js');
 const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
@@ -37,27 +37,7 @@ class MainMenu extends React.Component {
   }
 
   createDiagram(event, file) {
-    let win = new BrowserWindow({width: 1200, height: 1200, show: false})
-    win.on('closed', () => {
-      win = null
-    });
-
-    win.loadURL(require('url').format({
-      pathname: '/home/julius/notes_tasks/indexApp.html',
-      protocol: 'file:',
-      slashes: true
-    }))
-
-    win.once('ready-to-show', function() {
-      win.show();
-    })
-
-    if (file) {
-      setTimeout(function() {
-        win.webContents.send('load', file)
-      }, 500)
-    }
-
+    electron.ipcRenderer.sendToHost('fromTab', ["newDiagram", file ? file[0] : null])
   }
 
   loadDiagram() {

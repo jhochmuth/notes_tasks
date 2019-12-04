@@ -51,13 +51,13 @@ class Toolbar extends React.Component {
   render() {
     return (
       <div>
-        <Button id="noteFormButton" className="toolbar-button" color="secondary" style={{left: 20}} onClick={this.toggleNoteForm}>
+        <Button id="noteFormButton" className="toolbar-button" color="secondary" style={{left: '3%'}} onClick={this.toggleNoteForm}>
           <img src="/home/julius/notes_tasks/icons/note.png" className="toolbar-icon" />
         </Button>
-        <Button id="saveButton" className="toolbar-button" style={{left: 880}} onClick={this.props.save}>
+        <Button id="saveButton" className="toolbar-button" style={{left: '80%'}} onClick={this.props.save}>
           <img src="/home/julius/notes_tasks/icons/save.png" className="toolbar-icon" />
         </Button>
-        <Button id="loadButton" className="toolbar-button" style={{left: 900}} onClick={this.toggleLoadForm}>
+        <Button id="loadButton" className="toolbar-button" style={{left: '82%'}} onClick={this.toggleLoadForm}>
           <img src="/home/julius/notes_tasks/icons/load.png" className="toolbar-icon" />
         </Button>
         <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.toggleNoteForm}>

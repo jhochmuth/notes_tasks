@@ -4,7 +4,6 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const React = require('react');
 
-
 /*************************************************************
  * py process
  *************************************************************/
@@ -69,16 +68,19 @@ app.on('will-quit', exitPyProc)
 let mainWindow = null
 
 const createWindow = () => {
-  mainWindow = new BrowserWindow({width: 1200, height: 900})
+  mainWindow = new BrowserWindow({width: 1200, height: 900, show: false})
 
   mainWindow.loadURL(require('url').format({
-    pathname: path.join(__dirname, 'indexMenu.html'),
+    pathname: path.join(__dirname, 'tabs', 'indexTabs.html'),
     protocol: 'file:',
     slashes: true
   }))
 
-  //mainWindow.loadURL('http://localhost:3000/')
-  mainWindow.webContents.openDevTools()
+  mainWindow.once('ready-to-show', function() {
+    mainWindow.show();
+    mainWindow.reload();
+    mainWindow.webContents.openDevTools()
+  })
 
   mainWindow.on('closed', () => {
     mainWindow = null
