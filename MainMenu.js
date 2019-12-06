@@ -49,6 +49,7 @@ class MainMenu extends React.Component {
     }))
 
     win.once('ready-to-show', function() {
+      win.webContents.openDevTools()
       win.show();
     })
 

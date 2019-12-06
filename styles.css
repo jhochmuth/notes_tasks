@@ -19,7 +19,7 @@
 .mainmenu-title {
 	top: 25%;
 	position: absolute;
-	left: 45%;
+	left: 50%;
 	font-size: 48px;
 	color: white;
 	text-align: center;
@@ -124,4 +124,13 @@
 	white-space: nowrap;
 	text-align: left;
 	color: white;
+}
+
+.list-view-toolbar {
+	border-bottom: thin solid;
+	position: relative;
+	top: 0;
+	height: 8%;
+	background-color: #C0C0C0;
+	width: 100%;
 }

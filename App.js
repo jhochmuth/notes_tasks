@@ -1,5 +1,6 @@
 const fs = require('fs');
 const remote = require('electron').remote;
+const BrowserWindow = remote.BrowserWindow;
 const ipcRenderer = require('electron').ipcRenderer;
 const React = require('react');
 const ReactDOM = require('react-dom');
@@ -21,9 +22,11 @@ let model = new SRD.DiagramModel();
 class App extends React.Component {
   constructor() {
     super();
+
     const that = this;
+
     ipcRenderer.on('load', function(event, file) {
-      that.load(file[0])
+      that.load(file[0]);
     });
 
     this.addNote = this.addNote.bind(this);
@@ -92,6 +95,7 @@ class App extends React.Component {
     });
   }
 
+  /// todo: change to use electron functionality
   onLoadButtonClick(event) {
     event.preventDefault();
 
@@ -134,10 +138,45 @@ class App extends React.Component {
     });
   }
 
+  openListView() {
+    const that = this;
+    let win = new BrowserWindow({width: 800, height: 800, show: false});
+
+    win.on('closed', () => {
+      win = null
+    });
+
+    win.loadURL(require('url').format({
+      pathname: '/home/julius/notes_tasks/indexList.html',
+      protocol: 'file:',
+      slashes: true
+    }));
+
+    win.once('ready-to-show', function() {
+      win.webContents.openDevTools();
+      win.show();
+    });
+
+    let data = [];
+
+    for (let note in model.nodes) {
+      data.push(model.nodes[note].content);
+    }
+
+    setTimeout(function() {
+      win.webContents.send('listView', data);
+    }, 500);
+  }
+
   render() {
     return (
       <div className="app">
-        <div className="toolbar"><Toolbar addNote={this.addNote} save={this.save} load={this.onLoadButtonClick}/></div>
+        <div className="toolbar">
+          <Toolbar addNote={this.addNote}
+            save={this.save}
+            load={this.onLoadButtonClick}
+            openListView={this.openListView}/>
+        </div>
         <SRD.DiagramWidget
           diagramEngine={engine}
           smartRouting={true}

@@ -71,10 +71,12 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({width: 1200, height: 900, show: false})
 
   mainWindow.loadURL(require('url').format({
-    pathname: path.join(__dirname, 'tabs', 'indexTabs.html'),
+    pathname: path.join(__dirname, 'indexMenu.html'),
     protocol: 'file:',
     slashes: true
   }))
+
+  //pathname: path.join(__dirname, 'tabs', 'indexTabs.html'),
 
   mainWindow.once('ready-to-show', function() {
     mainWindow.show();
