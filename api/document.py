@@ -1,6 +1,7 @@
 import json
 
 from api.note import Note
+from api.connection import Connection
 
 
 class Document:
@@ -26,3 +27,6 @@ class Document:
                 if obj["type"] == "note":
                     note = Note.from_dict(obj)
                     self.children[note.id] = note
+                elif obj["type"] == "connection":
+                    connection = Connection.from_dict(obj)
+                    self.children[connection.id] = connection

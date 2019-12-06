@@ -21,7 +21,7 @@ class List extends React.Component {
     const attrList = [];
 
     for (let attr in note.attrs) {
-      if (attr != "title" || attr != "text") {
+      if (attr !== "title" && attr !== "text") {
         attrList.push(<li key={note.id + attr}>{attr}: {note.attrs[attr]}</li>);
       }
     }

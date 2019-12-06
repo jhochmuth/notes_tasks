@@ -34,9 +34,11 @@ class Connection:
     """
     def serialize(self):
         data = dict()
-        data["endpoint_one"] = self.endpoint_one
-        data["endpoint_two"] = self.endpoint_two
+        data["id"] = self.id
+        data["endpoint_one"] = self.endpoint_one.id
+        data["endpoint_two"] = self.endpoint_two.id
         data["text"] = self.text
+        data["type"] = "connection"
         return data
 
     @classmethod

@@ -24,6 +24,7 @@ class App extends React.Component {
     super();
 
     const that = this;
+    this.win = null;
 
     ipcRenderer.on('load', function(event, file) {
       that.load(file[0]);
@@ -33,6 +34,7 @@ class App extends React.Component {
     this.save = this.save.bind(this);
     this.load = this.load.bind(this);
     this.onLoadButtonClick = this.onLoadButtonClick.bind(this);
+    this.openListView = this.openListView.bind(this);
   }
 
   addNote(event) {
@@ -50,6 +52,8 @@ class App extends React.Component {
         model.addAll(note);
         engine.setDiagramModel(model);
         that.forceUpdate();
+
+        that.updateListView();
       }
     });
   }
@@ -138,34 +142,42 @@ class App extends React.Component {
     });
   }
 
+  updateListView() {
+    let data = [];
+    const that = this;
+
+    if (that.win) {
+      for (let note in model.nodes) {
+        data.push(model.nodes[note].content);
+      }
+
+      setTimeout(function() {
+        that.win.webContents.send('listView', data);
+      }, 500);
+    }
+  }
+
   openListView() {
     const that = this;
-    let win = new BrowserWindow({width: 800, height: 800, show: false});
 
-    win.on('closed', () => {
-      win = null
+    that.win = new BrowserWindow({width: 800, height: 800, show: false});
+
+    that.win.on('closed', () => {
+      this.win = null
     });
 
-    win.loadURL(require('url').format({
+    that.win.loadURL(require('url').format({
       pathname: '/home/julius/notes_tasks/indexList.html',
       protocol: 'file:',
       slashes: true
     }));
 
-    win.once('ready-to-show', function() {
-      win.webContents.openDevTools();
-      win.show();
+    this.win.once('ready-to-show', function() {
+      that.win.webContents.openDevTools();
+      that.win.show();
     });
 
-    let data = [];
-
-    for (let note in model.nodes) {
-      data.push(model.nodes[note].content);
-    }
-
-    setTimeout(function() {
-      win.webContents.send('listView', data);
-    }, 500);
+    that.updateListView();
   }
 
   render() {

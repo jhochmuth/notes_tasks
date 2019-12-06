@@ -74,6 +74,8 @@ class NoteWidget extends React.Component {
         attrs[attr] = val;
         newState.attrs = attrs;
         that.setState(newState);
+        that.props.node.content.attrs = attrs;
+        that.props.node.app.updateListView();
       }
     })
   }
@@ -94,7 +96,10 @@ class NoteWidget extends React.Component {
               <span className="attr-text">
                 <b>{attr}:</b> {attrs[attr]}
               </span>
-              <UncontrolledTooltip placement="right" target={"note" + that.props.node.content.id + "attr" + idDigit} delay={{show: 1000, hide: 0}}>{attrs[attr]}</UncontrolledTooltip>
+              <UncontrolledTooltip placement="right"
+                target={"note" + that.props.node.content.id + "attr" + idDigit}
+                delay={{show: 1000, hide: 0}}>{attrs[attr]}
+              </UncontrolledTooltip>
             </div>
         );
       }
@@ -136,6 +141,7 @@ class NoteWidget extends React.Component {
         if (response.val) {
           that.props.node.model.removeNode(that.props.node);
           that.props.node.app.forceUpdate();
+          that.props.node.app.updateListView();
         }
       }
     })
