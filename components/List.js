@@ -1,17 +1,19 @@
 const React = require('react');
-import {ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText} from 'reactstrap';
+import {Button, Input, InputGroup, InputGroupAddon, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText} from 'reactstrap';
 const ipcRenderer = require('electron').ipcRenderer;
 
 class List extends React.Component {
   constructor() {
     super();
     this.data = null;
-    this.state = {placeholder: 1}
+    this.state = {displayAttrs: true};
+    this.toggleAttrs = this.toggleAttrs.bind(this);
+
     const that = this;
 
     ipcRenderer.on('listView', function(event, data) {
       that.data = data;
-      that.setState({placeholder: 2})
+      that.setState({displayAttrs: false});
     });
   }
 
@@ -20,7 +22,7 @@ class List extends React.Component {
 
     for (let attr in note.attrs) {
       if (attr != "title" || attr != "text") {
-        attrList.push(<li key={note.id + attr}>{attr}: {note.attrs[attr]}</li>)
+        attrList.push(<li key={note.id + attr}>{attr}: {note.attrs[attr]}</li>);
       }
     }
 
@@ -30,24 +32,38 @@ class List extends React.Component {
   renderNotes() {
     const that = this;
 
-    if (that.data) {
+    if (that.data && that.data.length > 0) {
       return that.data.map(function(note) {
         return (
           <ListGroupItem key={note.id}>
             <ListGroupItemHeading>{note.attrs.title}</ListGroupItemHeading>
-              <ul>
-                {that.renderNoteAttrs(note)}
-              </ul>
+              {that.state.displayAttrs ? <ul>{that.renderNoteAttrs(note)}</ul> : null}
           </ListGroupItem>
         )
       })
     }
+
+    else {
+      return <h4>No notes present in diagram.</h4>
+    }
+  }
+
+  toggleAttrs() {
+    const newState = Object.assign({}, this.state);
+    newState.displayAttrs = !newState.displayAttrs;
+    this.setState(newState);
   }
 
   render() {
     return (
       <div>
-        <div className="list-view-toolbar"></div>
+        <div className="list-view-toolbar">
+          <Button className="toolbar-button" onClick={this.toggleAttrs} style={{position: "absolute", top: "10%", left: 20}}>Show Attrs</Button>
+          <InputGroup style={{position: "absolute", top: "20%", right: 20, width: "33%"}}>
+            <InputGroupAddon addonType="prepend">🔎</InputGroupAddon>
+            <Input/>
+          </InputGroup>
+        </div>
         <ListGroup>
           {this.renderNotes()}
         </ListGroup>

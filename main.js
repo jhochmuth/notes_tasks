@@ -75,7 +75,7 @@ const createWindow = () => {
     protocol: 'file:',
     slashes: true
   }))
-
+  //pathname: path.join(__dirname, 'indexMenu.html'),
   //pathname: path.join(__dirname, 'tabs', 'indexTabs.html'),
 
   mainWindow.once('ready-to-show', function() {

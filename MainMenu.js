@@ -56,7 +56,7 @@ class MainMenu extends React.Component {
     if (file) {
       setTimeout(function() {
         win.webContents.send('load', file)
-      }, 500)
+      }, 500);
     }
 
   }
