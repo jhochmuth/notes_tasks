@@ -30,6 +30,15 @@ class MainMenu extends React.Component {
             label: "Quit",
             click() {electron.remote.app.quit()}}
         ]
+      },
+      {
+        label: "Debug",
+        submenu: [
+          {
+            label: "Open Developer Tools",
+            click() {electron.remote.getCurrentWebContents().openDevTools()}
+          }
+        ]
       }
     ])
 

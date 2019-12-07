@@ -10,6 +10,8 @@ const NoteModel = require('./components/NoteModel.js');
 const NoteFactory = require('./components/NoteFactory.js');
 const NoteLinkFactory = require('./components/NoteLinkFactory.js');
 const NotePortFactory = require('./components/NotePortFactory.js');
+const ContainerModel = require('./components/ContainerModel.js');
+const ContainerFactory = require('./components/ContainerFactory.js');
 const stubs = require('./stubs.js');
 
 const engine = new SRD.DiagramEngine();
@@ -17,6 +19,7 @@ engine.installDefaultFactories();
 engine.registerNodeFactory(new NoteFactory());
 engine.registerLinkFactory(new NoteLinkFactory());
 engine.registerPortFactory(new NotePortFactory());
+engine.registerNodeFactory(new ContainerFactory());
 let model = new SRD.DiagramModel();
 
 class App extends React.Component {
@@ -31,6 +34,7 @@ class App extends React.Component {
     });
 
     this.addNote = this.addNote.bind(this);
+    this.addContainer = this.addContainer.bind(this);
     this.save = this.save.bind(this);
     this.load = this.load.bind(this);
     this.onLoadButtonClick = this.onLoadButtonClick.bind(this);
@@ -56,6 +60,13 @@ class App extends React.Component {
         that.updateListView();
       }
     });
+  }
+
+  addContainer(event) {
+    const container = new ContainerModel();
+    model.addAll(container);
+    engine.setDiagramModel(model);
+    this.forceUpdate();
   }
 
   // todo: increase efficiency by avoiding saving twice
@@ -161,7 +172,7 @@ class App extends React.Component {
     const that = this;
 
     that.win = new BrowserWindow({width: 800, height: 800, show: false});
-
+    that.win.setMenu(null);
     that.win.on('closed', () => {
       this.win = null
     });
@@ -185,6 +196,7 @@ class App extends React.Component {
       <div className="app">
         <div className="toolbar">
           <Toolbar addNote={this.addNote}
+            addContainer={this.addContainer}
             save={this.save}
             load={this.onLoadButtonClick}
             openListView={this.openListView}/>

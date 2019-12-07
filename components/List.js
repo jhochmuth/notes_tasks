@@ -1,5 +1,5 @@
 const React = require('react');
-import {Button, Form, Input, InputGroup, InputGroupAddon, Label, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, UncontrolledPopover, PopoverHeader, PopoverBody} from 'reactstrap';
+import {Button, Form, Input, InputGroup, InputGroupAddon, Label, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Popover, PopoverHeader, PopoverBody} from 'reactstrap';
 const ipcRenderer = require('electron').ipcRenderer;
 
 class List extends React.Component {
@@ -12,10 +12,11 @@ class List extends React.Component {
     this.renderedNotes = [];
     this.renderedAttrs = [];
 
-    this.state = {displayAttrs: false, renderedData: null};
+    this.state = {displayAttrs: false, renderedData: null, displaySortInfo: false};
     this.toggleAttrs = this.toggleAttrs.bind(this);
     this.search = this.search.bind(this);
     this.addSortAttr = this.addSortAttr.bind(this);
+    this.toggleSortInfo = this.toggleSortInfo.bind(this);
 
     const that = this;
 
@@ -87,6 +88,12 @@ class List extends React.Component {
     this.updateRenderedData();
   }
 
+  toggleSortInfo() {
+    const newState = Object.assign({}, this.state);
+    newState.displaySortInfo = !newState.displaySortInfo;
+    this.setState(newState);
+  }
+
   addSortAttr(event) {
     event.preventDefault();
     this.sortAttr.push(event.target.attr.value);
@@ -156,7 +163,7 @@ class List extends React.Component {
             Show Attrs
           </Button>
           <Button id="sortPopover" className="toolbar-button" style={{position: "absolute", top: "10%", left: "40%"}}>Sort Options</Button>
-          <UncontrolledPopover trigger="legacy" placement="bottom" target="sortPopover">
+          <Popover trigger="legacy" placement="bottom" target="sortPopover" isOpen={this.state.displaySortInfo} toggle={this.toggleSortInfo}>
             <PopoverHeader>Attribute sort order</PopoverHeader>
             <PopoverBody>
               {this.renderSortAttrs()}
@@ -166,7 +173,7 @@ class List extends React.Component {
                 <Button>Submit</Button>
               </Form>
             </PopoverBody>
-          </UncontrolledPopover>
+          </Popover>
           <Form onChange={this.search}>
             <InputGroup style={{position: "absolute", top: "20%", right: 20, width: "33%"}}>
               <InputGroupAddon addonType="prepend">🔎</InputGroupAddon>

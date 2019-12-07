@@ -79,6 +79,8 @@ class NoteWidget extends React.Component {
         that.props.node.app.updateListView();
       }
     })
+
+    this.toggleEditNote();
   }
 
   renderAttrs() {
@@ -114,6 +116,7 @@ class NoteWidget extends React.Component {
     this.forceUpdate();
   }
 
+  // todo: add grpc and backend functionality for adding labels
   editLabel(id, event) {
     event.preventDefault();
     if (event.target.label.value !== "") {
@@ -121,7 +124,7 @@ class NoteWidget extends React.Component {
       link.addLabel(event.target.label.value);
       this.props.node.display = false;
       this.props.node.selectedLinkId = null;
-      this.forceUpdate();
+      this.props.node.app.forceUpdate();
     }
   }
 
@@ -153,7 +156,7 @@ class NoteWidget extends React.Component {
     const height = this.state.displayAttrs ? 100 + (25 * (Object.keys(this.state.attrs).length - 1)) : 80;
     return (
       <div className="note"
-        style={{height: height, width: this.state.width, borderRadius: this.state.borderRadius}}
+        style={{height: height, width: this.state.width, borderRadius: this.state.borderRadius, zIndex: 5}}
         onMouseEnter={this.showButtons}
         onMouseLeave={this.hideButtons}>
         <h4 className="note-title" style={{height: this.state.displayAttrs ? null : "100%"}}>{attrs.title}</h4>

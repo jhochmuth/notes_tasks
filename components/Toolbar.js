@@ -29,11 +29,9 @@ class Toolbar extends React.Component {
       return;
     }
 
-    const newState = Object.assign({}, this.state);
-    newState.toggleNoteForm = false;
-    this.setState(newState);
-
     this.props.addNote(event);
+
+    this.toggleNoteForm();
   }
 
   toggleNoteForm() {
@@ -62,6 +60,9 @@ class Toolbar extends React.Component {
         </Button>
         <Button className="toolbar-button" style={{left: '5%'}} onClick={this.props.openListView}>
           <img src="/home/julius/notes_tasks/icons/list.png" className="toolbar-icon" />
+        </Button>
+        <Button className="toolbar-button" style={{left: '10%'}} onClick={this.props.addContainer}>
+          Container
         </Button>
         <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.toggleNoteForm}>
           <PopoverHeader>Create new note</PopoverHeader>
@@ -94,9 +95,3 @@ class Toolbar extends React.Component {
 }
 
 module.exports = Toolbar;
-
-/*
-<Button id="linkButton" className="toolbar-button" color="secondary" style={{left: 40}} onClick={this.props.createLink}>
-  <img src="/home/julius/notes_tasks/icons/link.png" className="toolbar-icon" />
-</Button>
-*/
