@@ -1,20 +1,48 @@
 const React = require('react');
-import {Button, Input, InputGroup, InputGroupAddon, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText} from 'reactstrap';
+import {Button, Form, Input, InputGroup, InputGroupAddon, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText} from 'reactstrap';
 const ipcRenderer = require('electron').ipcRenderer;
 
 class List extends React.Component {
   constructor() {
     super();
-    this.data = null;
-    this.state = {displayAttrs: true};
+
+    this.notes = {};
+    this.searchResults = false;
+    this.renderedNotes = new Set();
+    this.renderedAttrs = new Set();
+
+    this.state = {displayAttrs: false, renderedData: null};
     this.toggleAttrs = this.toggleAttrs.bind(this);
+    this.search = this.search.bind(this);
 
     const that = this;
 
     ipcRenderer.on('listView', function(event, data) {
-      that.data = data;
-      that.setState({displayAttrs: false});
+      that.notes = data;
+
+      that.updateRenderedData();
     });
+  }
+
+  updateRenderedData() {
+    const that = this;
+    const newRenderedData = [];
+
+    if (that.searchResults) {
+      that.renderedNotes.forEach(function(id) {
+        newRenderedData.push(that.notes[id]);
+      });
+    }
+
+    else {
+      for (let id in that.notes) {
+        newRenderedData.push(that.notes[id]);
+      }
+    }
+
+    const newState = Object.assign({}, that.state);
+    newState.renderedData = newRenderedData;
+    that.setState(newState);
   }
 
   renderNoteAttrs(note) {
@@ -31,9 +59,10 @@ class List extends React.Component {
 
   renderNotes() {
     const that = this;
+    if (Object.keys(that.notes).length == 0) return <h3>No notes present in diagram.</h3>
 
-    if (that.data && that.data.length > 0) {
-      return that.data.map(function(note) {
+    else if (that.state.renderedData && that.state.renderedData.length > 0) {
+      return that.state.renderedData.map(function(note) {
         return (
           <ListGroupItem key={note.id}>
             <ListGroupItemHeading>{note.attrs.title}</ListGroupItemHeading>
@@ -43,9 +72,7 @@ class List extends React.Component {
       })
     }
 
-    else {
-      return <h4>No notes present in diagram.</h4>
-    }
+    else return <h3>No notes found fulfilling criteria.</h3>
   }
 
   toggleAttrs() {
@@ -54,15 +81,42 @@ class List extends React.Component {
     this.setState(newState);
   }
 
+  search(event) {
+    event.preventDefault();
+    const searchTerm = event.currentTarget.search.value;
+    const that = this;
+    this.renderedNotes = new Set();
+
+    if (searchTerm.length > 0) {
+      that.searchResults = true;
+
+      for (let id in that.notes) {
+        let note = that.notes[id];
+        for (let attr in note.attrs) {
+          if (note.attrs[attr].toLowerCase().includes(searchTerm.toLowerCase())) {
+            that.renderedNotes.add(id);
+            break;
+          }
+        }
+      }
+    }
+
+    else that.searchResults = false;
+
+    this.updateRenderedData();
+  }
+
   render() {
     return (
       <div>
         <div className="list-view-toolbar">
           <Button className="toolbar-button" onClick={this.toggleAttrs} style={{position: "absolute", top: "10%", left: 20}}>Show Attrs</Button>
-          <InputGroup style={{position: "absolute", top: "20%", right: 20, width: "33%"}}>
-            <InputGroupAddon addonType="prepend">🔎</InputGroupAddon>
-            <Input/>
-          </InputGroup>
+          <Form onChange={this.search}>
+            <InputGroup style={{position: "absolute", top: "20%", right: 20, width: "33%"}}>
+              <InputGroupAddon addonType="prepend">🔎</InputGroupAddon>
+              <Input name="search" />
+            </InputGroup>
+          </Form>
         </div>
         <ListGroup>
           {this.renderNotes()}

@@ -143,12 +143,12 @@ class App extends React.Component {
   }
 
   updateListView() {
-    let data = [];
+    let data = {};
     const that = this;
 
     if (that.win) {
-      for (let note in model.nodes) {
-        data.push(model.nodes[note].content);
+      for (let id in model.nodes) {
+        data[id] = model.nodes[id].content;
       }
 
       setTimeout(function() {
