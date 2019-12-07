@@ -134,3 +134,8 @@
 	background-color: #C0C0C0;
 	width: 100%;
 }
+
+.delete-sort-attr-button {
+	position: absolute;
+	right: 5;
+}

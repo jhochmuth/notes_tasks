@@ -63,6 +63,7 @@ class NoteWidget extends React.Component {
       new_value: val
     }
 
+    // todo: backend does not update text length when text changed
     stubs.noteStub.updateNoteAttr(updateAttrRequest, function(err, noteReply) {
       if (err) {
         console.log(err);
@@ -155,7 +156,7 @@ class NoteWidget extends React.Component {
         style={{height: height, width: this.state.width, borderRadius: this.state.borderRadius}}
         onMouseEnter={this.showButtons}
         onMouseLeave={this.hideButtons}>
-        <h4 className="note-title">{attrs.title}</h4>
+        <h4 className="note-title" style={{height: this.state.displayAttrs ? null : "100%"}}>{attrs.title}</h4>
         <div style={{textAlign: "center", visibility: this.state.displayAttrs ? "visible" : "hidden"}}>{attrs.text}</div>
         <div style={{visibility: this.state.displayAttrs ? "visible" : "hidden", margin: 10}}>{this.renderAttrs()}</div>
         <button id={"attrFormControl" + this.props.node.content.id}

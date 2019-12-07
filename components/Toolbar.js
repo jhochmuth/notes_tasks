@@ -60,7 +60,9 @@ class Toolbar extends React.Component {
         <Button id="loadButton" className="toolbar-button" style={{left: '82%'}} onClick={this.toggleLoadForm}>
           <img src="/home/julius/notes_tasks/icons/load.png" className="toolbar-icon" />
         </Button>
-        <Button className="toolbar-button" style={{left: '5%'}} onClick={this.props.openListView}>List View</Button>
+        <Button className="toolbar-button" style={{left: '5%'}} onClick={this.props.openListView}>
+          <img src="/home/julius/notes_tasks/icons/list.png" className="toolbar-icon" />
+        </Button>
         <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.toggleNoteForm}>
           <PopoverHeader>Create new note</PopoverHeader>
           <PopoverBody>
