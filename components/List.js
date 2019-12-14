@@ -2,6 +2,7 @@ const React = require('react');
 import {Button, Form, Input, InputGroup, InputGroupAddon, Label, ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Popover, PopoverHeader, PopoverBody} from 'reactstrap';
 const ipcRenderer = require('electron').ipcRenderer;
 
+// todo: move ipcRenderer creation to appropriate lifecycle method
 class List extends React.Component {
   constructor() {
     super();
