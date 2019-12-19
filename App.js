@@ -46,7 +46,6 @@ class App extends React.Component {
     const note = new NoteModel(null, model, this);
     const attrs = {title: event.target.title.value, text: event.target.text.value};
     const noteRequest = {id: note.id, attrs: attrs};
-    console.log(noteRequest)
 
     stubs.noteStub.createNote(noteRequest, function(err, noteReply) {
       if (err) {
@@ -204,7 +203,7 @@ class App extends React.Component {
         </div>
         <SRD.DiagramWidget
           diagramEngine={engine}
-          smartRouting={true}
+          smartRouting={false}
           className="srd-diagram"
           maxNumberPointsPerLink="0"
           deleteKeys={[27]}
