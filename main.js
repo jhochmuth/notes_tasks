@@ -5,7 +5,7 @@ const path = require('path')
 const React = require('react');
 
 /*************************************************************
- * py process
+ * Python backend startup
  *************************************************************/
 
 const PY_DIST_FOLDER = 'pycalcdist'
@@ -62,7 +62,7 @@ app.on('will-quit', exitPyProc)
 
 
 /*************************************************************
- * window management
+ * Create electron window
  *************************************************************/
 
 let mainWindow = null
