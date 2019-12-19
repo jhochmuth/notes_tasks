@@ -61,9 +61,6 @@ class Toolbar extends React.Component {
         <Button className="toolbar-button" style={{left: '5%'}} onClick={this.props.openListView}>
           <img src="/home/julius/notes_tasks/icons/list.png" className="toolbar-icon" />
         </Button>
-        <Button className="toolbar-button" style={{left: '10%'}} onClick={this.props.addContainer}>
-          Container
-        </Button>
         <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.toggleNoteForm}>
           <PopoverHeader>Create new note</PopoverHeader>
           <PopoverBody>
@@ -95,3 +92,12 @@ class Toolbar extends React.Component {
 }
 
 module.exports = Toolbar;
+
+
+
+/*
+For Later use:
+<Button className="toolbar-button" style={{left: '10%'}} onClick={this.props.addContainer}>
+  Container
+</Button>
+*/

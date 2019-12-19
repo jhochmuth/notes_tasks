@@ -18,7 +18,7 @@ def run():
                                                                      "birth": "1857"}))
         print(response.id, response.attrs["title"], response.attrs["text"])
 
-        response = document_stub.SaveDocument(tasks_pb2.Empty())
+        response = document_stub.SaveDocument(tasks_pb2.SaveRequest(filename="blah.txt"))
         print(response)
 
         """
