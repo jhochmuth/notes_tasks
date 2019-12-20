@@ -6,6 +6,7 @@
   "scripts": {
     "react": "react-scripts start",
     "start": "electron .",
+    "test": "mocha",
     "postinstall": "npm rebuild --target=1.8.8 --runtime=electron --dist-url=https://atom.io/download/electron"
   },
   "dependencies": {
@@ -24,9 +25,12 @@
     "@babel/preset-env": "^7.7.1",
     "@babel/preset-react": "^7.7.0",
     "@babel/register": "^7.7.0",
+    "@testing-library/react": "^9.4.0",
     "closest": "0.0.1",
     "electron": "^1.8.8",
     "electron-packager": "^9.0.1",
+    "jest": "24.9.0",
+    "mocha": "^6.2.2",
     "pathfinding": "^0.4.18",
     "paths-js": "^0.4.10",
     "react-clickdrag": "^4.0.0"
