@@ -6,8 +6,8 @@ from api.rule import Rule
 def test_rule():
     note = Note("Joseph Conrad",
                 "Modernist author.",
-                attrs={"birth": 1857,
-                       "death": 1924,
+                attrs={"birth": "1857",
+                       "death": "1924",
                        "nationality": "British-Polish",
                        "novels": ["Nostromo", "The Secret Agent"]
                        },
