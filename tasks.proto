@@ -117,7 +117,7 @@ message BoolWrapper {
 }
 
 service DocumentManager {
-    rpc CreateDocument (Empty) returns (CreateDocumentReply) {}
+    rpc CreateDocument (BoolWrapper) returns (CreateDocumentReply) {}
     rpc CloseDocument (CloseDocumentRequest) returns (BoolWrapper) {}
     rpc SaveDocument (SaveRequest) returns (BoolWrapper) {}
     rpc LoadDocument (LoadRequest) returns (BoolWrapper) {}
