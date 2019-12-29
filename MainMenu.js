@@ -16,6 +16,61 @@ class MainMenu extends React.Component {
     const that = this;
     this.loadDiagram = this.loadDiagram.bind(this);
 
+  createDiagram(event, file) {
+    let win = new BrowserWindow({width: 1200, height: 1200, show: false})
+    win.on('closed', () => {
+      win = null
+    });
+
+    win.loadURL(require('url').format({
+      pathname: '/home/julius/notes_tasks/indexApp.html',
+      protocol: 'file:',
+      slashes: true
+    }))
+
+    win.once('ready-to-show', function() {
+      win.webContents.openDevTools()
+      win.show();
+      if (file) {
+          setTimeout(function() {
+            win.webContents.send('load', file)
+          }, 500);
+    }
+    })
+    /*
+    if (file) {
+      setTimeout(function() {
+        win.webContents.send('load', file)
+      }, 500);
+    }
+    */
+  }
+
+  loadDiagram() {
+    const that = this;
+
+    remote.dialog.showOpenDialog(function(file) {
+      if (!file) return;
+      that.createDiagram(null, file);
+    });
+  }
+
+  render() {
+    return (
+      <div className="mainmenu">
+        <img className="mainmenu-icon" src="/home/julius/notes_tasks/icons/mainIcon.png"/>
+        <div className="mainmenu-title">Bibbit</div>
+        <button id="new-document-button" className="mainmenu-button" onClick={this.createDiagram}>Create new mindmap</button>
+        <button id="load-document-button" className="mainmenu-button" onClick={this.loadDiagram}>Load saved mindmap</button>
+      </div>
+    )
+  }
+}
+
+module.exports = MainMenu;
+
+
+/*
     const menu = remote.Menu.buildFromTemplate([
       {
         label: "File",
@@ -48,51 +103,4 @@ class MainMenu extends React.Component {
 
     remote.Menu.setApplicationMenu(menu);
   }
-
-  createDiagram(event, file) {
-    let win = new BrowserWindow({width: 1200, height: 1200, show: false})
-    win.on('closed', () => {
-      win = null
-    });
-
-    win.loadURL(require('url').format({
-      pathname: '/home/julius/notes_tasks/indexApp.html',
-      protocol: 'file:',
-      slashes: true
-    }))
-
-    win.once('ready-to-show', function() {
-      win.webContents.openDevTools()
-      win.show();
-    })
-
-    if (file) {
-      setTimeout(function() {
-        win.webContents.send('load', file)
-      }, 500);
-    }
-
-  }
-
-  loadDiagram() {
-    const that = this;
-
-    remote.dialog.showOpenDialog(function(file) {
-      if (!file) return;
-      that.createDiagram(null, file);
-    });
-  }
-
-  render() {
-    return (
-      <div className="mainmenu">
-        <img className="mainmenu-icon" src="/home/julius/notes_tasks/icons/mainIcon.png"/>
-        <div className="mainmenu-title">Bibbit</div>
-        <button id="new-document-button" className="mainmenu-button" onClick={this.createDiagram}>Create new mindmap</button>
-        <button id="load-document-button" className="mainmenu-button" onClick={this.loadDiagram}>Load saved mindmap</button>
-      </div>
-    )
-  }
-}
-
-module.exports = MainMenu;
+*/
