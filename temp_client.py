@@ -12,6 +12,10 @@ def run():
         container_stub = tasks_pb2_grpc.ContainerManagerStub(channel)
         conditional_stub = tasks_pb2_grpc.ConditionalManagerStub(channel)
 
+        print("Creating document.")
+        response = document_stub.CreateDocument(tasks_pb2.BoolWrapper(val=True))
+        print(response.id)
+
         print("Creating note.")
         response = note_stub.CreateNote(tasks_pb2.NoteRequest(attrs={"title": "Joseph Conrad",
                                                                      "text": "British author.",

@@ -17,7 +17,8 @@ documents = dict()
 class DocumentServicer(tasks_pb2_grpc.DocumentManagerServicer):
     def CreateDocument(self, request, context):
         document = Document()
-        return tasks_pb2.DocumentReply(id=document.id)
+        documents[document.id] = document
+        return tasks_pb2.CreateDocumentReply(id=document.id)
 
     def CloseDocument(self, request, context):
         del documents[request.id]

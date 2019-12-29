@@ -31,6 +31,7 @@ class App extends React.Component {
     super();
 
     this.listWin = null;
+    this.documentId = null;
 
     this.addNote = this.addNote.bind(this);
     this.addContainer = this.addContainer.bind(this);
@@ -46,13 +47,22 @@ class App extends React.Component {
     ipcRenderer.on('load', function(event, file) {
       that.load(file[0]);
     });
+
+    stubs.documentStub.createDocument({val: true}, function(err, documentReply) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        that.documentId = documentReply.id;
+      }
+    });
   }
 
   addNote(event) {
     const that = this;
     const note = new NoteModel(null, model, this);
     const attrs = {title: event.target.title.value, text: event.target.text.value};
-    const noteRequest = {id: note.id, attrs: attrs};
+    const noteRequest = {id: note.id, attrs: attrs, document_id: that.documentId};
 
     stubs.noteStub.createNote(noteRequest, function(err, noteReply) {
       if (err) {

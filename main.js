@@ -8,7 +8,7 @@ const React = require('react');
  * Python backend startup
  *************************************************************/
 
-const PY_DIST_FOLDER = 'pycalcdist'
+const PY_DIST_FOLDER = ''
 const PY_FOLDER = ''
 const PY_MODULE = 'server' // without .py suffix
 

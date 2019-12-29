@@ -1,4 +1,5 @@
 import json
+import uuid
 
 from api.note import Note
 from api.connection import Connection
@@ -7,6 +8,7 @@ from api.connection import Connection
 class Document:
     def __init__(self):
         self.children = dict()
+        self.id = str(uuid.uuid1())
 
     def save_document(self, filename):
         data = dict()
