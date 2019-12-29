@@ -5,6 +5,7 @@ from api.uid import UID
 
 
 class Connection:
+    """Class used for creating links between notes."""
     def __init__(self, endpoint_one, endpoint_two, text=None, id=None):
         self.id = id if id else UID().assign_uid()
         self.endpoint_one = endpoint_one if endpoint_one else None

@@ -22,6 +22,10 @@ engine.registerPortFactory(new NotePortFactory());
 engine.registerNodeFactory(new ContainerFactory());
 let model = new SRD.DiagramModel();
 
+/*
+React component for the main app page.
+*/
+
 class App extends React.Component {
   constructor() {
     super();

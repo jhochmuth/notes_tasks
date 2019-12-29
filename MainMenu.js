@@ -6,6 +6,10 @@ const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
 
 // todo: fix stopgap solution for sending ipc messages (settimeout)
+
+/*
+React component for the main menu.
+*/
 class MainMenu extends React.Component {
   constructor() {
     super();

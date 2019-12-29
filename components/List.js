@@ -3,6 +3,10 @@ import {Button, Form, Input, InputGroup, InputGroupAddon, Label, ListGroup, List
 const ipcRenderer = require('electron').ipcRenderer;
 
 // todo: move ipcRenderer creation to appropriate lifecycle method
+
+/*
+React component for the list view page.
+*/
 class List extends React.Component {
   constructor() {
     super();

@@ -13,6 +13,7 @@ conditions = {"gt": operator.gt,
 
 
 class Conditional:
+    """Class used when searching notes for certain conditions."""
     def __init__(self, target, condition):
         self.id = UID().assign_uid()
         self.target = target

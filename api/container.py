@@ -5,6 +5,7 @@ default_search_order = tuple()
 
 
 class Container:
+    """Holds collections of notes and other data."""
     def __init__(self, attrs=default_container, notes=None, data=None):
         self.id = UID().assign_uid()
 
