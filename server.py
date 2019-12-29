@@ -11,14 +11,22 @@ import tasks_pb2
 import tasks_pb2_grpc
 
 
-document = Document()
+documents = dict()
 
 
 class DocumentServicer(tasks_pb2_grpc.DocumentManagerServicer):
+    def CreateDocument(self, request, context):
+        document = Document()
+        return tasks_pb2.DocumentReply(id=document.id)
+
+    def CloseDocument(self, request, context):
+        del documents[request.id]
+        return tasks_pb2.BoolWrapper(val=True)
+#
     def SaveDocument(self, request, context):
         document.save_document(request.filename)
         return tasks_pb2.BoolWrapper(val=True)
-
+#
     def LoadDocument(self, request, context):
         document.load_document(request.file)
         return tasks_pb2.BoolWrapper(val=True)
@@ -33,12 +41,12 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
                     parent_container=document.children[request.parent_container_id]
                     if len(request.parent_container_id) > 0
                     else None)
-        document.children[note.id] = note
+        documents[request.document_id].children[note.id] = note
 
         return tasks_pb2.NoteReply(id=note.id,
                                    attrs=note.attrs,
                                    parent_container_id=request.parent_container_id)
-
+#
     """Returns: NoteReply with attrs dict that contains only the updated attr."""
     def UpdateNoteAttr(self, request, context):
         note = document.children[request.note_id]
@@ -47,14 +55,14 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
 
         return tasks_pb2.NoteReply(id=request.note_id,
                                    attrs={request.attr: request.new_value})
-
+#
     def DeleteNoteAttr(self, request, context):
         note = document.children[request.note_id]
 
         note.delete_attr(request.attr)
 
         return tasks_pb2.BoolWrapper(val=True)
-
+#
     def DeleteNote(self, request, context):
         note = document.children[request.id]
         note.delete()
