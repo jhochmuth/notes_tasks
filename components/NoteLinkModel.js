@@ -16,6 +16,7 @@ class NoteLinkModel extends DefaultLinkModel {
 
     if (port) {
       const connectionRequest = {id: this.id, endpoint_two_id: port.parent.content.id};
+      console.log(connectionRequest);
 
       stubs.connectionStub.addEndpoint(connectionRequest, function(err, connectionReply) {
         if (err) {

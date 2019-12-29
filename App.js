@@ -25,17 +25,12 @@ let model = new SRD.DiagramModel();
 /*
 React component for the main app page.
 */
-
 class App extends React.Component {
+  // todo: add change title button
   constructor() {
     super();
 
-    const that = this;
-    this.win = null;
-
-    ipcRenderer.on('load', function(event, file) {
-      that.load(file[0]);
-    });
+    this.listWin = null;
 
     this.addNote = this.addNote.bind(this);
     this.addContainer = this.addContainer.bind(this);
@@ -43,6 +38,14 @@ class App extends React.Component {
     this.load = this.load.bind(this);
     this.onLoadButtonClick = this.onLoadButtonClick.bind(this);
     this.openListView = this.openListView.bind(this);
+  }
+
+  componentDidMount() {
+    const that = this;
+
+    ipcRenderer.on('load', function(event, file) {
+      that.load(file[0]);
+    });
   }
 
   addNote(event) {
@@ -161,38 +164,41 @@ class App extends React.Component {
     let data = {};
     const that = this;
 
-    if (that.win) {
+    if (that.listWin) {
       for (let id in model.nodes) {
         data[id] = model.nodes[id].content;
       }
 
-      setTimeout(function() {
-        that.win.webContents.send('listView', data);
-      }, 500);
+    that.listWin.webContents.send('listView', data);
     }
   }
 
   openListView() {
     const that = this;
 
-    that.win = new BrowserWindow({width: 800, height: 800, show: false});
-    that.win.setMenu(null);
-    that.win.on('closed', () => {
-      this.win = null
-    });
+    if (!that.listWin) {
+      that.listWin = new BrowserWindow({width: 800, height: 800, show: false});
+      that.listWin.setMenu(null);
+      that.listWin.on('closed', () => {
+        that.listWin = null;
+      });
 
-    that.win.loadURL(require('url').format({
-      pathname: '/home/julius/notes_tasks/indexList.html',
-      protocol: 'file:',
-      slashes: true
-    }));
+      that.listWin.loadURL(require('url').format({
+        pathname: '/home/julius/notes_tasks/indexList.html',
+        protocol: 'file:',
+        slashes: true
+      }));
 
-    this.win.once('ready-to-show', function() {
-      that.win.webContents.openDevTools();
-      that.win.show();
-    });
+      that.listWin.once('ready-to-show', function() {
+        that.listWin.webContents.openDevTools();
+        that.listWin.show();
+        that.updateListView();
+      });
+    }
 
-    that.updateListView();
+    else {
+      that.listWin.focus();
+    }
   }
 
   render() {

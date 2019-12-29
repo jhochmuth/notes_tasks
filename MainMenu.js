@@ -5,8 +5,6 @@ const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
 
-// todo: fix stopgap solution for sending ipc messages (settimeout)
-
 /*
 React component for the main menu.
 */
@@ -15,9 +13,11 @@ class MainMenu extends React.Component {
     super();
     const that = this;
     this.loadDiagram = this.loadDiagram.bind(this);
+  }
 
   createDiagram(event, file) {
-    let win = new BrowserWindow({width: 1200, height: 1200, show: false})
+    let win = new BrowserWindow({width: 1200, height: 1200, show: false, title: "Untitled Diagram"});
+
     win.on('closed', () => {
       win = null
     });
@@ -26,24 +26,15 @@ class MainMenu extends React.Component {
       pathname: '/home/julius/notes_tasks/indexApp.html',
       protocol: 'file:',
       slashes: true
-    }))
+    }));
 
     win.once('ready-to-show', function() {
-      win.webContents.openDevTools()
+      win.webContents.openDevTools();
       win.show();
       if (file) {
-          setTimeout(function() {
-            win.webContents.send('load', file)
-          }, 500);
-    }
-    })
-    /*
-    if (file) {
-      setTimeout(function() {
-        win.webContents.send('load', file)
-      }, 500);
-    }
-    */
+        win.webContents.send('load', file);
+      }
+    });
   }
 
   loadDiagram() {
