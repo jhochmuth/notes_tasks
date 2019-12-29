@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0btasks.proto\"\x07\n\x05\x45mpty\"\x1f\n\x0bSaveRequest\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\"\x1b\n\x0bLoadRequest\x12\x0c\n\x04\x66ile\x18\x01 \x01(\t\"\x8c\x01\n\x0bNoteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12&\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x17.NoteRequest.AttrsEntry\x12\x1b\n\x13parent_container_id\x18\x03 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x88\x01\n\tNoteReply\x12\n\n\x02id\x18\x01 \x01(\t\x12$\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x15.NoteReply.AttrsEntry\x12\x1b\n\x13parent_container_id\x18\x03 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"E\n\x11UpdateAttrRequest\x12\x0f\n\x07note_id\x18\x01 \x01(\t\x12\x0c\n\x04\x61ttr\x18\x02 \x01(\t\x12\x11\n\tnew_value\x18\x03 \x01(\t\"2\n\x11\x44\x65leteAttrRequest\x12\x0f\n\x07note_id\x18\x01 \x01(\t\x12\x0c\n\x04\x61ttr\x18\x02 \x01(\t\"\x85\x01\n\x10\x43ontainerRequest\x12+\n\x05\x61ttrs\x18\x01 \x03(\x0b\x32\x1c.ContainerRequest.AttrsEntry\x12\x16\n\x0e\x63hild_note_ids\x18\x02 \x03(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8d\x01\n\x0e\x43ontainerReply\x12\n\n\x02id\x18\x01 \x01(\t\x12)\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x1a.ContainerReply.AttrsEntry\x12\x16\n\x0e\x63hild_note_ids\x18\x03 \x03(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"7\n\x0e\x41\x64\x64NoteRequest\x12\x14\n\x0c\x63ontainer_id\x18\x01 \x01(\t\x12\x0f\n\x07note_id\x18\x02 \x01(\t\"_\n\x11\x43onnectionRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0f\x65ndpoint_one_id\x18\x02 \x01(\t\x12\x17\n\x0f\x65ndpoint_two_id\x18\x03 \x01(\t\x12\x0c\n\x04text\x18\x04 \x01(\t\"]\n\x0f\x43onnectionReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0f\x65ndpoint_one_id\x18\x02 \x01(\t\x12\x17\n\x0f\x65ndpoint_two_id\x18\x03 \x01(\t\x12\x0c\n\x04text\x18\x04 \x01(\t\"T\n\x0bRuleRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x10\n\x08\x61\x64\x64_text\x18\x03 \x01(\t\x12\x17\n\x0f\x65\x66\x66\x65\x63t_location\x18\x04 \x01(\t\"R\n\tRuleReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x10\n\x08\x61\x64\x64_text\x18\x03 \x01(\t\x12\x17\n\x0f\x65\x66\x66\x65\x63t_location\x18\x04 \x01(\t\"C\n\x12\x43onditionalRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x11\n\tcondition\x18\x03 \x01(\t\"A\n\x10\x43onditionalReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x11\n\tcondition\x18\x03 \x01(\t\"U\n\x16\x43ontainerSearchRequest\x12\x14\n\x0c\x63ontainer_id\x18\x01 \x01(\t\x12\x16\n\x0e\x63onditional_id\x18\x02 \x01(\t\x12\r\n\x05\x61ttrs\x18\x03 \x03(\t\"&\n\x14\x43ontainerSearchReply\x12\x0e\n\x06result\x18\x01 \x03(\t\"\x1a\n\x0b\x42oolWrapper\x12\x0b\n\x03val\x18\x01 \x01(\x08\x32m\n\x0f\x44ocumentManager\x12,\n\x0cSaveDocument\x12\x0c.SaveRequest\x1a\x0c.BoolWrapper\"\x00\x12,\n\x0cLoadDocument\x12\x0c.LoadRequest\x1a\x0c.BoolWrapper\"\x00\x32\xcd\x01\n\x0bNoteManager\x12(\n\nCreateNote\x12\x0c.NoteRequest\x1a\n.NoteReply\"\x00\x12\x32\n\x0eUpdateNoteAttr\x12\x12.UpdateAttrRequest\x1a\n.NoteReply\"\x00\x12\x34\n\x0e\x44\x65leteNoteAttr\x12\x12.DeleteAttrRequest\x1a\x0c.BoolWrapper\"\x00\x12*\n\nDeleteNote\x12\x0c.NoteRequest\x1a\x0c.BoolWrapper\"\x00\x32\x86\x01\n\x11\x43onnectionManager\x12:\n\x10\x43reateConnection\x12\x12.ConnectionRequest\x1a\x10.ConnectionReply\"\x00\x12\x35\n\x0b\x41\x64\x64\x45ndpoint\x12\x12.ConnectionRequest\x1a\x10.ConnectionReply\"\x00\x32\xac\x02\n\x10\x43ontainerManager\x12\x37\n\x0f\x43reateContainer\x12\x11.ContainerRequest\x1a\x0f.ContainerReply\"\x00\x12-\n\x07\x41\x64\x64Note\x12\x0f.AddNoteRequest\x1a\x0f.ContainerReply\"\x00\x12\x30\n\nRemoveNote\x12\x0f.AddNoteRequest\x1a\x0f.ContainerReply\"\x00\x12H\n\x14SearchChildNoteAttrs\x12\x17.ContainerSearchRequest\x1a\x15.ContainerSearchReply\"\x00\x12\x34\n\x0f\x44\x65leteContainer\x12\x11.ContainerRequest\x1a\x0c.BoolWrapper\"\x00\x32S\n\x12\x43onditionalManager\x12=\n\x11\x43reateConditional\x12\x13.ConditionalRequest\x1a\x11.ConditionalReply\"\x00\x32\x37\n\x0bRuleManager\x12(\n\nCreateRule\x12\x0c.RuleRequest\x1a\n.RuleReply\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x0btasks.proto\"\x07\n\x05\x45mpty\"!\n\x13\x43reateDocumentReply\x12\n\n\x02id\x18\x01 \x01(\t\"\"\n\x14\x43loseDocumentRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x1f\n\x0bSaveRequest\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\"\x1b\n\x0bLoadRequest\x12\x0c\n\x04\x66ile\x18\x01 \x01(\t\"\xa1\x01\n\x0bNoteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12&\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x17.NoteRequest.AttrsEntry\x12\x1b\n\x13parent_container_id\x18\x03 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x04 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x88\x01\n\tNoteReply\x12\n\n\x02id\x18\x01 \x01(\t\x12$\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x15.NoteReply.AttrsEntry\x12\x1b\n\x13parent_container_id\x18\x03 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"E\n\x11UpdateAttrRequest\x12\x0f\n\x07note_id\x18\x01 \x01(\t\x12\x0c\n\x04\x61ttr\x18\x02 \x01(\t\x12\x11\n\tnew_value\x18\x03 \x01(\t\"2\n\x11\x44\x65leteAttrRequest\x12\x0f\n\x07note_id\x18\x01 \x01(\t\x12\x0c\n\x04\x61ttr\x18\x02 \x01(\t\"\x85\x01\n\x10\x43ontainerRequest\x12+\n\x05\x61ttrs\x18\x01 \x03(\x0b\x32\x1c.ContainerRequest.AttrsEntry\x12\x16\n\x0e\x63hild_note_ids\x18\x02 \x03(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8d\x01\n\x0e\x43ontainerReply\x12\n\n\x02id\x18\x01 \x01(\t\x12)\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x1a.ContainerReply.AttrsEntry\x12\x16\n\x0e\x63hild_note_ids\x18\x03 \x03(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"7\n\x0e\x41\x64\x64NoteRequest\x12\x14\n\x0c\x63ontainer_id\x18\x01 \x01(\t\x12\x0f\n\x07note_id\x18\x02 \x01(\t\"_\n\x11\x43onnectionRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0f\x65ndpoint_one_id\x18\x02 \x01(\t\x12\x17\n\x0f\x65ndpoint_two_id\x18\x03 \x01(\t\x12\x0c\n\x04text\x18\x04 \x01(\t\"]\n\x0f\x43onnectionReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0f\x65ndpoint_one_id\x18\x02 \x01(\t\x12\x17\n\x0f\x65ndpoint_two_id\x18\x03 \x01(\t\x12\x0c\n\x04text\x18\x04 \x01(\t\"T\n\x0bRuleRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x10\n\x08\x61\x64\x64_text\x18\x03 \x01(\t\x12\x17\n\x0f\x65\x66\x66\x65\x63t_location\x18\x04 \x01(\t\"R\n\tRuleReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x10\n\x08\x61\x64\x64_text\x18\x03 \x01(\t\x12\x17\n\x0f\x65\x66\x66\x65\x63t_location\x18\x04 \x01(\t\"C\n\x12\x43onditionalRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x11\n\tcondition\x18\x03 \x01(\t\"A\n\x10\x43onditionalReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x11\n\tcondition\x18\x03 \x01(\t\"U\n\x16\x43ontainerSearchRequest\x12\x14\n\x0c\x63ontainer_id\x18\x01 \x01(\t\x12\x16\n\x0e\x63onditional_id\x18\x02 \x01(\t\x12\r\n\x05\x61ttrs\x18\x03 \x03(\t\"&\n\x14\x43ontainerSearchReply\x12\x0e\n\x06result\x18\x01 \x03(\t\"\x1a\n\x0b\x42oolWrapper\x12\x0b\n\x03val\x18\x01 \x01(\x08\x32\xd7\x01\n\x0f\x44ocumentManager\x12\x30\n\x0e\x43reateDocument\x12\x06.Empty\x1a\x14.CreateDocumentReply\"\x00\x12\x36\n\rCloseDocument\x12\x15.CloseDocumentRequest\x1a\x0c.BoolWrapper\"\x00\x12,\n\x0cSaveDocument\x12\x0c.SaveRequest\x1a\x0c.BoolWrapper\"\x00\x12,\n\x0cLoadDocument\x12\x0c.LoadRequest\x1a\x0c.BoolWrapper\"\x00\x32\xcd\x01\n\x0bNoteManager\x12(\n\nCreateNote\x12\x0c.NoteRequest\x1a\n.NoteReply\"\x00\x12\x32\n\x0eUpdateNoteAttr\x12\x12.UpdateAttrRequest\x1a\n.NoteReply\"\x00\x12\x34\n\x0e\x44\x65leteNoteAttr\x12\x12.DeleteAttrRequest\x1a\x0c.BoolWrapper\"\x00\x12*\n\nDeleteNote\x12\x0c.NoteRequest\x1a\x0c.BoolWrapper\"\x00\x32\x86\x01\n\x11\x43onnectionManager\x12:\n\x10\x43reateConnection\x12\x12.ConnectionRequest\x1a\x10.ConnectionReply\"\x00\x12\x35\n\x0b\x41\x64\x64\x45ndpoint\x12\x12.ConnectionRequest\x1a\x10.ConnectionReply\"\x00\x32\xac\x02\n\x10\x43ontainerManager\x12\x37\n\x0f\x43reateContainer\x12\x11.ContainerRequest\x1a\x0f.ContainerReply\"\x00\x12-\n\x07\x41\x64\x64Note\x12\x0f.AddNoteRequest\x1a\x0f.ContainerReply\"\x00\x12\x30\n\nRemoveNote\x12\x0f.AddNoteRequest\x1a\x0f.ContainerReply\"\x00\x12H\n\x14SearchChildNoteAttrs\x12\x17.ContainerSearchRequest\x1a\x15.ContainerSearchReply\"\x00\x12\x34\n\x0f\x44\x65leteContainer\x12\x11.ContainerRequest\x1a\x0c.BoolWrapper\"\x00\x32S\n\x12\x43onditionalManager\x12=\n\x11\x43reateConditional\x12\x13.ConditionalRequest\x1a\x11.ConditionalReply\"\x00\x32\x37\n\x0bRuleManager\x12(\n\nCreateRule\x12\x0c.RuleRequest\x1a\n.RuleReply\"\x00\x62\x06proto3')
 )
 
 
@@ -50,6 +50,68 @@ _EMPTY = _descriptor.Descriptor(
 )
 
 
+_CREATEDOCUMENTREPLY = _descriptor.Descriptor(
+  name='CreateDocumentReply',
+  full_name='CreateDocumentReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='CreateDocumentReply.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=24,
+  serialized_end=57,
+)
+
+
+_CLOSEDOCUMENTREQUEST = _descriptor.Descriptor(
+  name='CloseDocumentRequest',
+  full_name='CloseDocumentRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='CloseDocumentRequest.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=59,
+  serialized_end=93,
+)
+
+
 _SAVEREQUEST = _descriptor.Descriptor(
   name='SaveRequest',
   full_name='SaveRequest',
@@ -76,8 +138,8 @@ _SAVEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=24,
-  serialized_end=55,
+  serialized_start=95,
+  serialized_end=126,
 )
 
 
@@ -107,8 +169,8 @@ _LOADREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=57,
-  serialized_end=84,
+  serialized_start=128,
+  serialized_end=155,
 )
 
 
@@ -145,8 +207,8 @@ _NOTEREQUEST_ATTRSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=183,
-  serialized_end=227,
+  serialized_start=275,
+  serialized_end=319,
 )
 
 _NOTEREQUEST = _descriptor.Descriptor(
@@ -177,6 +239,13 @@ _NOTEREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='document_id', full_name='NoteRequest.document_id', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -189,8 +258,8 @@ _NOTEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=87,
-  serialized_end=227,
+  serialized_start=158,
+  serialized_end=319,
 )
 
 
@@ -227,8 +296,8 @@ _NOTEREPLY_ATTRSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=183,
-  serialized_end=227,
+  serialized_start=275,
+  serialized_end=319,
 )
 
 _NOTEREPLY = _descriptor.Descriptor(
@@ -271,8 +340,8 @@ _NOTEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=230,
-  serialized_end=366,
+  serialized_start=322,
+  serialized_end=458,
 )
 
 
@@ -316,8 +385,8 @@ _UPDATEATTRREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=368,
-  serialized_end=437,
+  serialized_start=460,
+  serialized_end=529,
 )
 
 
@@ -354,8 +423,8 @@ _DELETEATTRREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=439,
-  serialized_end=489,
+  serialized_start=531,
+  serialized_end=581,
 )
 
 
@@ -392,8 +461,8 @@ _CONTAINERREQUEST_ATTRSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=183,
-  serialized_end=227,
+  serialized_start=275,
+  serialized_end=319,
 )
 
 _CONTAINERREQUEST = _descriptor.Descriptor(
@@ -429,8 +498,8 @@ _CONTAINERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=492,
-  serialized_end=625,
+  serialized_start=584,
+  serialized_end=717,
 )
 
 
@@ -467,8 +536,8 @@ _CONTAINERREPLY_ATTRSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=183,
-  serialized_end=227,
+  serialized_start=275,
+  serialized_end=319,
 )
 
 _CONTAINERREPLY = _descriptor.Descriptor(
@@ -511,8 +580,8 @@ _CONTAINERREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=628,
-  serialized_end=769,
+  serialized_start=720,
+  serialized_end=861,
 )
 
 
@@ -549,8 +618,8 @@ _ADDNOTEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=771,
-  serialized_end=826,
+  serialized_start=863,
+  serialized_end=918,
 )
 
 
@@ -601,8 +670,8 @@ _CONNECTIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=828,
-  serialized_end=923,
+  serialized_start=920,
+  serialized_end=1015,
 )
 
 
@@ -653,8 +722,8 @@ _CONNECTIONREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=925,
-  serialized_end=1018,
+  serialized_start=1017,
+  serialized_end=1110,
 )
 
 
@@ -705,8 +774,8 @@ _RULEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1020,
-  serialized_end=1104,
+  serialized_start=1112,
+  serialized_end=1196,
 )
 
 
@@ -757,8 +826,8 @@ _RULEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1106,
-  serialized_end=1188,
+  serialized_start=1198,
+  serialized_end=1280,
 )
 
 
@@ -802,8 +871,8 @@ _CONDITIONALREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1190,
-  serialized_end=1257,
+  serialized_start=1282,
+  serialized_end=1349,
 )
 
 
@@ -847,8 +916,8 @@ _CONDITIONALREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1259,
-  serialized_end=1324,
+  serialized_start=1351,
+  serialized_end=1416,
 )
 
 
@@ -892,8 +961,8 @@ _CONTAINERSEARCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1326,
-  serialized_end=1411,
+  serialized_start=1418,
+  serialized_end=1503,
 )
 
 
@@ -923,8 +992,8 @@ _CONTAINERSEARCHREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1413,
-  serialized_end=1451,
+  serialized_start=1505,
+  serialized_end=1543,
 )
 
 
@@ -954,8 +1023,8 @@ _BOOLWRAPPER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1453,
-  serialized_end=1479,
+  serialized_start=1545,
+  serialized_end=1571,
 )
 
 _NOTEREQUEST_ATTRSENTRY.containing_type = _NOTEREQUEST
@@ -967,6 +1036,8 @@ _CONTAINERREQUEST.fields_by_name['attrs'].message_type = _CONTAINERREQUEST_ATTRS
 _CONTAINERREPLY_ATTRSENTRY.containing_type = _CONTAINERREPLY
 _CONTAINERREPLY.fields_by_name['attrs'].message_type = _CONTAINERREPLY_ATTRSENTRY
 DESCRIPTOR.message_types_by_name['Empty'] = _EMPTY
+DESCRIPTOR.message_types_by_name['CreateDocumentReply'] = _CREATEDOCUMENTREPLY
+DESCRIPTOR.message_types_by_name['CloseDocumentRequest'] = _CLOSEDOCUMENTREQUEST
 DESCRIPTOR.message_types_by_name['SaveRequest'] = _SAVEREQUEST
 DESCRIPTOR.message_types_by_name['LoadRequest'] = _LOADREQUEST
 DESCRIPTOR.message_types_by_name['NoteRequest'] = _NOTEREQUEST
@@ -993,6 +1064,20 @@ Empty = _reflection.GeneratedProtocolMessageType('Empty', (_message.Message,), {
   # @@protoc_insertion_point(class_scope:Empty)
   })
 _sym_db.RegisterMessage(Empty)
+
+CreateDocumentReply = _reflection.GeneratedProtocolMessageType('CreateDocumentReply', (_message.Message,), {
+  'DESCRIPTOR' : _CREATEDOCUMENTREPLY,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:CreateDocumentReply)
+  })
+_sym_db.RegisterMessage(CreateDocumentReply)
+
+CloseDocumentRequest = _reflection.GeneratedProtocolMessageType('CloseDocumentRequest', (_message.Message,), {
+  'DESCRIPTOR' : _CLOSEDOCUMENTREQUEST,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:CloseDocumentRequest)
+  })
+_sym_db.RegisterMessage(CloseDocumentRequest)
 
 SaveRequest = _reflection.GeneratedProtocolMessageType('SaveRequest', (_message.Message,), {
   'DESCRIPTOR' : _SAVEREQUEST,
@@ -1164,13 +1249,31 @@ _DOCUMENTMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=1481,
-  serialized_end=1590,
+  serialized_start=1574,
+  serialized_end=1789,
   methods=[
+  _descriptor.MethodDescriptor(
+    name='CreateDocument',
+    full_name='DocumentManager.CreateDocument',
+    index=0,
+    containing_service=None,
+    input_type=_EMPTY,
+    output_type=_CREATEDOCUMENTREPLY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='CloseDocument',
+    full_name='DocumentManager.CloseDocument',
+    index=1,
+    containing_service=None,
+    input_type=_CLOSEDOCUMENTREQUEST,
+    output_type=_BOOLWRAPPER,
+    serialized_options=None,
+  ),
   _descriptor.MethodDescriptor(
     name='SaveDocument',
     full_name='DocumentManager.SaveDocument',
-    index=0,
+    index=2,
     containing_service=None,
     input_type=_SAVEREQUEST,
     output_type=_BOOLWRAPPER,
@@ -1179,7 +1282,7 @@ _DOCUMENTMANAGER = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='LoadDocument',
     full_name='DocumentManager.LoadDocument',
-    index=1,
+    index=3,
     containing_service=None,
     input_type=_LOADREQUEST,
     output_type=_BOOLWRAPPER,
@@ -1197,8 +1300,8 @@ _NOTEMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=1,
   serialized_options=None,
-  serialized_start=1593,
-  serialized_end=1798,
+  serialized_start=1792,
+  serialized_end=1997,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateNote',
@@ -1248,8 +1351,8 @@ _CONNECTIONMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=2,
   serialized_options=None,
-  serialized_start=1801,
-  serialized_end=1935,
+  serialized_start=2000,
+  serialized_end=2134,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateConnection',
@@ -1281,8 +1384,8 @@ _CONTAINERMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=3,
   serialized_options=None,
-  serialized_start=1938,
-  serialized_end=2238,
+  serialized_start=2137,
+  serialized_end=2437,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateContainer',
@@ -1341,8 +1444,8 @@ _CONDITIONALMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=4,
   serialized_options=None,
-  serialized_start=2240,
-  serialized_end=2323,
+  serialized_start=2439,
+  serialized_end=2522,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateConditional',
@@ -1365,8 +1468,8 @@ _RULEMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=5,
   serialized_options=None,
-  serialized_start=2325,
-  serialized_end=2380,
+  serialized_start=2524,
+  serialized_end=2579,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateRule',

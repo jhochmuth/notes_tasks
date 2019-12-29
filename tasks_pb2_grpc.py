@@ -14,6 +14,16 @@ class DocumentManagerStub(object):
     Args:
       channel: A grpc.Channel.
     """
+    self.CreateDocument = channel.unary_unary(
+        '/DocumentManager/CreateDocument',
+        request_serializer=tasks__pb2.Empty.SerializeToString,
+        response_deserializer=tasks__pb2.CreateDocumentReply.FromString,
+        )
+    self.CloseDocument = channel.unary_unary(
+        '/DocumentManager/CloseDocument',
+        request_serializer=tasks__pb2.CloseDocumentRequest.SerializeToString,
+        response_deserializer=tasks__pb2.BoolWrapper.FromString,
+        )
     self.SaveDocument = channel.unary_unary(
         '/DocumentManager/SaveDocument',
         request_serializer=tasks__pb2.SaveRequest.SerializeToString,
@@ -29,6 +39,20 @@ class DocumentManagerStub(object):
 class DocumentManagerServicer(object):
   # missing associated documentation comment in .proto file
   pass
+
+  def CreateDocument(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def CloseDocument(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
 
   def SaveDocument(self, request, context):
     # missing associated documentation comment in .proto file
@@ -47,6 +71,16 @@ class DocumentManagerServicer(object):
 
 def add_DocumentManagerServicer_to_server(servicer, server):
   rpc_method_handlers = {
+      'CreateDocument': grpc.unary_unary_rpc_method_handler(
+          servicer.CreateDocument,
+          request_deserializer=tasks__pb2.Empty.FromString,
+          response_serializer=tasks__pb2.CreateDocumentReply.SerializeToString,
+      ),
+      'CloseDocument': grpc.unary_unary_rpc_method_handler(
+          servicer.CloseDocument,
+          request_deserializer=tasks__pb2.CloseDocumentRequest.FromString,
+          response_serializer=tasks__pb2.BoolWrapper.SerializeToString,
+      ),
       'SaveDocument': grpc.unary_unary_rpc_method_handler(
           servicer.SaveDocument,
           request_deserializer=tasks__pb2.SaveRequest.FromString,
