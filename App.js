@@ -47,15 +47,6 @@ class App extends React.Component {
     ipcRenderer.on('load', function(event, file) {
       that.load(file[0]);
     });
-
-    stubs.documentStub.createDocument({val: true}, function(err, documentReply) {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        that.documentId = documentReply.id;
-      }
-    });
   }
 
   addNote(event) {

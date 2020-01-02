@@ -11,23 +11,14 @@ import tasks_pb2
 import tasks_pb2_grpc
 
 
-documents = dict()
+document = Document()
 
 
 class DocumentServicer(tasks_pb2_grpc.DocumentManagerServicer):
-    def CreateDocument(self, request, context):
-        document = Document()
-        documents[document.id] = document
-        return tasks_pb2.CreateDocumentReply(id=document.id)
-
-    def CloseDocument(self, request, context):
-        del documents[request.id]
-        return tasks_pb2.BoolWrapper(val=True)
-#
     def SaveDocument(self, request, context):
         document.save_document(request.filename)
         return tasks_pb2.BoolWrapper(val=True)
-#
+
     def LoadDocument(self, request, context):
         document.load_document(request.file)
         return tasks_pb2.BoolWrapper(val=True)
@@ -42,7 +33,7 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
                     parent_container=document.children[request.parent_container_id]
                     if len(request.parent_container_id) > 0
                     else None)
-        documents[request.document_id].children[note.id] = note
+        document.children[note.id] = note
 
         return tasks_pb2.NoteReply(id=note.id,
                                    attrs=note.attrs,
