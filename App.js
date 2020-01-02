@@ -29,7 +29,7 @@ class App extends React.Component {
   // todo: add change title button
   constructor() {
     super();
-
+    
     this.listWin = null;
     this.documentId = null;
 
