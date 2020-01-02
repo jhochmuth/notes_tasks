@@ -10,6 +10,7 @@ class DocumentManagerStub(object):
 
   def __init__(self, channel):
     """Constructor.
+
     Args:
       channel: A grpc.Channel.
     """
@@ -68,6 +69,7 @@ class NoteManagerStub(object):
 
   def __init__(self, channel):
     """Constructor.
+
     Args:
       channel: A grpc.Channel.
     """
@@ -160,6 +162,7 @@ class ConnectionManagerStub(object):
 
   def __init__(self, channel):
     """Constructor.
+
     Args:
       channel: A grpc.Channel.
     """
@@ -218,6 +221,7 @@ class ContainerManagerStub(object):
 
   def __init__(self, channel):
     """Constructor.
+
     Args:
       channel: A grpc.Channel.
     """
@@ -327,6 +331,7 @@ class ConditionalManagerStub(object):
 
   def __init__(self, channel):
     """Constructor.
+
     Args:
       channel: A grpc.Channel.
     """
@@ -368,6 +373,7 @@ class RuleManagerStub(object):
 
   def __init__(self, channel):
     """Constructor.
+
     Args:
       channel: A grpc.Channel.
     """
