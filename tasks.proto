@@ -5,6 +5,10 @@ message Empty {
 
 }
 
+message CreateDocumentReply {
+    string id = 1;
+}
+
 message SaveRequest {
     string filename = 1;
 }
@@ -108,6 +112,7 @@ message BoolWrapper {
 }
 
 service DocumentManager {
+    rpc CreateDocument (Empty) returns (CreateDocumentReply) {}
     rpc SaveDocument (SaveRequest) returns (BoolWrapper) {}
     rpc LoadDocument (LoadRequest) returns (BoolWrapper) {}
 }
