@@ -15,8 +15,7 @@ class NoteLinkModel extends DefaultLinkModel {
     super.setTargetPort(port);
 
     if (port) {
-      const connectionRequest = {id: this.id, endpoint_two_id: port.parent.content.id};
-      console.log(connectionRequest);
+      const connectionRequest = {id: this.id, endpoint_two_id: port.parent.content.id, document_id: port.parent.app.documentId};
 
       stubs.connectionStub.addEndpoint(connectionRequest, function(err, connectionReply) {
         if (err) {

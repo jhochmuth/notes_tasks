@@ -12,7 +12,8 @@ class NotePortModel extends PortModel {
     const that = this;
     const link = new NoteLinkModel();
     link.color = "black";
-    const connectionRequest = {id: link.id, endpoint_one_id: this.parent.content.id};
+
+    const connectionRequest = {id: link.id, endpoint_one_id: this.parent.content.id, document_id: this.parent.app.documentId};
 
     stubs.connectionStub.createConnection(connectionRequest, function(err, connectionReply) {
       if (err) {

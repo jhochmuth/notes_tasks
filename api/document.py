@@ -8,8 +8,7 @@ from api.connection import Connection
 class Document:
     def __init__(self):
         self.children = dict()
-        #self.id = str(uuid.uiid1())
-        self.id = "0"
+        self.id = str(uuid.uuid1())
 
     def save_document(self, filename):
         data = dict()

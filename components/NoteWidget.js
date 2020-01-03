@@ -60,7 +60,8 @@ class NoteWidget extends React.Component {
     const updateAttrRequest = {
       note_id: this.props.node.content.id,
       attr: attr,
-      new_value: val
+      new_value: val,
+      document_id: this.props.node.app.documentId
     }
 
     // todo: backend does not update text length when text changed
@@ -130,7 +131,7 @@ class NoteWidget extends React.Component {
 
   deleteNote() {
     const that = this;
-    const noteRequest = {id: this.props.node.content.id};
+    const noteRequest = {id: this.props.node.content.id, document_id: this.props.node.app.documentId};
 
     for (let linkId in this.props.node.ports.bottom.links) {
       this.props.node.ports.bottom.links[linkId].remove();

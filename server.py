@@ -38,7 +38,7 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
                     parent_container=document.children[request.parent_container_id]
                     if len(request.parent_container_id) > 0
                     else None)
-        documents["0"].children[note.id] = note
+        documents[request.document_id].children[note.id] = note
 
         return tasks_pb2.NoteReply(id=note.id,
                                    attrs=note.attrs,
@@ -46,7 +46,7 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
 
     """Returns: NoteReply with attrs dict that contains only the updated attr."""
     def UpdateNoteAttr(self, request, context):
-        note = document.children[request.note_id]
+        note = documents[request.document_id].children[request.note_id]
 
         note.update_attr(request.attr, request.new_value)
 
@@ -54,26 +54,26 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
                                    attrs={request.attr: request.new_value})
 
     def DeleteNoteAttr(self, request, context):
-        note = document.children[request.note_id]
+        note = documents[request.document_id].children[request.note_id]
 
         note.delete_attr(request.attr)
 
         return tasks_pb2.BoolWrapper(val=True)
 
     def DeleteNote(self, request, context):
-        note = document.children[request.id]
+        note = documents[request.document_id].children[request.id]
         note.delete()
         return tasks_pb2.BoolWrapper(val=True)
 
 
 class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):
     def CreateConnection(self, request, context):
-        connection = Connection(endpoint_one=document.children[request.endpoint_one_id] if request.endpoint_one_id else None,
-                                endpoint_two=document.children[request.endpoint_two_id] if request.endpoint_two_id else None,
+        connection = Connection(endpoint_one=documents[request.document_id].children[request.endpoint_one_id] if request.endpoint_one_id else None,
+                                endpoint_two=documents[request.document_id].children[request.endpoint_two_id] if request.endpoint_two_id else None,
                                 text=request.text,
                                 id=request.id)
 
-        document.children[connection.id] = connection
+        documents[request.document_id].children[connection.id] = connection
 
         return tasks_pb2.ConnectionReply(id=connection.id,
                                          endpoint_one_id=request.endpoint_one_id,
@@ -81,8 +81,8 @@ class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):
                                          text=request.text)
 
     def AddEndpoint(self, request, context):
-        connection = document.children[request.id]
-        connection.change_second_endpoint(document.children[request.endpoint_two_id])
+        connection = documents[request.document_id].children[request.id]
+        connection.change_second_endpoint(documents[request.document_id].children[request.endpoint_two_id])
 
         return tasks_pb2.ConnectionReply(id=connection.id,
                                          endpoint_two_id=request.endpoint_two_id)
