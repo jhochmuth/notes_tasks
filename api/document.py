@@ -20,15 +20,18 @@ class Document:
         with open(filename, 'w') as outfile:
             json.dump(data, outfile)
 
-    def load_document(self, file):
-        self.children = dict()
+    @classmethod
+    def load_document(cls, file):
+        document = cls()
 
         with open(file, 'r') as infile:
             data = json.load(infile)
             for id, obj in data["backend"].items():
                 if obj["type"] == "note":
                     note = Note.from_dict(obj)
-                    self.children[note.id] = note
+                    document.children[note.id] = note
                 elif obj["type"] == "connection":
                     connection = Connection.from_dict(obj)
-                    self.children[connection.id] = connection
+                    document.children[connection.id] = connection
+
+        return document

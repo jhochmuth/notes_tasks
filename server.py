@@ -20,13 +20,18 @@ class DocumentServicer(tasks_pb2_grpc.DocumentManagerServicer):
         documents[document.id] = document
         return tasks_pb2.CreateDocumentReply(id=document.id)
 
+    def CloseDocument(self, request, context):
+        del documents[request.id]
+        return tasks_pb2.BoolWrapper(val=True)
+
     def SaveDocument(self, request, context):
-        document.save_document(request.filename)
+        documents[request.document_id].save_document(request.filename)
         return tasks_pb2.BoolWrapper(val=True)
 
     def LoadDocument(self, request, context):
-        document.load_document(request.file)
-        return tasks_pb2.BoolWrapper(val=True)
+        document = Document.load_document(request.file)
+        documents[document.id] = document
+        return tasks_pb2.CreateDocumentReply(id=document.id)
 
 
 class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):

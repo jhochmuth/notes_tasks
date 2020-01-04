@@ -19,6 +19,11 @@ class DocumentManagerStub(object):
         request_serializer=tasks__pb2.Empty.SerializeToString,
         response_deserializer=tasks__pb2.CreateDocumentReply.FromString,
         )
+    self.CloseDocument = channel.unary_unary(
+        '/DocumentManager/CloseDocument',
+        request_serializer=tasks__pb2.CloseDocumentRequest.SerializeToString,
+        response_deserializer=tasks__pb2.BoolWrapper.FromString,
+        )
     self.SaveDocument = channel.unary_unary(
         '/DocumentManager/SaveDocument',
         request_serializer=tasks__pb2.SaveRequest.SerializeToString,
@@ -27,7 +32,7 @@ class DocumentManagerStub(object):
     self.LoadDocument = channel.unary_unary(
         '/DocumentManager/LoadDocument',
         request_serializer=tasks__pb2.LoadRequest.SerializeToString,
-        response_deserializer=tasks__pb2.BoolWrapper.FromString,
+        response_deserializer=tasks__pb2.CreateDocumentReply.FromString,
         )
 
 
@@ -36,6 +41,13 @@ class DocumentManagerServicer(object):
   pass
 
   def CreateDocument(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def CloseDocument(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -64,6 +76,11 @@ def add_DocumentManagerServicer_to_server(servicer, server):
           request_deserializer=tasks__pb2.Empty.FromString,
           response_serializer=tasks__pb2.CreateDocumentReply.SerializeToString,
       ),
+      'CloseDocument': grpc.unary_unary_rpc_method_handler(
+          servicer.CloseDocument,
+          request_deserializer=tasks__pb2.CloseDocumentRequest.FromString,
+          response_serializer=tasks__pb2.BoolWrapper.SerializeToString,
+      ),
       'SaveDocument': grpc.unary_unary_rpc_method_handler(
           servicer.SaveDocument,
           request_deserializer=tasks__pb2.SaveRequest.FromString,
@@ -72,7 +89,7 @@ def add_DocumentManagerServicer_to_server(servicer, server):
       'LoadDocument': grpc.unary_unary_rpc_method_handler(
           servicer.LoadDocument,
           request_deserializer=tasks__pb2.LoadRequest.FromString,
-          response_serializer=tasks__pb2.BoolWrapper.SerializeToString,
+          response_serializer=tasks__pb2.CreateDocumentReply.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

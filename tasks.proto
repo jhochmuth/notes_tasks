@@ -9,6 +9,10 @@ message CreateDocumentReply {
     string id = 1;
 }
 
+message CloseDocumentRequest {
+    string id = 1;
+}
+
 message SaveRequest {
     string filename = 1;
     string document_id = 2;
@@ -118,8 +122,9 @@ message BoolWrapper {
 
 service DocumentManager {
     rpc CreateDocument (Empty) returns (CreateDocumentReply) {}
+    rpc CloseDocument (CloseDocumentRequest) returns (BoolWrapper) {}
     rpc SaveDocument (SaveRequest) returns (BoolWrapper) {}
-    rpc LoadDocument (LoadRequest) returns (BoolWrapper) {}
+    rpc LoadDocument (LoadRequest) returns (CreateDocumentReply) {}
 }
 
 service NoteManager {

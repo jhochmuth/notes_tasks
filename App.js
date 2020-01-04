@@ -94,7 +94,7 @@ class App extends React.Component {
     remote.dialog.showSaveDialog(function(filename) {
       if (!filename) return;
 
-      const saveRequest = {filename: filename};
+      const saveRequest = {filename: filename, document_id: that.documentId};
 
       stubs.documentStub.saveDocument(saveRequest, function(err, response) {
         if (err) {
@@ -142,6 +142,13 @@ class App extends React.Component {
 
   load(file) {
     const that = this;
+    const closeRequest = {id: this.documentId};
+    stubs.documentStub.closeDocument(closeRequest, function(err, response) {
+      if (err) {
+        console.log(err);
+      }
+    });
+
     const loadRequest = {file: file};
 
     stubs.documentStub.loadDocument(loadRequest, function(err, response) {
@@ -149,6 +156,8 @@ class App extends React.Component {
         console.log(err);
       }
       else {
+        that.documentId = response.id;
+
         fs.readFile(file, function(err, data) {
           if (err) {
             console.log(err);
