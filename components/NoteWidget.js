@@ -64,16 +64,14 @@ class NoteWidget extends React.Component {
       document_id: this.props.node.app.documentId
     }
 
-    // todo: backend does not update text length when text changed
     stubs.noteStub.updateNoteAttr(updateAttrRequest, function(err, noteReply) {
       if (err) {
         console.log(err);
       }
 
       else {
-        const attrs = Object.assign({}, that.state.attrs);
+        const attrs = noteReply.attrs;
         const newState = Object.assign({}, that.state);
-        attrs[attr] = val;
         newState.attrs = attrs;
         that.setState(newState);
         that.props.node.content.attrs = attrs;
@@ -117,15 +115,26 @@ class NoteWidget extends React.Component {
     this.forceUpdate();
   }
 
-  // todo: add grpc and backend functionality for adding labels
   editLabel(id, event) {
     event.preventDefault();
+    const that = this;
+    const text = event.target.label.value
+
     if (event.target.label.value !== "") {
-      const link = this.props.node.ports.bottom.links[id];
-      link.addLabel(event.target.label.value);
-      this.props.node.display = false;
-      this.props.node.selectedLinkId = null;
-      this.props.node.app.forceUpdate();
+      const connectionRequest = {id: id, text: text, document_id: this.props.node.app.documentId};
+
+      stubs.connectionStub.createConnection(connectionRequest, function(err, connectionReply) {
+        if (err) {
+          console.log(err);
+        }
+        else {
+          const link = that.props.node.ports.bottom.links[id];
+          link.addLabel(text);
+          that.props.node.display = false;
+          that.props.node.selectedLinkId = null;
+          that.props.node.app.forceUpdate();
+        }
+      });
     }
   }
 

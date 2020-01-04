@@ -85,8 +85,8 @@ class Note:
         if new_text != self.attrs["text"]:
             self.attrs["text"] = new_text
             self.update_last_changed()
-            self.attrs["Text char len"] = len(self.text)
-            self.attrs["Text word len"] = len(self.text.split())
+            self.attrs["Text char len"] = str(len(self.attrs["text"]))
+            self.attrs["Text word len"] = str(len(self.attrs["text"].split()))
 
             for descendant in self.descendant_notes:
                 if "text" in descendant.inherited_attrs:
@@ -121,12 +121,15 @@ class Note:
                 descendant.add_attr(attr, value, True)
 
     def update_attr(self, attr, value):
-        self.update_last_changed()
-        self.attrs[attr] = value
+        if attr == "text":
+            self.update_text(value)
+        else:
+            self.update_last_changed()
+            self.attrs[attr] = value
 
-        for descendant in self.descendant_notes:
-            if attr in descendant.inherited_attrs:
-                descendant.update_attr(attr, value)
+            for descendant in self.descendant_notes:
+                if attr in descendant.inherited_attrs:
+                    descendant.update_attr(attr, value)
 
     def create_duplicate(self):
         """Copies a note without creating an inheritance link."""

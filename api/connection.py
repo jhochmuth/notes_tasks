@@ -24,6 +24,10 @@ class Connection:
 
     def change_second_endpoint(self, new_target):
         self.endpoint_two = new_target
+
+    def change_label(self, text):
+        self.text = None if text == "" else text
+
     """
     def open_endpoint_one(self):
         if type(self.endpoint_one) is URL:

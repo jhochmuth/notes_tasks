@@ -210,6 +210,11 @@ class ConnectionManagerStub(object):
         request_serializer=tasks__pb2.ConnectionRequest.SerializeToString,
         response_deserializer=tasks__pb2.ConnectionReply.FromString,
         )
+    self.AddLabel = channel.unary_unary(
+        '/ConnectionManager/AddLabel',
+        request_serializer=tasks__pb2.ConnectionRequest.SerializeToString,
+        response_deserializer=tasks__pb2.ConnectionReply.FromString,
+        )
     self.DeleteConnection = channel.unary_unary(
         '/ConnectionManager/DeleteConnection',
         request_serializer=tasks__pb2.ConnectionRequest.SerializeToString,
@@ -235,6 +240,13 @@ class ConnectionManagerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def AddLabel(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def DeleteConnection(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -252,6 +264,11 @@ def add_ConnectionManagerServicer_to_server(servicer, server):
       ),
       'AddEndpoint': grpc.unary_unary_rpc_method_handler(
           servicer.AddEndpoint,
+          request_deserializer=tasks__pb2.ConnectionRequest.FromString,
+          response_serializer=tasks__pb2.ConnectionReply.SerializeToString,
+      ),
+      'AddLabel': grpc.unary_unary_rpc_method_handler(
+          servicer.AddLabel,
           request_deserializer=tasks__pb2.ConnectionRequest.FromString,
           response_serializer=tasks__pb2.ConnectionReply.SerializeToString,
       ),

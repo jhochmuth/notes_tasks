@@ -12,7 +12,6 @@ class Toolbar extends React.Component {
     this.addNote = this.addNote.bind(this);
     this.onChange = this.onChange.bind(this);
     this.toggleNoteForm = this.toggleNoteForm.bind(this);
-    this.toggleLoadForm = this.toggleLoadForm.bind(this);
   }
 
   onChange(event) {

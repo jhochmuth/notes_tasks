@@ -56,7 +56,7 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
         note.update_attr(request.attr, request.new_value)
 
         return tasks_pb2.NoteReply(id=request.note_id,
-                                   attrs={request.attr: request.new_value})
+                                   attrs=note.attrs)
 
     def DeleteNoteAttr(self, request, context):
         note = documents[request.document_id].children[request.note_id]
@@ -92,6 +92,11 @@ class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):
 
         return tasks_pb2.ConnectionReply(id=connection.id,
                                          endpoint_two_id=request.endpoint_two_id)
+
+    def AddLabel(self, request, context):
+        connection = documents[request.document_id].children[request.id]
+        connection.change_label(request.text)
+        return tasks_pb2.ConnectionReply(id=connection.id)
 
     def DeleteConnection(self, request, context):
         del documents[request.document_id].children[request.id]
