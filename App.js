@@ -27,7 +27,9 @@ React component for the main app page.
 */
 class App extends React.Component {
   // todo: add change title button
-  // todo: add backend functionality to delete connections and remove endpoints
+  // todo: connection remove() method does not activate when esc button pressed
+  // todo: find solution for removing documents from dict when window is closed
+  // todo: close any popups when esc button pressed (particularly connection label popup)
   constructor() {
     super();
 
@@ -47,6 +49,10 @@ class App extends React.Component {
 
     ipcRenderer.on('load', function(event, file) {
       that.load(file[0]);
+    });
+
+    ipcRenderer.on('close', function(event) {
+      that.sendCloseRequest();
     });
 
     stubs.documentStub.createDocument(null, function(err, documentReply) {
@@ -129,25 +135,18 @@ class App extends React.Component {
   }
 
   /// todo: change to use electron functionality
-  onLoadButtonClick(event) {
-    event.preventDefault();
+  onLoadButtonClick() {
+    const that = this;
 
-    if (!event.target.file.value) {
-      alert('You must specify a file to load.');
-      return;
-    }
-
-    this.load('saved_diagrams/' + event.target.file.value.replace('C:\\fakepath\\', ''));
+    remote.dialog.showOpenDialog(function(file) {
+      if (!file) return;
+      that.load(file[0]);
+    });
   }
 
   load(file) {
     const that = this;
-    const closeRequest = {id: this.documentId};
-    stubs.documentStub.closeDocument(closeRequest, function(err, response) {
-      if (err) {
-        console.log(err);
-      }
-    });
+    this.sendCloseRequest();
 
     const loadRequest = {file: file};
 
@@ -219,6 +218,16 @@ class App extends React.Component {
     else {
       that.listWin.focus();
     }
+  }
+
+  sendCloseRequest() {
+    const closeRequest = {id: this.documentId};
+
+    stubs.documentStub.closeDocument(closeRequest, function(err, response) {
+      if (err) {
+        console.log(err);
+      }
+    });
   }
 
   render() {

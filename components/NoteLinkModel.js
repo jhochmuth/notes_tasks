@@ -27,6 +27,21 @@ class NoteLinkModel extends DefaultLinkModel {
       });
     }
   }
+
+  remove() {
+    super.remove();
+
+    const connectionRequest = {id: this.id, document_id: this.sourcePort.parent.app.documentId};
+
+    stubs.connectionStub.deleteConnection(connectionRequest, function(err, reply) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        return;
+      }
+    });
+  }
 }
 
 module.exports = NoteLinkModel;

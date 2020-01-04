@@ -19,7 +19,7 @@ class MainMenu extends React.Component {
     let win = new BrowserWindow({width: 1200, height: 1200, show: false, title: "Untitled Diagram"});
 
     win.on('closed', () => {
-      win = null
+      win = null;
     });
 
     win.loadURL(require('url').format({

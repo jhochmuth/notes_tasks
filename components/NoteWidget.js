@@ -130,26 +130,7 @@ class NoteWidget extends React.Component {
   }
 
   deleteNote() {
-    const that = this;
-    const noteRequest = {id: this.props.node.content.id, document_id: this.props.node.app.documentId};
-
-    for (let linkId in this.props.node.ports.bottom.links) {
-      this.props.node.ports.bottom.links[linkId].remove();
-    }
-
-    stubs.noteStub.deleteNote(noteRequest, function(err, response) {
-      if (err) {
-        console.log(err);
-      }
-
-      else {
-        if (response.val) {
-          that.props.node.model.removeNode(that.props.node);
-          that.props.node.app.forceUpdate();
-          that.props.node.app.updateListView();
-        }
-      }
-    })
+    this.props.node.remove();
   }
 
   render() {

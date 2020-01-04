@@ -2,8 +2,6 @@ const React = require('react');
 const stubs = require('../stubs.js');
 import {Button, Form, FormGroup, Input, Label, Popover, PopoverBody, PopoverHeader} from 'reactstrap';
 
-// todo: use electron dialog box for load instead of having react component open it
-
 /*
 React component for the toolbar of the main app page.
 */
@@ -44,12 +42,6 @@ class Toolbar extends React.Component {
     this.setState(newState);
   }
 
-  toggleLoadForm() {
-    const newState = Object.assign({}, this.state);
-    newState.displayLoadForm = !this.state.displayLoadForm;
-    this.setState(newState);
-  }
-
   render() {
     return (
       <div>
@@ -59,7 +51,7 @@ class Toolbar extends React.Component {
         <Button id="saveButton" className="toolbar-button" style={{left: '80%'}} onClick={this.props.save}>
           <img src="/home/julius/notes_tasks/icons/save.png" className="toolbar-icon" />
         </Button>
-        <Button id="loadButton" className="toolbar-button" style={{left: '82%'}} onClick={this.toggleLoadForm}>
+        <Button id="loadButton" className="toolbar-button" style={{left: '82%'}} onClick={this.props.load}>
           <img src="/home/julius/notes_tasks/icons/load.png" className="toolbar-icon" />
         </Button>
         <Button className="toolbar-button" style={{left: '5%'}} onClick={this.props.openListView}>
@@ -81,23 +73,12 @@ class Toolbar extends React.Component {
             </Form>
           </PopoverBody>
         </Popover>
-        <Popover trigger="legacy" placement="bottom" target="loadButton" isOpen={this.state.displayLoadForm} toggle={this.toggleLoadForm}>
-          <PopoverHeader>Load diagram from file</PopoverHeader>
-          <PopoverBody>
-            <Form onSubmit={this.props.load}>
-              <Input type="file" name="file" />
-              <Button>Submit</Button>
-            </Form>
-          </PopoverBody>
-        </Popover>
       </div>
     )
   }
 }
 
 module.exports = Toolbar;
-
-
 
 /*
 For Later use:

@@ -68,6 +68,7 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
     def DeleteNote(self, request, context):
         note = documents[request.document_id].children[request.id]
         note.delete()
+        del documents[request.document_id].children[request.id]
         return tasks_pb2.BoolWrapper(val=True)
 
 
@@ -91,6 +92,10 @@ class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):
 
         return tasks_pb2.ConnectionReply(id=connection.id,
                                          endpoint_two_id=request.endpoint_two_id)
+
+    def DeleteConnection(self, request, context):
+        del documents[request.document_id].children[request.id]
+        return tasks_pb2.BoolWrapper(val=True)
 
 
 class ContainerServicer(tasks_pb2_grpc.ContainerManagerServicer):

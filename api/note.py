@@ -209,7 +209,6 @@ class Note:
 
         for descendant in self.descendant_notes:
             descendant.prototype = None
-        del self
 
     @classmethod
     def from_dict(cls, data):
