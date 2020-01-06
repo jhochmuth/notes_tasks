@@ -51,6 +51,7 @@ message DeleteAttrRequest {
 message ContainerRequest {
     map<string, string> attrs = 1;
     repeated string child_note_ids = 2;
+    string document_id = 3;
 }
 
 message ContainerReply {

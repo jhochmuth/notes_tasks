@@ -2,6 +2,9 @@ const React = require('react');
 const stubs = require('../stubs.js');
 import {PortWidget} from '@projectstorm/react-diagrams';
 import {Button, Form, FormGroup, Input, Label, Popover, PopoverBody, PopoverHeader, UncontrolledTooltip} from 'reactstrap';
+const electron = require('electron');
+const remote = electron.remote;
+const BrowserWindow = remote.BrowserWindow;
 
 const shapeSettings = {
   rectangle: 15,
@@ -82,6 +85,23 @@ class NoteWidget extends React.Component {
     this.toggleEditNote();
   }
 
+  handleDoubleClick(attr, val) {
+    if (attr === "link") {
+      let win = new BrowserWindow({width: 1000, height: 1000, show: false});
+
+      win.on('closed', () => {
+        win = null;
+      });
+
+      win.loadURL(val);
+
+      win.once('ready-to-show', function() {
+        win.webContents.openDevTools();
+        win.show();
+      });
+    }
+  }
+
   renderAttrs() {
     const attrs = this.state.attrs;
     const that = this;
@@ -94,7 +114,7 @@ class NoteWidget extends React.Component {
       else {
         idDigit += 1;
         return (
-            <div key={attr} id={"note" + that.props.node.content.id + "attr" + idDigit}>
+            <div key={attr} id={"note" + that.props.node.content.id + "attr" + idDigit} onDoubleClick={that.handleDoubleClick.bind(this, attr, attrs[attr])}>
               <span className="attr-text">
                 <b>{attr}:</b> {attrs[attr]}
               </span>

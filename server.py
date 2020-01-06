@@ -40,9 +40,10 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
                     text=request.attrs["text"],
                     id=request.id,
                     attrs=dict(request.attrs),
-                    parent_container=document.children[request.parent_container_id]
+                    parent_container=documents[request.document_id].children[request.parent_container_id]
                     if len(request.parent_container_id) > 0
                     else None)
+
         documents[request.document_id].children[note.id] = note
 
         return tasks_pb2.NoteReply(id=note.id,
@@ -105,7 +106,8 @@ class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):
 
 class ContainerServicer(tasks_pb2_grpc.ContainerManagerServicer):
     def CreateContainer(self, request, context):
-        notes = [document.children[note_id] for note_id in request.child_note_ids]
+        notes = [documents[request.document_id].children[note_id] for note_id in request.child_note_ids]
+
         container = Container(attrs=request.attrs,
                               notes=notes)
 
