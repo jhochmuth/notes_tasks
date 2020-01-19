@@ -11,6 +11,10 @@ default_note_settings = {"width": "200",
                          "text": "black"}
 
 
+def get_current_time():
+    return datetime.now().strftime("%Y/%m/%d %I:%M %p")
+
+
 # TODO: Fix functionality for dates when using GRPC.
 class Note:
     """Basic note class."""
@@ -37,7 +41,7 @@ class Note:
         prototype : Note, optional
             The prototype for this note.
         inherited_attrs : set, optional
-            Any attribute specified in this set will be inherited from the prototype.
+            Specifies attrs inherited from prototype.
 
         """
         if id is None:
@@ -53,7 +57,7 @@ class Note:
         self.attrs["title"] = title
         self.attrs["text"] = text
 
-        self.attrs["Date created"] = datetime.now().strftime("%Y/%m/%d %I:%M %p")
+        self.attrs["Date created"] = get_current_time()
         self.update_last_changed()
 
         self.attrs["Text char len"] = str(len(self.attrs["text"]))
@@ -78,7 +82,7 @@ class Note:
                 self.attrs[key] = val
         """
     def update_last_changed(self):
-        self.attrs["Last changed"] = datetime.now().strftime("%Y/%m/%d %I:%M %p")
+        self.attrs["Last changed"] = get_current_time()
 
     def update_text(self, new_text):
         """Used to update the text of a note."""
@@ -171,9 +175,10 @@ class Note:
         Parameters
         ----------
         condition : Conditional
-            The condition to be fulfilled. Each attribute will be checked individually.
+            The condition to test for.
         attrs : list, optional
-            Contains the attributes that should be searched. If none given, then all attributes will be checked.
+            Contains the attributes that should be searched.
+            If none given, then all attributes will be checked.
 
         Returns
         -------
@@ -201,7 +206,8 @@ class Note:
         data["id"] = self.id
         data["type"] = "note"
         data["attrs"] = self.attrs
-        data["parent_container"] = self.parent_container.id if self.parent_container else None
+        data["parent_container"] = (self.parent_container.id
+                                    if self.parent_container else None)
         data["prototype"] = self.prototype.id if self.prototype else None
         data["inherited_attrs"] = list(self.inherited_attrs)
         return data

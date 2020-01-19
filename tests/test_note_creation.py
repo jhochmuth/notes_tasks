@@ -11,4 +11,5 @@ def test_note_creation():
                         },
                  )
 
-    assert note1.attrs["title"] == "Joseph Conrad" and note1.attrs["birth"] == "1857"
+    assert (note1.attrs["title"] == "Joseph Conrad"
+            and note1.attrs["birth"] == "1857")

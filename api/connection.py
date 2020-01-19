@@ -1,7 +1,7 @@
-from api.note import Note, URL
+from api.note import Note
 from api.uid import UID
 
-#from urllib import request
+# from urllib import request
 
 
 class Connection:
@@ -40,8 +40,13 @@ class Connection:
     def serialize(self):
         data = dict()
         data["id"] = self.id
-        data["endpoint_one"] = self.endpoint_one.id if self.endpoint_one else None
-        data["endpoint_two"] = self.endpoint_two.id if self.endpoint_two else None
+
+        data["endpoint_one"] = (self.endpoint_one.id
+                                if self.endpoint_one else None)
+
+        data["endpoint_two"] = (self.endpoint_two.id
+                                if self.endpoint_two else None)
+
         data["text"] = self.text
         data["type"] = "connection"
         return data

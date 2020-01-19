@@ -1,8 +1,6 @@
 import requests
 
 from bs4 import BeautifulSoup
-#import keras
-#import numpy as np
 
 from api.note import Note
 

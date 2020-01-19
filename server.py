@@ -36,21 +36,23 @@ class DocumentServicer(tasks_pb2_grpc.DocumentManagerServicer):
 
 class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
     def CreateNote(self, request, context):
+        document = documents[request.document_id]
+        container_id = request.parent_container_id
+
         note = Note(title=request.attrs["title"],
                     text=request.attrs["text"],
                     id=request.id,
                     attrs=dict(request.attrs),
-                    parent_container=documents[request.document_id].children[request.parent_container_id]
+                    parent_container=document.children[container_id]
                     if len(request.parent_container_id) > 0
                     else None)
 
-        documents[request.document_id].children[note.id] = note
+        document.children[note.id] = note
 
         return tasks_pb2.NoteReply(id=note.id,
                                    attrs=note.attrs,
-                                   parent_container_id=request.parent_container_id)
+                                   parent_container_id=container_id)
 
-    """Returns: NoteReply with attrs dict that contains only the updated attr."""
     def UpdateNoteAttr(self, request, context):
         note = documents[request.document_id].children[request.note_id]
 
@@ -75,24 +77,40 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
 
 class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):
     def CreateConnection(self, request, context):
-        connection = Connection(endpoint_one=documents[request.document_id].children[request.endpoint_one_id] if request.endpoint_one_id else None,
-                                endpoint_two=documents[request.document_id].children[request.endpoint_two_id] if request.endpoint_two_id else None,
+        document = documents[request.document_id]
+
+        endpoint_one_id = request.endpoint_one_id
+        endpoint_one = (document.children[request.endpoint_one_id]
+                        if request.endpoint_one_id
+                        else None)
+
+        endpoint_two_id = request.endpoint_two_id
+        endpoint_two = (document.children[request.endpoint_two_id]
+                        if request.endpoint_two_id
+                        else None)
+
+        connection = Connection(endpoint_one=endpoint_one,
+                                endpoint_two=endpoint_two,
                                 text=request.text,
                                 id=request.id)
 
         documents[request.document_id].children[connection.id] = connection
 
         return tasks_pb2.ConnectionReply(id=connection.id,
-                                         endpoint_one_id=request.endpoint_one_id,
-                                         endpoint_two_id=request.endpoint_two_id,
+                                         endpoint_one_id=endpoint_one_id,
+                                         endpoint_two_id=endpoint_two_id,
                                          text=request.text)
 
     def AddEndpoint(self, request, context):
+        document = documents[request.document_id]
+        new_endpoint_id = request.endpoint_two_id
+        new_endpoint = document.children[new_endpoint_id]
+
         connection = documents[request.document_id].children[request.id]
-        connection.change_second_endpoint(documents[request.document_id].children[request.endpoint_two_id])
+        connection.change_second_endpoint(new_endpoint)
 
         return tasks_pb2.ConnectionReply(id=connection.id,
-                                         endpoint_two_id=request.endpoint_two_id)
+                                         endpoint_two_id=new_endpoint_id)
 
     def AddLabel(self, request, context):
         connection = documents[request.document_id].children[request.id]
@@ -106,7 +124,10 @@ class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):
 
 class ContainerServicer(tasks_pb2_grpc.ContainerManagerServicer):
     def CreateContainer(self, request, context):
-        notes = [documents[request.document_id].children[note_id] for note_id in request.child_note_ids]
+        document = documents[request.document_id]
+
+        notes = [document.children[note_id]
+                 for note_id in request.child_note_ids]
 
         container = Container(attrs=request.attrs,
                               notes=notes)
@@ -118,6 +139,7 @@ class ContainerServicer(tasks_pb2_grpc.ContainerManagerServicer):
                                         child_note_ids=request.child_note_ids)
 
     def AddNote(self, request, context):
+        document = documents[request.document_id]
         container = document.children[request.container_id]
         note = document.children[request.note_id]
         container.add_note(note)
@@ -127,6 +149,7 @@ class ContainerServicer(tasks_pb2_grpc.ContainerManagerServicer):
                                         child_note_ids=child_note_ids)
 
     def RemoveNote(self, request, context):
+        document = documents[request.document_id]
         container = document.children[request.container_id]
         note = document.children[request.note_id]
         container.remove_note(note)
@@ -136,6 +159,7 @@ class ContainerServicer(tasks_pb2_grpc.ContainerManagerServicer):
                                         child_note_ids=child_note_ids)
 
     def SearchChildNoteAttrs(self, request, context):
+        document = documents[request.document_id]
         container = document.children[request.container_id]
         condition = document.children[request.conditional_id]
         attrs = request.attrs
@@ -147,12 +171,15 @@ class ContainerServicer(tasks_pb2_grpc.ContainerManagerServicer):
         return tasks_pb2.ContainerSearchReply(result=result)
 
     def DeleteContainer(self, request, context):
-        container = document.children
+        pass
 
 
 class ConditionalServicer(tasks_pb2_grpc.ConditionalManagerServicer):
     def CreateConditional(self, request, context):
-        condition = Conditional(target=request.target, condition=request.condition)
+        document = documents[request.document_id]
+
+        condition = Conditional(target=request.target,
+                                condition=request.condition)
 
         document.children[condition.id] = condition
 
@@ -163,11 +190,24 @@ class ConditionalServicer(tasks_pb2_grpc.ConditionalManagerServicer):
 
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
-    tasks_pb2_grpc.add_DocumentManagerServicer_to_server(DocumentServicer(), server)
-    tasks_pb2_grpc.add_NoteManagerServicer_to_server(NoteServicer(), server)
-    tasks_pb2_grpc.add_ConnectionManagerServicer_to_server(ConnectionServicer(), server)
-    tasks_pb2_grpc.add_ContainerManagerServicer_to_server(ContainerServicer(), server)
-    tasks_pb2_grpc.add_ConditionalManagerServicer_to_server(ConditionalServicer(), server)
+
+    tasks_pb2_grpc.add_DocumentManagerServicer_to_server(DocumentServicer(),
+                                                         server)
+
+    tasks_pb2_grpc.add_NoteManagerServicer_to_server(NoteServicer(),
+                                                     server)
+
+    tasks_pb2_grpc.add_ConnectionManagerServicer_to_server(
+        ConnectionServicer(),
+        server)
+
+    tasks_pb2_grpc.add_ContainerManagerServicer_to_server(ContainerServicer(),
+                                                          server)
+
+    tasks_pb2_grpc.add_ConditionalManagerServicer_to_server(
+        ConditionalServicer(),
+        server)
+
     server.add_insecure_port('[::]:50051')
     server.start()
     try:
