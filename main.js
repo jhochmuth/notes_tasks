@@ -1,7 +1,7 @@
-const electron = require('electron')
-const app = electron.app
-const BrowserWindow = electron.BrowserWindow
-const path = require('path')
+const electron = require('electron');
+const app = electron.app;
+const BrowserWindow = electron.BrowserWindow;
+const path = require('path');
 const React = require('react');
 
 /*************************************************************
@@ -71,11 +71,11 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({width: 1200, height: 900, show: false})
 
   mainWindow.loadURL(require('url').format({
-    pathname: path.join(__dirname, 'indexMenu.html'),
+    pathname: path.join(__dirname, 'html/indexMenu.html'),
     protocol: 'file:',
     slashes: true
   }))
-  //pathname: path.join(__dirname, 'indexMenu.html'),
+  //pathname: path.join(__dirname, 'html/indexMenu.html'),
   //pathname: path.join(__dirname, 'tabs', 'indexTabs.html'),
 
   mainWindow.once('ready-to-show', function() {

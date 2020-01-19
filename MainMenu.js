@@ -4,6 +4,7 @@ const stubs = require('./stubs.js');
 const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
+const path = require('path');
 
 /*
 React component for the main menu.
@@ -23,7 +24,7 @@ class MainMenu extends React.Component {
     });
 
     win.loadURL(require('url').format({
-      pathname: '/home/julius/notes_tasks/indexApp.html',
+      pathname: path.join(__dirname, 'html/indexApp.html'),
       protocol: 'file:',
       slashes: true
     }));
@@ -59,39 +60,3 @@ class MainMenu extends React.Component {
 }
 
 module.exports = MainMenu;
-
-
-/*
-    const menu = remote.Menu.buildFromTemplate([
-      {
-        label: "File",
-        submenu: [
-          {
-            label: "New Diagram",
-            click() {that.createDiagram()}
-          },
-          {label: "Save As"},
-          {label: "Save"},
-          {
-            label: "Open",
-            click() {that.loadDiagram()}
-          },
-          {
-            label: "Quit",
-            click() {electron.remote.app.quit()}}
-        ]
-      },
-      {
-        label: "Debug",
-        submenu: [
-          {
-            label: "Open Developer Tools",
-            click() {electron.remote.getCurrentWebContents().openDevTools()}
-          }
-        ]
-      }
-    ])
-
-    remote.Menu.setApplicationMenu(menu);
-  }
-*/

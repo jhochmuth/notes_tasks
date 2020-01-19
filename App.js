@@ -13,6 +13,7 @@ const NotePortFactory = require('./components/NotePortFactory.js');
 const ContainerModel = require('./components/ContainerModel.js');
 const ContainerFactory = require('./components/ContainerFactory.js');
 const stubs = require('./stubs.js');
+const path = require('path');
 
 const engine = new SRD.DiagramEngine();
 engine.installDefaultFactories();
@@ -203,7 +204,7 @@ class App extends React.Component {
       });
 
       that.listWin.loadURL(require('url').format({
-        pathname: '/home/julius/notes_tasks/indexList.html',
+        pathname: path.join(__dirname, 'html/indexList.html'),
         protocol: 'file:',
         slashes: true
       }));
