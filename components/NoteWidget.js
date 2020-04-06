@@ -2,6 +2,8 @@ const React = require('react');
 const stubs = require('../stubs.js');
 import {PortWidget} from '@projectstorm/react-diagrams';
 import {Button, Form, FormGroup, Input, Label, Popover, PopoverBody, PopoverHeader, UncontrolledTooltip} from 'reactstrap';
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
@@ -12,6 +14,7 @@ const shapeSettings = {
 }
 
 class NoteWidget extends React.Component {
+  // todo: refactor attributes into separate component
   constructor(props) {
     super(props);
     this.state = {attrs: this.props.node.content.attrs, displayAttrs: false, width: 200, showAttrForm: false, borderRadius: "15px", showButtons: false};
@@ -85,7 +88,7 @@ class NoteWidget extends React.Component {
     this.toggleEditNote();
   }
 
-  handleDoubleClick(attr, val) {
+  attrDoubleClick(attr, val) {
     if (attr === "link") {
       let win = new BrowserWindow({width: 1000, height: 1000, show: false});
 
@@ -114,7 +117,7 @@ class NoteWidget extends React.Component {
       else {
         idDigit += 1;
         return (
-            <div key={attr} id={"note" + that.props.node.content.id + "attr" + idDigit} onDoubleClick={that.handleDoubleClick.bind(this, attr, attrs[attr])}>
+            <div key={attr} id={"note" + that.props.node.content.id + "attr" + idDigit} onDoubleClick={that.attrDoubleClick.bind(this, attr, attrs[attr])}>
               <span className="attr-text">
                 <b>{attr}:</b> {attrs[attr]}
               </span>
@@ -171,7 +174,9 @@ class NoteWidget extends React.Component {
         onMouseEnter={this.showButtons}
         onMouseLeave={this.hideButtons}>
         <h4 className="note-title" style={{height: this.state.displayAttrs ? null : "100%"}}>{attrs.title}</h4>
-        <div style={{textAlign: "center", visibility: this.state.displayAttrs ? "visible" : "hidden"}}>{attrs.text}</div>
+        <div style={{textAlign: "center", visibility: this.state.displayAttrs ? "visible" : "hidden"}}>
+          <CKEditor editor={ClassicEditor} />
+        </div>
         <div style={{visibility: this.state.displayAttrs ? "visible" : "hidden", margin: 10}}>{this.renderAttrs()}</div>
         <button id={"attrFormControl" + this.props.node.content.id}
           className="edit-note-button"
