@@ -6,7 +6,7 @@
   "scripts": {
     "react": "react-scripts start",
     "start": "electron .",
-    "test": "mocha",
+    "test": "testcafe electron:/home/julius/notes_tasks ./tests/end_to_end/",
     "postinstall": "npm rebuild --target=1.8.8 --runtime=electron --dist-url=https://atom.io/download/electron"
   },
   "dependencies": {
