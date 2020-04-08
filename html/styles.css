@@ -97,6 +97,10 @@
 	border-top-right-radius: 5px;
 }
 
+.note-text {
+	text-align: center;
+}
+
 .edit-note-button {
 	position: absolute;
 	margin: 10px;

@@ -174,9 +174,7 @@ class NoteWidget extends React.Component {
         onMouseEnter={this.showButtons}
         onMouseLeave={this.hideButtons}>
         <h4 className="note-title" style={{height: this.state.displayAttrs ? null : "100%"}}>{attrs.title}</h4>
-        <div style={{textAlign: "center", visibility: this.state.displayAttrs ? "visible" : "hidden"}}>
-          <CKEditor editor={ClassicEditor} />
-        </div>
+        <div className="note-text" style={{visibility: this.state.displayAttrs ? "visible" : "hidden"}}>{attrs.text}</div>
         <div style={{visibility: this.state.displayAttrs ? "visible" : "hidden", margin: 10}}>{this.renderAttrs()}</div>
         <button id={"attrFormControl" + this.props.node.content.id}
           className="edit-note-button"
@@ -193,6 +191,9 @@ class NoteWidget extends React.Component {
           <PopoverHeader>Edit note</PopoverHeader>
           <PopoverBody>
             <Form onSubmit={this.editNoteAttr}>
+              <FormGroup>
+                <Label>Edit Text</Label>
+              </FormGroup>
               <FormGroup>
                 <Label for={"attrForm" + this.props.node.content.id}>Attribute name</Label>
                 <Input type="textarea" name="attr" id={"attrForm" + this.props.node.content.id} />
