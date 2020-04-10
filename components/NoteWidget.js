@@ -4,6 +4,7 @@ import {PortWidget} from '@projectstorm/react-diagrams';
 import {Button, Form, FormGroup, Input, Label, Popover, PopoverBody, PopoverHeader, UncontrolledTooltip} from 'reactstrap';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ReactModal from 'react-modal';
 const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
@@ -17,13 +18,26 @@ class NoteWidget extends React.Component {
   // todo: refactor attributes into separate component
   constructor(props) {
     super(props);
-    this.state = {attrs: this.props.node.content.attrs, displayAttrs: false, width: 200, showAttrForm: false, borderRadius: "15px", showButtons: false};
+
+    this.state = {
+      attrs: this.props.node.content.attrs,
+      displayAttrs: false,
+      width: 200,
+      showAttrForm: false,
+      borderRadius: "15px",
+      showButtons: false,
+      showTextForm: false
+    };
+
+    this.textData = null;
+
     this.showButtons = this.showButtons.bind(this);
     this.hideButtons = this.hideButtons.bind(this);
     this.toggleAttrs = this.toggleAttrs.bind(this);
     this.toggleEditNote = this.toggleEditNote.bind(this);
     this.editNoteAttr = this.editNoteAttr.bind(this);
     this.toggleEditLabel = this.toggleEditLabel.bind(this);
+    this.toggleEditText = this.toggleEditText.bind(this);
     this.deleteNote = this.deleteNote.bind(this);
   }
 
@@ -161,13 +175,48 @@ class NoteWidget extends React.Component {
     }
   }
 
+  toggleEditText(event) {
+    const newState = Object.assign({}, this.state);
+    newState.showTextForm = !newState.showTextForm;
+    this.setState(newState);
+  }
+
+  updateText() {
+    const that = this;
+
+    const updateAttrRequest = {
+      note_id: this.props.node.content.id,
+      attr: "text",
+      new_value: this.textData,
+      document_id: this.props.node.app.documentId
+    }
+
+    stubs.noteStub.updateNoteAttr(updateAttrRequest, function(err, noteReply) {
+      if (err) {
+        console.log(err);
+      }
+
+      else {
+        const attrs = noteReply.attrs;
+        const newState = Object.assign({}, that.state);
+        newState.attrs = attrs;
+        that.setState(newState);
+        that.props.node.content.attrs = attrs;
+        that.props.node.app.updateListView();
+        that.toggleEditText()
+      }
+    })
+  }
+
   deleteNote() {
     this.props.node.remove();
   }
 
+  //todo: change from ClassicEditor to DecoupledEditor
   render() {
     const attrs = this.state.attrs;
     const height = this.state.displayAttrs ? 100 + (25 * (Object.keys(this.state.attrs).length - 1)) : 80;
+
     return (
       <div className="note"
         style={{height: height, width: this.state.width, borderRadius: this.state.borderRadius, zIndex: 5}}
@@ -192,20 +241,49 @@ class NoteWidget extends React.Component {
           <PopoverBody>
             <Form onSubmit={this.editNoteAttr}>
               <FormGroup>
-                <Label>Edit Text</Label>
-              </FormGroup>
-              <FormGroup>
                 <Label for={"attrForm" + this.props.node.content.id}>Attribute name</Label>
                 <Input type="textarea" name="attr" id={"attrForm" + this.props.node.content.id} />
               </FormGroup>
               <FormGroup>
                 <Label>Attribute value</Label>
-                <Input type="textarea" name="val" id={"valForm" + this.props.node.content.id} />
+                <Input
+                  type="textarea"
+                  name="val"
+                  id={"valForm" + this.props.node.content.id} />
               </FormGroup>
               <Button>Submit</Button>
             </Form>
           </PopoverBody>
         </Popover>
+        <ReactModal
+          isOpen={this.state.showTextForm}
+          onRequestClose={this.toggleEditText}
+          ariaHideApp={false}>
+          <CKEditor
+            editor={ClassicEditor}
+            onInit={(editor) => {
+              this.textData = editor.getData();
+            }}
+            onChange={(event, editor) => {
+              this.textData = editor.getData();
+            }}
+            data={attrs.text}
+          />
+          <Button
+            className="text-form-submit-button"
+            onClick={() => {this.updateText();}}
+          >Save</Button>
+          <Button
+            className="text-form-cancel-button"
+            onClick={this.toggleEditText}
+          >Cancel</Button>
+        </ReactModal>
+        <button
+          id={"textEditControl" + this.props.node.content.id}
+          className="edit-text-button"
+          onClick={this.toggleEditText}
+          style={{visibility: this.state.displayAttrs ? "visible" : "hidden"}}
+        >Edit</button>
         <div id={"port" + this.props.node.content.id}
           style={{position: "absolute", top: 3, left: 3}}>
           <PortWidget name="bottom" node={this.props.node} />

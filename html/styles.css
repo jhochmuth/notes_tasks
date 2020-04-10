@@ -101,11 +101,26 @@
 	text-align: center;
 }
 
+.edit-text-button {
+	position: absolute;
+	margin: 10px;
+	right: 0px;
+	top: 20px;
+}
+
 .edit-note-button {
 	position: absolute;
 	margin: 10px;
 	right: 0px;
 	bottom: 0px;
+}
+
+.text-form-submit-button {
+	margin: 10px;
+}
+
+.text-form-cancel-button {
+	margin: 10px;
 }
 
 .toggle-note-display-button {
