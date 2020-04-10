@@ -115,6 +115,12 @@
 	bottom: 0px;
 }
 
+.ck-editor__editable {
+	background: white;
+	min-height: 80%;
+	padding: 1cm 2cm 2cm;
+}
+
 .text-form-submit-button {
 	margin: 10px;
 }

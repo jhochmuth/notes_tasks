@@ -212,7 +212,6 @@ class NoteWidget extends React.Component {
     this.props.node.remove();
   }
 
-  //todo: change from ClassicEditor to DecoupledEditor
   render() {
     const attrs = this.state.attrs;
     const height = this.state.displayAttrs ? 100 + (25 * (Object.keys(this.state.attrs).length - 1)) : 80;
@@ -258,17 +257,24 @@ class NoteWidget extends React.Component {
         <ReactModal
           isOpen={this.state.showTextForm}
           onRequestClose={this.toggleEditText}
+          style={{
+            content: {
+              backgroundColor: "#F5F5F5"
+            }
+          }}
           ariaHideApp={false}>
-          <CKEditor
-            editor={ClassicEditor}
-            onInit={(editor) => {
-              this.textData = editor.getData();
-            }}
-            onChange={(event, editor) => {
-              this.textData = editor.getData();
-            }}
-            data={attrs.text}
-          />
+          <div>
+            <CKEditor
+              editor={ClassicEditor}
+              onInit={(editor) => {
+                this.textData = editor.getData();
+              }}
+              onChange={(event, editor) => {
+                this.textData = editor.getData();
+              }}
+              data={attrs.text}
+            />
+          </div>
           <Button
             className="text-form-submit-button"
             onClick={() => {this.updateText();}}
