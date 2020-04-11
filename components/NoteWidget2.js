@@ -10,10 +10,6 @@ const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
 
-const shapeSettings = {
-  rectangle: 15,
-  circle: "50%"
-}
 
 class NoteWidget extends React.Component {
   // todo: refactor attributes into separate component
@@ -24,13 +20,18 @@ class NoteWidget extends React.Component {
       attrs: this.props.node.content.attrs,
       displayAttrs: false,
       width: 200,
+      height: 80,
       showAttrForm: false,
-      borderRadius: "15px",
       showButtons: false,
-      showTextForm: false
+      showTextForm: false,
+      selected: false
     };
 
     this.textData = null;
+
+    this.props.node.addListener({
+      selectionChanged: (event) => this.toggleSelection(event)
+    })
 
     this.showButtons = this.showButtons.bind(this);
     this.hideButtons = this.hideButtons.bind(this);
@@ -40,6 +41,12 @@ class NoteWidget extends React.Component {
     this.toggleEditLabel = this.toggleEditLabel.bind(this);
     this.toggleEditText = this.toggleEditText.bind(this);
     this.deleteNote = this.deleteNote.bind(this);
+  }
+
+  toggleSelection(event) {
+    const newState = Object.assign({}, this.state);
+    newState.selected = event.isSelected;
+    this.setState(newState);
   }
 
   showButtons() {
@@ -71,12 +78,6 @@ class NoteWidget extends React.Component {
     const attr = event.target.attr.value;
     const val = event.target.val.value;
     event.preventDefault();
-
-    if (attr =="shape") {
-      const newState = Object.assign({}, this.state);
-      newState.borderRadius = shapeSettings[val];
-      this.setState(newState);
-    }
 
     const updateAttrRequest = {
       note_id: this.props.node.content.id,
@@ -222,18 +223,28 @@ class NoteWidget extends React.Component {
     this.props.node.model.setLocked(false)
   }
 
+  onResize(data) {
+    const newState = Object.assign({}, this.state);
+    newState.width = data.size.width;
+    newState.height = data.size.height;
+    this.setState(newState);
+  }
+
   render() {
     const attrs = this.state.attrs;
-    const height = this.state.displayAttrs ? 100 + (25 * (Object.keys(this.state.attrs).length - 1)) : 80;
+    const height = this.state.height;
+
     return (
       <ResizableBox
         width={this.state.width}
         height={height}
         className="note"
         onResizeStart={(event, data) => this.onResizeStart()}
-        onResizeStop={(event, data) => this.onResizeStop()}>
+        onResizeStop={(event, data) => this.onResizeStop()}
+        onResize={(event, data) => this.onResize(data)}
+      >
         <div
-          style={{borderRadius: this.state.borderRadius, zIndex: 5}}
+          style={{zIndex: 5, borderColor: this.state.selected ? "lightskyblue" : "black", border: "solid", width: this.state.width, height: height}}
           onMouseEnter={this.showButtons}
           onMouseLeave={this.hideButtons}>
           <h4 className="note-title" style={{height: this.state.displayAttrs ? null : "100%"}}>{attrs.title}</h4>
