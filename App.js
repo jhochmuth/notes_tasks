@@ -37,6 +37,7 @@ class App extends React.Component {
 
     this.listWin = null;
     this.documentId = null;
+    this.diagramRef = React.createRef();
 
     this.addNote = this.addNote.bind(this);
     this.addContainer = this.addContainer.bind(this);
@@ -247,6 +248,7 @@ class App extends React.Component {
           className="srd-diagram"
           maxNumberPointsPerLink="0"
           deleteKeys={[27]}
+          ref={this.diagramRef}
         />
       </div>
     );

@@ -5,6 +5,7 @@ import {Button, Form, FormGroup, Input, Label, Popover, PopoverBody, PopoverHead
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ReactModal from 'react-modal';
+const ResizableBox = require('react-resizable').ResizableBox;
 const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
@@ -212,101 +213,117 @@ class NoteWidget extends React.Component {
     this.props.node.remove();
   }
 
+  onResizeStart() {
+    this.props.node.app.diagramRef.current.stopFiringAction()
+    this.props.node.model.setLocked()
+  }
+
+  onResizeStop() {
+    this.props.node.model.setLocked(false)
+  }
+
   render() {
     const attrs = this.state.attrs;
     const height = this.state.displayAttrs ? 100 + (25 * (Object.keys(this.state.attrs).length - 1)) : 80;
     return (
-      <div
-        style={{height: height, width: this.state.width, borderRadius: this.state.borderRadius, zIndex: 5}}
-        onMouseEnter={this.showButtons}
-        onMouseLeave={this.hideButtons}>
-        <h4 className="note-title" style={{height: this.state.displayAttrs ? null : "100%"}}>{attrs.title}</h4>
-        <div className="note-text" style={{visibility: this.state.displayAttrs ? "visible" : "hidden"}}>{attrs.text}</div>
-        <div style={{visibility: this.state.displayAttrs ? "visible" : "hidden", margin: 10}}>{this.renderAttrs()}</div>
-        <button id={"attrFormControl" + this.props.node.content.id}
-          className="edit-note-button"
-          onClick={this.toggleEditNote}
-          style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>⚙</button>
-        <button className="toggle-note-display-button"
-          onClick={this.toggleAttrs}
-          style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>{this.state.displayAttrs ? "⤒" : "⤓"}</button>
-        <Button close
-          className="delete-note-button"
-          style={{color: "crimson", textShadow: "0px 0px", visibility: this.state.showButtons ? "visible" : "hidden"}}
-          onClick={this.deleteNote}/>
-        <Popover placement="right" trigger="legacy" target={"attrFormControl" + this.props.node.content.id} isOpen={this.state.showAttrForm} toggle={this.toggleEditNote}>
-          <PopoverHeader>Edit note</PopoverHeader>
-          <PopoverBody>
-            <Form onSubmit={this.editNoteAttr}>
-              <FormGroup>
-                <Label for={"attrForm" + this.props.node.content.id}>Attribute name</Label>
-                <Input type="textarea" name="attr" id={"attrForm" + this.props.node.content.id} />
-              </FormGroup>
-              <FormGroup>
-                <Label>Attribute value</Label>
-                <Input
-                  type="textarea"
-                  name="val"
-                  id={"valForm" + this.props.node.content.id} />
-              </FormGroup>
-              <Button>Submit</Button>
-            </Form>
-          </PopoverBody>
-        </Popover>
-        <ReactModal
-          isOpen={this.state.showTextForm}
-          onRequestClose={this.toggleEditText}
-          style={{
-            content: {
-              backgroundColor: "#F5F5F5"
-            }
-          }}
-          ariaHideApp={false}>
-          <CKEditor
-            editor={ClassicEditor}
-            onInit={(editor) => {
-              this.textData = editor.getData();
+      <ResizableBox
+        width={this.state.width}
+        height={height}
+        className="note"
+        onResizeStart={(event, data) => this.onResizeStart()}
+        onResizeStop={(event, data) => this.onResizeStop()}>
+        <div
+          style={{borderRadius: this.state.borderRadius, zIndex: 5}}
+          onMouseEnter={this.showButtons}
+          onMouseLeave={this.hideButtons}>
+          <h4 className="note-title" style={{height: this.state.displayAttrs ? null : "100%"}}>{attrs.title}</h4>
+          <div className="note-text" style={{visibility: this.state.displayAttrs ? "visible" : "hidden"}}>{attrs.text}</div>
+          <div style={{visibility: this.state.displayAttrs ? "visible" : "hidden", margin: 10}}>{this.renderAttrs()}</div>
+          <button id={"attrFormControl" + this.props.node.content.id}
+            className="edit-note-button"
+            onClick={this.toggleEditNote}
+            style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>⚙</button>
+          <button className="toggle-note-display-button"
+            onClick={this.toggleAttrs}
+            style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>{this.state.displayAttrs ? "⤒" : "⤓"}</button>
+          <Button close
+            className="delete-note-button"
+            style={{color: "crimson", textShadow: "0px 0px", visibility: this.state.showButtons ? "visible" : "hidden"}}
+            onClick={this.deleteNote}/>
+          <Popover placement="right" trigger="legacy" target={"attrFormControl" + this.props.node.content.id} isOpen={this.state.showAttrForm} toggle={this.toggleEditNote}>
+            <PopoverHeader>Edit note</PopoverHeader>
+            <PopoverBody>
+              <Form onSubmit={this.editNoteAttr}>
+                <FormGroup>
+                  <Label for={"attrForm" + this.props.node.content.id}>Attribute name</Label>
+                  <Input type="textarea" name="attr" id={"attrForm" + this.props.node.content.id} />
+                </FormGroup>
+                <FormGroup>
+                  <Label>Attribute value</Label>
+                  <Input
+                    type="textarea"
+                    name="val"
+                    id={"valForm" + this.props.node.content.id} />
+                </FormGroup>
+                <Button>Submit</Button>
+              </Form>
+            </PopoverBody>
+          </Popover>
+          <ReactModal
+            isOpen={this.state.showTextForm}
+            onRequestClose={this.toggleEditText}
+            style={{
+              content: {
+                backgroundColor: "#F5F5F5"
+              }
             }}
-            onChange={(event, editor) => {
-              this.textData = editor.getData();
-            }}
-            data={attrs.text}
-          />
-          <Button
-            className="text-form-submit-button"
-            onClick={() => {this.updateText()}}
-          >Save</Button>
-          <Button
-            className="text-form-cancel-button"
+            ariaHideApp={false}>
+            <CKEditor
+              editor={ClassicEditor}
+              onInit={(editor) => {
+                this.textData = editor.getData();
+              }}
+              onChange={(event, editor) => {
+                this.textData = editor.getData();
+              }}
+              data={attrs.text}
+            />
+            <Button
+              className="text-form-submit-button"
+              onClick={() => {this.updateText()}}
+            >Save</Button>
+            <Button
+              className="text-form-cancel-button"
+              onClick={this.toggleEditText}
+            >Cancel</Button>
+          </ReactModal>
+          <button
+            id={"textEditControl" + this.props.node.content.id}
+            className="edit-text-button"
             onClick={this.toggleEditText}
-          >Cancel</Button>
-        </ReactModal>
-        <button
-          id={"textEditControl" + this.props.node.content.id}
-          className="edit-text-button"
-          onClick={this.toggleEditText}
-          style={{visibility: this.state.displayAttrs ? "visible" : "hidden"}}
-        >Edit</button>
-        <div id={"port" + this.props.node.content.id}
-          style={{position: "absolute", top: 3, left: 3}}>
-          <PortWidget name="bottom" node={this.props.node} />
+            style={{visibility: this.state.displayAttrs ? "visible" : "hidden"}}
+          >Edit</button>
+          <div id={"port" + this.props.node.content.id}
+            style={{position: "absolute", top: 3, left: 3}}>
+            <PortWidget name="bottom" node={this.props.node} />
+          </div>
+          <Popover placement="left"
+            trigger="legacy"
+            target={"port" + this.props.node.content.id}
+            isOpen={this.props.node.display}>
+            <PopoverHeader>Add label to link</PopoverHeader>
+            <PopoverBody>
+              <Form onSubmit={this.editLabel.bind(this, this.props.node.selectedLinkId)}>
+                <Input type="textarea"
+                  name="label"
+                  id={"labelForm" + this.props.node.content.id} />
+                <Button>Submit</Button>
+                <Button onClick={this.toggleEditLabel}>Cancel</Button>
+              </Form>
+            </PopoverBody>
+          </Popover>
         </div>
-        <Popover placement="left"
-          trigger="legacy"
-          target={"port" + this.props.node.content.id}
-          isOpen={this.props.node.display}>
-          <PopoverHeader>Add label to link</PopoverHeader>
-          <PopoverBody>
-            <Form onSubmit={this.editLabel.bind(this, this.props.node.selectedLinkId)}>
-              <Input type="textarea"
-                name="label"
-                id={"labelForm" + this.props.node.content.id} />
-              <Button>Submit</Button>
-              <Button onClick={this.toggleEditLabel}>Cancel</Button>
-            </Form>
-          </PopoverBody>
-        </Popover>
-      </div>
+      </ResizableBox>
     )
   }
 }
