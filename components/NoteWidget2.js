@@ -18,10 +18,9 @@ class NoteWidget extends React.Component {
 
     this.state = {
       attrs: this.props.node.content.attrs,
-      displayAttrs: false,
       width: 200,
       height: 80,
-      showAttrForm: false,
+      displayData: false,
       showButtons: false,
       showTextForm: false,
       selected: false
@@ -35,8 +34,7 @@ class NoteWidget extends React.Component {
 
     this.showButtons = this.showButtons.bind(this);
     this.hideButtons = this.hideButtons.bind(this);
-    this.toggleAttrs = this.toggleAttrs.bind(this);
-    this.toggleEditNote = this.toggleEditNote.bind(this);
+    this.toggleDisplayData = this.toggleDisplayData.bind(this);
     this.editNoteAttr = this.editNoteAttr.bind(this);
     this.toggleEditLabel = this.toggleEditLabel.bind(this);
     this.toggleEditText = this.toggleEditText.bind(this);
@@ -61,15 +59,9 @@ class NoteWidget extends React.Component {
     this.setState(newState);
   }
 
-  toggleAttrs() {
+  toggleDisplayData() {
     const newState = Object.assign({}, this.state);
-    newState.displayAttrs = !this.state.displayAttrs;
-    this.setState(newState);
-  }
-
-  toggleEditNote() {
-    const newState = Object.assign({}, this.state);
-    newState.showAttrForm = !newState.showAttrForm;
+    newState.displayData = !this.state.displayData;
     this.setState(newState);
   }
 
@@ -137,10 +129,6 @@ class NoteWidget extends React.Component {
               <span className="attr-text">
                 <b>{attr}:</b> {attrs[attr]}
               </span>
-              <UncontrolledTooltip placement="right"
-                target={"note" + that.props.node.content.id + "attr" + idDigit}
-                delay={{show: 1000, hide: 0}}>{attrs[attr]}
-              </UncontrolledTooltip>
             </div>
         );
       }
@@ -247,39 +235,33 @@ class NoteWidget extends React.Component {
           style={{zIndex: 5, borderColor: this.state.selected ? "lightskyblue" : "black", border: "solid", width: this.state.width, height: height}}
           onMouseEnter={this.showButtons}
           onMouseLeave={this.hideButtons}>
-          <h4 className="note-title" style={{height: this.state.displayAttrs ? null : "100%"}}>{attrs.title}</h4>
-          <div className="note-text" style={{visibility: this.state.displayAttrs ? "visible" : "hidden"}}>{attrs.text}</div>
-          <div style={{visibility: this.state.displayAttrs ? "visible" : "hidden", margin: 10}}>{this.renderAttrs()}</div>
-          <button id={"attrFormControl" + this.props.node.content.id}
+          <h4 className="note-title">{attrs.title}</h4>
+          <button id={"toggleDisplayData" + this.props.node.content.id}
             className="edit-note-button"
-            onClick={this.toggleEditNote}
+            onClick={this.toggleDisplayData}
             style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>⚙</button>
-          <button className="toggle-note-display-button"
-            onClick={this.toggleAttrs}
-            style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>{this.state.displayAttrs ? "⤒" : "⤓"}</button>
           <Button close
             className="delete-note-button"
             style={{color: "crimson", textShadow: "0px 0px", visibility: this.state.showButtons ? "visible" : "hidden"}}
             onClick={this.deleteNote}/>
-          <Popover placement="right" trigger="legacy" target={"attrFormControl" + this.props.node.content.id} isOpen={this.state.showAttrForm} toggle={this.toggleEditNote}>
-            <PopoverHeader>Edit note</PopoverHeader>
-            <PopoverBody>
-              <Form onSubmit={this.editNoteAttr}>
-                <FormGroup>
-                  <Label for={"attrForm" + this.props.node.content.id}>Attribute name</Label>
-                  <Input type="textarea" name="attr" id={"attrForm" + this.props.node.content.id} />
-                </FormGroup>
-                <FormGroup>
-                  <Label>Attribute value</Label>
-                  <Input
-                    type="textarea"
-                    name="val"
-                    id={"valForm" + this.props.node.content.id} />
-                </FormGroup>
-                <Button>Submit</Button>
-              </Form>
-            </PopoverBody>
-          </Popover>
+          <ReactModal
+            isOpen={this.state.displayData}
+            onRequestClose={this.toggleDisplayData}
+            style={{
+              content: {
+                backgroundColor: "#F5F5F5",
+                left: "60%",
+                width: "36%"
+              }
+            }}
+            ariaHideApp={false}>
+            <h2 className="note-data-title">{attrs.title}</h2>
+            <div>{this.renderAttrs()}</div>
+            <Button
+              className="edit-text-button"
+              onClick={this.toggleEditText}
+            >Edit Text</Button>
+          </ReactModal>
           <ReactModal
             isOpen={this.state.showTextForm}
             onRequestClose={this.toggleEditText}
