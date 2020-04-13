@@ -102,12 +102,23 @@
 	text-decoration: underline;
 }
 
+.attr {
+	display: grid;
+	grid-template-columns: 90% 10%;
+}
+
 .attr-text {
 	display: block;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	text-align: left;
+	grid-column: 1;
+}
+
+.delete-attr-button {
+	right: 10;
+	grid-column: 2;
 }
 
 .edit-text-button {

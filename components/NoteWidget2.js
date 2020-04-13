@@ -13,6 +13,7 @@ const BrowserWindow = remote.BrowserWindow;
 
 class NoteWidget extends React.Component {
   // todo: refactor attributes into separate component
+  // todo: create functionality to hide mandatory attributes such as text len
   constructor(props) {
     super(props);
 
@@ -96,6 +97,30 @@ class NoteWidget extends React.Component {
     this.toggleEditNote();
   }
 
+  deleteNoteAttr(attr) {
+    const that = this;
+
+    const deleteAttrRequest = {
+      note_id: this.props.node.content.id,
+      attr: attr,
+      document_id: this.props.node.app.documentId
+    }
+
+    stubs.noteStub.deleteNoteAttr(deleteAttrRequest, function(err, noteReply) {
+      if (err) {
+        console.log(err);
+      }
+
+      else {
+        const newState = Object.assign({}, that.state);
+        delete newState.attrs[attr];
+        that.setState(newState);
+        that.props.node.content.attrs = newState.attrs;
+        that.props.node.app.updateListView();
+      }
+    })
+  }
+
   attrDoubleClick(attr, val) {
     if (attr === "link") {
       let win = new BrowserWindow({width: 1000, height: 1000, show: false});
@@ -125,10 +150,15 @@ class NoteWidget extends React.Component {
       else {
         idDigit += 1;
         return (
-            <div key={attr} id={"note" + that.props.node.content.id + "attr" + idDigit} onDoubleClick={that.attrDoubleClick.bind(this, attr, attrs[attr])}>
+            <div
+              key={attr}
+              id={"note" + that.props.node.content.id + "attr" + idDigit}
+              onDoubleClick={that.attrDoubleClick.bind(this, attr, attrs[attr])}
+              className="attr">
               <span className="attr-text">
                 <b>{attr}:</b> {attrs[attr]}
               </span>
+              <Button close className="delete-attr-button" onClick={() => that.deleteNoteAttr(attr)} />
             </div>
         );
       }
@@ -232,7 +262,7 @@ class NoteWidget extends React.Component {
         onResize={(event, data) => this.onResize(data)}
       >
         <div
-          style={{zIndex: 5, borderColor: this.state.selected ? "lightskyblue" : "black", border: "solid", width: this.state.width, height: height}}
+          style={{zIndex: 5, border: this.state.selected ? "thin lightskyblue solid" : "none", width: this.state.width, height: height}}
           onMouseEnter={this.showButtons}
           onMouseLeave={this.hideButtons}>
           <h4 className="note-title">{attrs.title}</h4>
@@ -256,6 +286,7 @@ class NoteWidget extends React.Component {
             }}
             ariaHideApp={false}>
             <h2 className="note-data-title">{attrs.title}</h2>
+            <h4 style={{marginTop: 10}}>Attributes</h4>
             <div>{this.renderAttrs()}</div>
             <Button
               className="edit-text-button"
