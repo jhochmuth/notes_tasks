@@ -1,7 +1,7 @@
 const React = require('react');
 const stubs = require('../stubs.js');
 import {PortWidget} from '@projectstorm/react-diagrams';
-import {Button, Form, FormGroup, Input, Label, Popover, PopoverBody, PopoverHeader, UncontrolledTooltip} from 'reactstrap';
+import {Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, Label, Popover, PopoverBody, PopoverHeader, UncontrolledTooltip} from 'reactstrap';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ReactModal from 'react-modal';
@@ -28,6 +28,7 @@ class NoteWidget extends React.Component {
     };
 
     this.textData = null;
+    this.diagramListenerId = null;
 
     this.props.node.addListener({
       selectionChanged: (event) => this.toggleSelection(event)
@@ -35,7 +36,6 @@ class NoteWidget extends React.Component {
 
     this.showButtons = this.showButtons.bind(this);
     this.hideButtons = this.hideButtons.bind(this);
-    this.toggleDisplayData = this.toggleDisplayData.bind(this);
     this.editNoteAttr = this.editNoteAttr.bind(this);
     this.toggleEditLabel = this.toggleEditLabel.bind(this);
     this.toggleEditText = this.toggleEditText.bind(this);
@@ -60,13 +60,25 @@ class NoteWidget extends React.Component {
     this.setState(newState);
   }
 
-  toggleDisplayData() {
+  toggleDisplayData(openModal) {
+    if (openModal) {
+      this.diagramListenerId = this.props.node.model.addListener({
+        offsetUpdated: (event) => this.props.node.app.diagramRef.current.stopFiringAction()
+      });
+    }
+    else {
+      console.log(this.props.node.model.removeListener(this.diagramListenerId));
+    }
+
     const newState = Object.assign({}, this.state);
-    newState.displayData = !this.state.displayData;
+    newState.displayData = !newState.displayData;
     this.setState(newState);
   }
 
   editNoteAttr(event) {
+    event.preventDefault();
+    console.log(event.target.key.value)
+    /*
     const that = this;
     const attr = event.target.attr.value;
     const val = event.target.val.value;
@@ -93,8 +105,7 @@ class NoteWidget extends React.Component {
         that.props.node.app.updateListView();
       }
     })
-
-    this.toggleEditNote();
+    */
   }
 
   deleteNoteAttr(attr) {
@@ -233,12 +244,12 @@ class NoteWidget extends React.Component {
   }
 
   onResizeStart() {
-    this.props.node.app.diagramRef.current.stopFiringAction()
-    this.props.node.model.setLocked()
+    this.props.node.app.diagramRef.current.stopFiringAction();
+    this.props.node.model.setLocked();
   }
 
   onResizeStop() {
-    this.props.node.model.setLocked(false)
+    this.props.node.model.setLocked(false);
   }
 
   onResize(data) {
@@ -262,13 +273,13 @@ class NoteWidget extends React.Component {
         onResize={(event, data) => this.onResize(data)}
       >
         <div
-          style={{zIndex: 5, border: this.state.selected ? "thin lightskyblue solid" : "none", width: this.state.width, height: height}}
+          style={{zIndex: 5, border: this.state.selected ? "lightskyblue solid" : "none", width: this.state.width, height: height}}
           onMouseEnter={this.showButtons}
           onMouseLeave={this.hideButtons}>
           <h4 className="note-title">{attrs.title}</h4>
           <button id={"toggleDisplayData" + this.props.node.content.id}
             className="edit-note-button"
-            onClick={this.toggleDisplayData}
+            onClick={() => this.toggleDisplayData(true)}
             style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>⚙</button>
           <Button close
             className="delete-note-button"
@@ -276,7 +287,7 @@ class NoteWidget extends React.Component {
             onClick={this.deleteNote}/>
           <ReactModal
             isOpen={this.state.displayData}
-            onRequestClose={this.toggleDisplayData}
+            onRequestClose={() => this.toggleDisplayData(false)}
             style={{
               content: {
                 backgroundColor: "#F5F5F5",
@@ -288,6 +299,18 @@ class NoteWidget extends React.Component {
             <h2 className="note-data-title">{attrs.title}</h2>
             <h4 style={{marginTop: 10}}>Attributes</h4>
             <div>{this.renderAttrs()}</div>
+            <Form className="attr-form" onSubmit={this.editNoteAttr}>
+              <h5>Create new attribute</h5>
+              <InputGroup className="attr-form-group">
+                <InputGroupAddon addonType="prepend" className="attr-form-label">Key</InputGroupAddon>
+                <Input name="key"/>
+              </InputGroup>
+              <InputGroup className="attr-form-group">
+                <InputGroupAddon addonType="prepend" className="attr-form-label">Value</InputGroupAddon>
+                <Input name="value"/>
+              </InputGroup>
+              <Button>Add</Button>
+            </Form>
             <Button
               className="edit-text-button"
               onClick={this.toggleEditText}
