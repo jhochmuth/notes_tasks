@@ -71,7 +71,7 @@ class App extends React.Component {
   addNote(event) {
     const that = this;
     const note = new NoteModel(null, model, this);
-    const attrs = {title: event.target.title.value, text: event.target.text.value};
+    const attrs = {title: event.target.title.value};
     const noteRequest = {id: note.id, attrs: attrs, document_id: this.documentId};
 
     stubs.noteStub.createNote(noteRequest, function(err, noteReply) {

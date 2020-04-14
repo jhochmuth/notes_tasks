@@ -1,6 +1,6 @@
 const React = require('react');
 const stubs = require('../stubs.js');
-import {Button, Form, FormGroup, Input, Label, Popover, PopoverBody, PopoverHeader} from 'reactstrap';
+import {Button, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Popover, PopoverBody, PopoverHeader} from 'reactstrap';
 
 /*
 React component for the toolbar of the main app page.
@@ -60,14 +60,12 @@ class Toolbar extends React.Component {
           <PopoverHeader>Create new note</PopoverHeader>
           <PopoverBody>
             <Form onSubmit={this.addNote}>
-              <FormGroup>
-                <Label for={"titleForm"}>Title</Label>
-                <Input type="textarea" name="title" id={"titleForm"} />
-              </FormGroup>
-              <FormGroup>
-                <Label>Text</Label>
-                <Input type="textarea" name="text" id={"textForm"} />
-              </FormGroup>
+              <InputGroup className="attr-form-group">
+                <InputGroupAddon addonType="prepend" className="attr-form-label">
+                  <InputGroupText className="attr-form-text">Title</InputGroupText>
+                </InputGroupAddon>
+                <Input name="title" className="attr-form-input"/>
+              </InputGroup>
               <Button>Submit</Button>
             </Form>
           </PopoverBody>
