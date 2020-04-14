@@ -40,7 +40,6 @@ class NoteWidget extends React.Component {
     this.showButtons = this.showButtons.bind(this);
     this.hideButtons = this.hideButtons.bind(this);
     this.editNoteAttr = this.editNoteAttr.bind(this);
-    this.toggleEditLabel = this.toggleEditLabel.bind(this);
     this.toggleEditText = this.toggleEditText.bind(this);
     this.deleteNote = this.deleteNote.bind(this);
   }
@@ -84,11 +83,20 @@ class NoteWidget extends React.Component {
     this.setState(newState);
   }
 
-  editNoteAttr(event) {
-    event.preventDefault();
+  editNoteAttr(event, attr_obj) {
     const that = this;
-    const attr = event.target.key.value;
-    const val = event.target.value.value;
+    let attr;
+    let val;
+
+    if (event) {
+      event.preventDefault();
+      attr = event.target.key.value;
+      val = event.target.value.value;
+    }
+    else {
+      attr = attr_obj.attr;
+      val = attr_obj.val;
+    }
 
     const updateAttrRequest = {
       note_id: this.props.node.content.id,
@@ -170,19 +178,22 @@ class NoteWidget extends React.Component {
               key={attr}
               id={"note" + that.props.node.content.id + "attr" + idDigit}
               onDoubleClick={that.attrDoubleClick.bind(this, attr, attrs[attr])}
-              className="attr">
+              className="attr"
+            >
               <span className="attr-text">
                 <b>{attr}:</b> {attrs[attr]}
               </span>
-              <Button close className="delete-attr-button" onClick={() => that.deleteNoteAttr(attr)} />
+              <Button close
+                className="delete-attr-button"
+                onClick={() => that.deleteNoteAttr(attr)}
+              />
             </div>
         );
       }
     })
   }
 
-  toggleEditLabel(event) {
-    event.preventDefault();
+  toggleEditLabel() {
     this.props.node.display = !this.props.node.display;
     this.props.node.selectedLinkId = null;
     this.forceUpdate();
@@ -191,7 +202,8 @@ class NoteWidget extends React.Component {
   editLabel(id, event) {
     event.preventDefault();
     const that = this;
-    const text = event.target.label.value
+    const text = event.target.label.value;
+    console.log(text)
 
     if (event.target.label.value !== "") {
       const connectionRequest = {id: id, text: text, document_id: this.props.node.app.documentId};
@@ -219,29 +231,8 @@ class NoteWidget extends React.Component {
 
   updateText() {
     const that = this;
-
-    const updateAttrRequest = {
-      note_id: this.props.node.content.id,
-      attr: "text",
-      new_value: this.textData,
-      document_id: this.props.node.app.documentId
-    }
-
-    stubs.noteStub.updateNoteAttr(updateAttrRequest, function(err, noteReply) {
-      if (err) {
-        console.log(err);
-      }
-
-      else {
-        const attrs = noteReply.attrs;
-        const newState = Object.assign({}, that.state);
-        newState.attrs = attrs;
-        that.setState(newState);
-        that.props.node.content.attrs = attrs;
-        that.props.node.app.updateListView();
-        that.toggleEditText()
-      }
-    })
+    this.editNoteAttr(null, {attr: "text", val: this.textData});
+    that.toggleEditText();
   }
 
   deleteNote() {
@@ -264,15 +255,13 @@ class NoteWidget extends React.Component {
     this.setState(newState);
   }
 
-  //todo: update attrs
   colorSelectorChange(color) {
     const newState = Object.assign({}, this.state);
     newState.noteColor = color.hex;
     this.setState(newState);
+    this.editNoteAttr(null, {attr: "Color", val: color.hex});
   }
 
-
-  //todo: change popover label form to modal component
   render() {
     const attrs = this.state.attrs;
     const height = this.state.height;
@@ -347,7 +336,8 @@ class NoteWidget extends React.Component {
                 backgroundColor: "#F5F5F5"
               }
             }}
-            ariaHideApp={false}>
+            ariaHideApp={false}
+          >
             <CKEditor
               editor={ClassicEditor}
               onInit={(editor) => {
@@ -389,21 +379,29 @@ class NoteWidget extends React.Component {
               />
             </PopoverBody>
           </Popover>
-          <Popover placement="left"
-            trigger="legacy"
-            target={"port" + this.props.node.content.id}
-            isOpen={this.props.node.display}>
-            <PopoverHeader>Add label to link</PopoverHeader>
-            <PopoverBody>
-              <Form onSubmit={this.editLabel.bind(this, this.props.node.selectedLinkId)}>
-                <Input type="textarea"
-                  name="label"
-                  id={"labelForm" + this.props.node.content.id} />
-                <Button>Submit</Button>
-                <Button onClick={this.toggleEditLabel}>Cancel</Button>
-              </Form>
-            </PopoverBody>
-          </Popover>
+          <ReactModal
+            isOpen={this.props.node.display}
+            onRequestClose={() => this.toggleEditLabel()}
+            style={{
+              content: {
+                backgroundColor: "#F5F5F5",
+                height: "40%",
+                width: "40%"
+              }
+            }}
+            ariaHideApp={false}
+          >
+            <Form onSubmit={(event) => this.editLabel(this.props.node.selectedLinkId, event)}>
+              <InputGroup className="attr-form-group">
+                <InputGroupAddon addonType="prepend" className="attr-form-label">
+                  <InputGroupText className="attr-form-text">Label</InputGroupText>
+                </InputGroupAddon>
+                <Input name="label" className="attr-form-input"/>
+              </InputGroup>
+              <Button className="app-button">Submit</Button>
+              <Button className="app-button" onClick={() => this.toggleEditLabel()}>Cancel</Button>
+            </Form>
+          </ReactModal>
         </div>
       </ResizableBox>
     )
