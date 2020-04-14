@@ -1,10 +1,11 @@
 const React = require('react');
 const stubs = require('../stubs.js');
 import {PortWidget} from '@projectstorm/react-diagrams';
-import {Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, Label, Popover, PopoverBody, PopoverHeader, UncontrolledTooltip} from 'reactstrap';
+import {Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Popover, PopoverBody, PopoverHeader, UncontrolledTooltip} from 'reactstrap';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ReactModal from 'react-modal';
+import {ChromePicker} from 'react-color';
 const ResizableBox = require('react-resizable').ResizableBox;
 const electron = require('electron');
 const remote = electron.remote;
@@ -13,7 +14,7 @@ const BrowserWindow = remote.BrowserWindow;
 
 class NoteWidget extends React.Component {
   // todo: refactor attributes into separate component
-  // todo: create functionality to hide mandatory attributes such as text len
+  // todo: create functionality to hide reserved attributes such as text len
   constructor(props) {
     super(props);
 
@@ -22,9 +23,11 @@ class NoteWidget extends React.Component {
       width: 200,
       height: 80,
       displayData: false,
+      displayColorSelector: false,
       showButtons: false,
       showTextForm: false,
-      selected: false
+      selected: false,
+      noteColor: "#686868"
     };
 
     this.textData = null;
@@ -67,7 +70,7 @@ class NoteWidget extends React.Component {
       });
     }
     else {
-      console.log(this.props.node.model.removeListener(this.diagramListenerId));
+      this.props.node.model.removeListener(this.diagramListenerId);
     }
 
     const newState = Object.assign({}, this.state);
@@ -75,14 +78,17 @@ class NoteWidget extends React.Component {
     this.setState(newState);
   }
 
+  toggleColorSelector(openSelector) {
+    const newState = Object.assign({}, this.state);
+    newState.displayColorSelector = openSelector;
+    this.setState(newState);
+  }
+
   editNoteAttr(event) {
     event.preventDefault();
-    console.log(event.target.key.value)
-    /*
     const that = this;
-    const attr = event.target.attr.value;
-    const val = event.target.val.value;
-    event.preventDefault();
+    const attr = event.target.key.value;
+    const val = event.target.value.value;
 
     const updateAttrRequest = {
       note_id: this.props.node.content.id,
@@ -105,7 +111,6 @@ class NoteWidget extends React.Component {
         that.props.node.app.updateListView();
       }
     })
-    */
   }
 
   deleteNoteAttr(attr) {
@@ -259,6 +264,12 @@ class NoteWidget extends React.Component {
     this.setState(newState);
   }
 
+  colorSelectorChange(color) {
+    const newState = Object.assign({}, this.state);
+    newState.noteColor = color.hex;
+    this.setState(newState);
+  }
+
   render() {
     const attrs = this.state.attrs;
     const height = this.state.height;
@@ -273,7 +284,7 @@ class NoteWidget extends React.Component {
         onResize={(event, data) => this.onResize(data)}
       >
         <div
-          style={{zIndex: 5, border: this.state.selected ? "lightskyblue solid" : "none", width: this.state.width, height: height}}
+          style={{zIndex: 5, border: this.state.selected ? "lightskyblue solid" : "none", width: this.state.width, height: height, backgroundColor: this.state.noteColor}}
           onMouseEnter={this.showButtons}
           onMouseLeave={this.hideButtons}>
           <h4 className="note-title">{attrs.title}</h4>
@@ -281,6 +292,9 @@ class NoteWidget extends React.Component {
             className="edit-note-button"
             onClick={() => this.toggleDisplayData(true)}
             style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>⚙</button>
+          <button id={"colorButton" + this.props.node.content.id}
+            className="color-selector-button"
+            onClick={() => this.toggleColorSelector(true)}>{String.fromCharCode(55356, 57256)}</button>
           <Button close
             className="delete-note-button"
             style={{color: "crimson", textShadow: "0px 0px", visibility: this.state.showButtons ? "visible" : "hidden"}}
@@ -302,12 +316,16 @@ class NoteWidget extends React.Component {
             <Form className="attr-form" onSubmit={this.editNoteAttr}>
               <h5>Create new attribute</h5>
               <InputGroup className="attr-form-group">
-                <InputGroupAddon addonType="prepend" className="attr-form-label">Key</InputGroupAddon>
-                <Input name="key"/>
+                <InputGroupAddon addonType="prepend" className="attr-form-label">
+                  <InputGroupText className="attr-form-text">Attr</InputGroupText>
+                </InputGroupAddon>
+                <Input name="key" className="attr-form-input"/>
               </InputGroup>
               <InputGroup className="attr-form-group">
-                <InputGroupAddon addonType="prepend" className="attr-form-label">Value</InputGroupAddon>
-                <Input name="value"/>
+                <InputGroupAddon addonType="prepend" className="attr-form-label">
+                  <InputGroupText className="attr-form-text">Value</InputGroupText>
+                </InputGroupAddon>
+                <Input name="value" className="attr-form-input"/>
               </InputGroup>
               <Button>Add</Button>
             </Form>
@@ -354,6 +372,18 @@ class NoteWidget extends React.Component {
             style={{position: "absolute", top: 3, left: 3}}>
             <PortWidget name="bottom" node={this.props.node} />
           </div>
+          <Popover placement="left"
+            trigger="legacy"
+            isOpen={this.state.displayColorSelector}
+            target={"colorButton" + this.props.node.content.id}
+            toggle={() => this.toggleColorSelector(false)}>
+            <PopoverBody>
+              <ChromePicker
+                color={this.state.noteColor}
+                onChangeComplete={(color, event) => this.colorSelectorChange(color)}
+              />
+            </PopoverBody>
+          </Popover>
           <Popover placement="left"
             trigger="legacy"
             target={"port" + this.props.node.content.id}
