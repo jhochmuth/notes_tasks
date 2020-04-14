@@ -16,16 +16,31 @@ def run():
 
         print("Creating document.")
         response = document_stub.CreateDocument(tasks_pb2.Empty())
-        print(response.id)
+        document_id = response.id
+        print(document_id)
 
         print("Creating note.")
         response = note_stub.CreateNote(tasks_pb2.NoteRequest(attrs={"title": "Joseph Conrad",
                                                                      "text": "British author.",
-                                                                     "birth": "1857"}))
-        print(response.id, response.attrs["title"], response.attrs["text"])
+                                                                     "birth": "1860"},
+                                                              document_id=document_id))
+        note1_id = response.id
+        print(note1_id, response.attrs["title"], response.attrs["text"])
 
-        response = document_stub.SaveDocument(tasks_pb2.SaveRequest(filename="blah.txt"))
-        print(response)
+        print("Creating descendant note.")
+        response = note_stub.CreateDescendantNote(tasks_pb2.NoteRequest(id=note1_id,
+                                                                        document_id=document_id))
+        note2_id = response.id
+        print(note2_id)
+
+        print("Updating notes using inheritance hierarchy.")
+        responses = note_stub.UpdateNoteAttr(tasks_pb2.UpdateAttrRequest(note_id=note1_id,
+                                                                         attr="birth",
+                                                                         new_value="1857",
+                                                                         document_id=document_id))
+        for response in responses:
+            print(response.id)
+            print(response.attrs)
 
         """
         print("Updating note.")

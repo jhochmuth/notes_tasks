@@ -130,7 +130,8 @@ service DocumentManager {
 
 service NoteManager {
     rpc CreateNote (NoteRequest) returns (NoteReply) {}
-    rpc UpdateNoteAttr (UpdateAttrRequest) returns (NoteReply) {}
+    rpc UpdateNoteAttr (UpdateAttrRequest) returns (stream NoteReply) {}
+    rpc CreateDescendantNote (NoteRequest) returns (NoteReply) {}
     rpc DeleteNoteAttr (DeleteAttrRequest) returns (BoolWrapper) {}
     rpc DeleteNote (NoteRequest) returns (BoolWrapper) {}
 }

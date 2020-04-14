@@ -56,10 +56,21 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
     def UpdateNoteAttr(self, request, context):
         note = documents[request.document_id].children[request.note_id]
 
-        note.update_attr(request.attr, request.new_value)
+        updated_notes = note.update_attr(request.attr, request.new_value)
 
-        return tasks_pb2.NoteReply(id=request.note_id,
-                                   attrs=note.attrs)
+        for note in updated_notes:
+            yield tasks_pb2.NoteReply(id=note.id,
+                                      attrs=note.attrs)
+
+    def CreateDescendantNote(self, request, context):
+        note = documents[request.document_id].children[request.id]
+        container_id = request.parent_container_id
+
+        descendant = note.create_descendant()
+
+        return tasks_pb2.NoteReply(id=descendant.id,
+                                   attrs=descendant.attrs,
+                                   parent_container_id=container_id)
 
     def DeleteNoteAttr(self, request, context):
         note = documents[request.document_id].children[request.note_id]

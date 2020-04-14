@@ -1,4 +1,6 @@
 *.pyc
 *.AppImage
+.DS_Store
+.idea/
 node_modules/
 saved_diagrams/

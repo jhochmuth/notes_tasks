@@ -3,12 +3,12 @@ from datetime import datetime
 from api.uid import UID
 
 
-default_note_settings = {"width": "200",
-                         "height": "250",
-                         "pos_x": "0",
-                         "pos_y": "0",
-                         "background": "white",
-                         "text": "black"}
+RESERVED_ATTRS = {"title",
+                  "text",
+                  "Date created",
+                  "Last changed",
+                  "Text char len",
+                  "Text word len"}
 
 
 def get_current_time():
@@ -44,7 +44,7 @@ class Note:
             Specifies attrs inherited from prototype.
 
         """
-        if id is None:
+        if not id:
             self.id = UID().assign_uid()
         else:
             self.id = id
@@ -131,9 +131,11 @@ class Note:
             self.update_last_changed()
             self.attrs[attr] = value
 
-            for descendant in self.descendant_notes:
-                if attr in descendant.inherited_attrs:
-                    descendant.update_attr(attr, value)
+        for descendant in self.descendant_notes:
+            if attr in descendant.inherited_attrs:
+                yield from descendant.update_attr(attr, value)
+
+        yield self
 
     def create_duplicate(self):
         """Copies a note without creating an inheritance link."""
@@ -146,20 +148,18 @@ class Note:
 
         return new
 
-    def create_descendant(self, inherited_attrs):
+    def create_descendant(self):
         """Creates a descendant note using prototypal inheritance."""
         new = Note(title=self.attrs["title"],
                    text=self.attrs["text"],
                    attrs=self.attrs.copy(),
                    prototype=self,
-                   inherited_attrs=inherited_attrs,
+                   inherited_attrs=set(self.attrs.keys()),
                    parent_container=self.parent_container)
 
-        new.attrs["Date created"] = datetime.now()
-        new.attrs["Last changed"] = datetime.now()
+        new.inherited_attrs -= RESERVED_ATTRS
 
         self.descendant_notes.append(new)
-
         return new
 
     def get_container_data(self):
