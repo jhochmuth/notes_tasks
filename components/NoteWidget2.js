@@ -264,12 +264,15 @@ class NoteWidget extends React.Component {
     this.setState(newState);
   }
 
+  //todo: update attrs
   colorSelectorChange(color) {
     const newState = Object.assign({}, this.state);
     newState.noteColor = color.hex;
     this.setState(newState);
   }
 
+
+  //todo: change popover label form to modal component
   render() {
     const attrs = this.state.attrs;
     const height = this.state.height;
@@ -294,6 +297,7 @@ class NoteWidget extends React.Component {
             style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>⚙</button>
           <button id={"colorButton" + this.props.node.content.id}
             className="color-selector-button"
+            style={{visibility: this.state.showButtons ? "visible" : "hidden"}}
             onClick={() => this.toggleColorSelector(true)}>{String.fromCharCode(55356, 57256)}</button>
           <Button close
             className="delete-note-button"
@@ -301,6 +305,7 @@ class NoteWidget extends React.Component {
             onClick={this.deleteNote}/>
           <ReactModal
             isOpen={this.state.displayData}
+            onAfterOpen={() => this.hideButtons()}
             onRequestClose={() => this.toggleDisplayData(false)}
             style={{
               content: {
