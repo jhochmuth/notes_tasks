@@ -9,16 +9,17 @@ pytest.main()
 def test_prototype():
     prototype = Note("Joseph Conrad",
                      "",
+                     id="1",
                      attrs={"occupation": "novelist",
                             "nationality": "British-Polish"
                             },
                      )
 
-    descendant = prototype.create_descendant()
+    descendant = prototype.create_descendant("2")
     descendant.update_title("Charles Dickens")
     descendant.inherited_attrs.remove("nationality")
 
-    last_descendant = descendant.create_descendant()
+    last_descendant = descendant.create_descendant("3")
     last_descendant.update_title("George Eliot")
 
     for _ in descendant.update_attr("nationality", "British"):
