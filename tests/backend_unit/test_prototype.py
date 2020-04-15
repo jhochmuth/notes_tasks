@@ -8,21 +8,26 @@ pytest.main()
 
 def test_prototype():
     prototype = Note("Joseph Conrad",
-                     "Modernist author.",
-                     attrs={"birth": "1857",
-                            "death": "1924",
-                            "nationality": "British-Polish",
-                            "novels": ["Nostromo", "The Secret Agent"]
+                     "",
+                     attrs={"occupation": "novelist",
+                            "nationality": "British-Polish"
                             },
                      )
 
-    inherited_attrs = {"title", "birth"}
-    descendant = prototype.create_descendant(inherited_attrs=inherited_attrs)
+    descendant = prototype.create_descendant()
+    descendant.update_title("Charles Dickens")
+    descendant.inherited_attrs.remove("nationality")
 
-    prototype.update_attr("death", "0")
-    prototype.update_title("blah")
-    prototype.update_attr("birth", "10")
+    last_descendant = descendant.create_descendant()
+    last_descendant.update_title("George Eliot")
 
-    assert prototype.attrs["death"] != descendant.attrs["death"]
-    assert prototype.attrs["birth"] == descendant.attrs["birth"]
-    assert prototype.attrs["title"] == descendant.attrs["title"]
+    for _ in descendant.update_attr("nationality", "British"):
+        pass
+
+    for _ in prototype.update_attr("occupation", "author"):
+        pass
+
+    assert prototype.attrs["occupation"] == descendant.attrs["occupation"]
+    assert prototype.attrs["nationality"] != descendant.attrs["nationality"]
+    assert prototype.attrs["occupation"] == last_descendant.attrs["occupation"]
+    assert descendant.attrs["nationality"] == last_descendant.attrs["nationality"]
