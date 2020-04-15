@@ -35,6 +35,14 @@ message NoteReply {
     string parent_container_id = 3;
 }
 
+message DescendantNoteRequest {
+    string id = 1;
+    map<string, string> attrs = 2;
+    string parent_container_id = 3;
+    string document_id = 4;
+    string descendant_id = 5;
+}
+
 message UpdateAttrRequest {
     string note_id = 1;
     string attr = 2;
@@ -131,7 +139,7 @@ service DocumentManager {
 service NoteManager {
     rpc CreateNote (NoteRequest) returns (NoteReply) {}
     rpc UpdateNoteAttr (UpdateAttrRequest) returns (stream NoteReply) {}
-    rpc CreateDescendantNote (NoteRequest) returns (NoteReply) {}
+    rpc CreateDescendantNote (DescendantNoteRequest) returns (NoteReply) {}
     rpc DeleteNoteAttr (DeleteAttrRequest) returns (BoolWrapper) {}
     rpc DeleteNote (NoteRequest) returns (BoolWrapper) {}
 }

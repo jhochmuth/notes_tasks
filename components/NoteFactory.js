@@ -9,7 +9,7 @@ class NoteFactory extends SRD.AbstractNodeFactory {
   }
 
   generateReactWidget(diagramEngine, node) {
-    return <NoteWidget node={node}/>;
+    return <NoteWidget node={node} ref={node.ref}/>;
   }
 
   getNewInstance() {

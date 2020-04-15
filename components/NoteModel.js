@@ -4,9 +4,10 @@ const _ = require('lodash');
 const stubs = require('../stubs.js');
 
 class NoteModel extends SRD.NodeModel {
-  constructor(content, model, app) {
+  constructor(content, model, app, ref) {
     super("note");
     this.content = content;
+    this.ref = ref;
     this.model = model;
     this.app = app;
     this.display = false;

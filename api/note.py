@@ -148,10 +148,11 @@ class Note:
 
         return new
 
-    def create_descendant(self):
+    def create_descendant(self, descendant_id):
         """Creates a descendant note using prototypal inheritance."""
         new = Note(title=self.attrs["title"],
                    text=self.attrs["text"],
+                   id=descendant_id,
                    attrs=self.attrs.copy(),
                    prototype=self,
                    inherited_attrs=set(self.attrs.keys()),

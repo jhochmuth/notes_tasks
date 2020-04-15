@@ -39,8 +39,6 @@ class NoteWidget extends React.Component {
 
     this.showButtons = this.showButtons.bind(this);
     this.hideButtons = this.hideButtons.bind(this);
-    this.editNoteAttr = this.editNoteAttr.bind(this);
-    this.toggleEditText = this.toggleEditText.bind(this);
     this.deleteNote = this.deleteNote.bind(this);
   }
 
@@ -83,8 +81,7 @@ class NoteWidget extends React.Component {
     this.setState(newState);
   }
 
-  editNoteAttr(event, attr_obj) {
-    const that = this;
+  updateNoteAttr(event, attr_obj) {
     let attr;
     let val;
 
@@ -105,20 +102,7 @@ class NoteWidget extends React.Component {
       document_id: this.props.node.app.documentId
     }
 
-    stubs.noteStub.updateNoteAttr(updateAttrRequest, function(err, noteReply) {
-      if (err) {
-        console.log(err);
-      }
-
-      else {
-        const attrs = noteReply.attrs;
-        const newState = Object.assign({}, that.state);
-        newState.attrs = attrs;
-        that.setState(newState);
-        that.props.node.content.attrs = attrs;
-        that.props.node.app.updateListView();
-      }
-    })
+    this.props.node.app.updateNoteAttr(updateAttrRequest);
   }
 
   deleteNoteAttr(attr) {
@@ -203,7 +187,6 @@ class NoteWidget extends React.Component {
     event.preventDefault();
     const that = this;
     const text = event.target.label.value;
-    console.log(text)
 
     if (event.target.label.value !== "") {
       const connectionRequest = {id: id, text: text, document_id: this.props.node.app.documentId};
@@ -231,7 +214,7 @@ class NoteWidget extends React.Component {
 
   updateText() {
     const that = this;
-    this.editNoteAttr(null, {attr: "text", val: this.textData});
+    this.updateNoteAttr(null, {attr: "text", val: this.textData});
     that.toggleEditText();
   }
 
@@ -259,7 +242,7 @@ class NoteWidget extends React.Component {
     const newState = Object.assign({}, this.state);
     newState.noteColor = color.hex;
     this.setState(newState);
-    this.editNoteAttr(null, {attr: "Color", val: color.hex});
+    this.updateNoteAttr(null, {attr: "Color", val: color.hex});
   }
 
   render() {
@@ -307,7 +290,7 @@ class NoteWidget extends React.Component {
             <h2 className="note-data-title">{attrs.title}</h2>
             <h4 style={{marginTop: 10}}>Attributes</h4>
             <div>{this.renderAttrs()}</div>
-            <Form className="attr-form" onSubmit={this.editNoteAttr}>
+            <Form className="attr-form" onSubmit={(event) => this.updateNoteAttr(event)}>
               <h5>Create new attribute</h5>
               <InputGroup className="attr-form-group">
                 <InputGroupAddon addonType="prepend" className="attr-form-label">
@@ -325,12 +308,16 @@ class NoteWidget extends React.Component {
             </Form>
             <Button
               className="edit-text-button"
-              onClick={this.toggleEditText}
+              onClick={() => this.toggleEditText()}
             >Edit Text</Button>
+            <Button
+              className="protoype-button"
+              onClick={() => this.props.node.app.createDescendantNote(this.props.node.id)}
+            >Create Descendant</Button>
           </ReactModal>
           <ReactModal
             isOpen={this.state.showTextForm}
-            onRequestClose={this.toggleEditText}
+            onRequestClose={() => this.toggleEditText()}
             style={{
               content: {
                 backgroundColor: "#F5F5F5"
@@ -354,13 +341,13 @@ class NoteWidget extends React.Component {
             >Save</Button>
             <Button
               className="text-form-cancel-button"
-              onClick={this.toggleEditText}
+              onClick={() => this.toggleEditText()}
             >Cancel</Button>
           </ReactModal>
           <button
             id={"textEditControl" + this.props.node.content.id}
             className="edit-text-button"
-            onClick={this.toggleEditText}
+            onClick={() => this.toggleEditText()}
             style={{visibility: this.state.displayAttrs ? "visible" : "hidden"}}
           >Edit</button>
           <div id={"port" + this.props.node.content.id}

@@ -38,6 +38,7 @@ class App extends React.Component {
     this.listWin = null;
     this.documentId = null;
     this.diagramRef = React.createRef();
+    this.noteRefs = {};
 
     this.addNote = this.addNote.bind(this);
     this.addContainer = this.addContainer.bind(this);
@@ -70,7 +71,8 @@ class App extends React.Component {
 
   addNote(event) {
     const that = this;
-    const note = new NoteModel(null, model, this);
+    const ref = React.createRef();
+    const note = new NoteModel(null, model, this, ref);
     const attrs = {title: event.target.title.value};
     const noteRequest = {id: note.id, attrs: attrs, document_id: this.documentId};
 
@@ -85,7 +87,51 @@ class App extends React.Component {
         that.forceUpdate();
 
         that.updateListView();
+        that.noteRefs[note.id] = ref;
       }
+    });
+  }
+
+  createDescendantNote(prototypeId) {
+    const that = this;
+    const ref = React.createRef();
+    const note = new NoteModel(null, model, this, ref);
+
+    const descendantNoteRequest = {
+      id: prototypeId,
+      document_id: this.documentId,
+      descendant_id: note.id
+    }
+
+    stubs.noteStub.createDescendantNote(descendantNoteRequest, function(err, noteReply) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        note.content = noteReply;
+        model.addAll(note);
+        engine.setDiagramModel(model);
+        that.forceUpdate();
+
+        that.updateListView();
+        that.noteRefs[note.id] = ref;
+      }
+    });
+  }
+
+  updateNoteAttr(updateAttrRequest) {
+    const that = this;
+
+    let call = stubs.noteStub.updateNoteAttr(updateAttrRequest);
+
+    call.on('data', function(noteReply) {
+      const note = that.noteRefs[noteReply.id].current;
+      const attrs = noteReply.attrs;
+      const newState = Object.assign({}, note.state);
+      newState.attrs = attrs;
+      note.setState(newState);
+      note.props.node.content.attrs = attrs;
+      note.props.node.app.updateListView();
     });
   }
 
