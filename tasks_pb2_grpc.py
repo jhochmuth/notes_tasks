@@ -119,7 +119,7 @@ class NoteManagerStub(object):
         )
     self.CreateDescendantNote = channel.unary_unary(
         '/NoteManager/CreateDescendantNote',
-        request_serializer=tasks__pb2.NoteRequest.SerializeToString,
+        request_serializer=tasks__pb2.DescendantNoteRequest.SerializeToString,
         response_deserializer=tasks__pb2.NoteReply.FromString,
         )
     self.DeleteNoteAttr = channel.unary_unary(
@@ -188,7 +188,7 @@ def add_NoteManagerServicer_to_server(servicer, server):
       ),
       'CreateDescendantNote': grpc.unary_unary_rpc_method_handler(
           servicer.CreateDescendantNote,
-          request_deserializer=tasks__pb2.NoteRequest.FromString,
+          request_deserializer=tasks__pb2.DescendantNoteRequest.FromString,
           response_serializer=tasks__pb2.NoteReply.SerializeToString,
       ),
       'DeleteNoteAttr': grpc.unary_unary_rpc_method_handler(
