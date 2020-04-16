@@ -73,7 +73,8 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
         return tasks_pb2.NoteReply(id=descendant.id,
                                    attrs=descendant.attrs,
                                    parent_container_id=container_id,
-                                   prototype_id=note.id)
+                                   prototype_id=note.id,
+                                   inherited_attrs=list(descendant.inherited_attrs))
 
     def DeleteNoteAttr(self, request, context):
         note = documents[request.document_id].children[request.note_id]
