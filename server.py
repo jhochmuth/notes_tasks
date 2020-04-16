@@ -63,10 +63,12 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
                                       attrs=note.attrs)
 
     def CreateDescendantNote(self, request, context):
+        document = documents[request.document_id]
         note = documents[request.document_id].children[request.id]
         container_id = request.parent_container_id
 
         descendant = note.create_descendant(request.descendant_id)
+        document.children[descendant.id] = descendant
 
         return tasks_pb2.NoteReply(id=descendant.id,
                                    attrs=descendant.attrs,

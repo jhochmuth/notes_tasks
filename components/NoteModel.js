@@ -39,7 +39,7 @@ class NoteModel extends SRD.NodeModel {
   remove() {
     const that = this;
     const noteRequest = {id: this.content.id, document_id: this.app.documentId};
-
+    
     for (let linkId in this.ports.bottom.links) {
       this.ports.bottom.links[linkId].remove();
     }

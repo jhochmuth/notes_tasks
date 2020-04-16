@@ -103,7 +103,7 @@ class App extends React.Component {
       descendant_id: note.id
     }
 
-    stubs.noteStub.createDescendantNote(descendantNoteRequest, function(err, noteReply) {
+    stubs.noteStub.CreateDescendantNote(descendantNoteRequest, function(err, noteReply) {
       if (err) {
         console.log(err);
       }

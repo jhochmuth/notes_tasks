@@ -26,8 +26,7 @@ class NoteWidget extends React.Component {
       displayColorSelector: false,
       showButtons: false,
       showTextForm: false,
-      selected: false,
-      noteColor: "#686868"
+      selected: false
     };
 
     this.textData = null;
@@ -259,7 +258,7 @@ class NoteWidget extends React.Component {
         onResize={(event, data) => this.onResize(data)}
       >
         <div
-          style={{zIndex: 5, border: this.state.selected ? "lightskyblue solid" : "none", width: this.state.width, height: height, backgroundColor: this.state.noteColor}}
+          style={{zIndex: 5, border: this.state.selected ? "lightskyblue solid" : "none", width: this.state.width, height: height, backgroundColor: attrs.Color}}
           onMouseEnter={this.showButtons}
           onMouseLeave={this.hideButtons}>
           <h4 className="note-title">{attrs.title}</h4>

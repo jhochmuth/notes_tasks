@@ -63,6 +63,8 @@ class Note:
         self.attrs["Text char len"] = str(len(self.attrs["text"]))
         self.attrs["Text word len"] = str(len(self.attrs["text"].split()))
 
+        self.attrs["Color"] = attrs["Color"] if "Color" in attrs else "#686868"
+
         self.connections = list()
 
         self.parent_container = parent_container
