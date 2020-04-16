@@ -32,6 +32,7 @@ def run():
                                                                         document_id=document_id))
         note2_id = response.id
         print(note2_id)
+        print(response.inherited_attrs)
 
         print("Updating notes using inheritance hierarchy.")
         responses = note_stub.UpdateNoteAttr(tasks_pb2.UpdateAttrRequest(note_id=note1_id,
