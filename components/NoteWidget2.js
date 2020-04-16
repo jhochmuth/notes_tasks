@@ -27,7 +27,8 @@ class NoteWidget extends React.Component {
       showButtons: false,
       showTextForm: false,
       selected: false,
-      prototypeId: this.props.node.content.prototype_id
+      prototypeId: this.props.node.content.prototype_id,
+      inheritedAttrs: this.props.node.content.inherited_attrs
     };
 
     this.textData = null;
@@ -147,33 +148,41 @@ class NoteWidget extends React.Component {
   }
 
   renderAttrs() {
+    if (!this.state.displayData) return null;
+
     const attrs = this.state.attrs;
     const that = this;
     let idDigit = 0;
 
-    return Object.keys(attrs).map(function(attr) {
-      if (attr == 'title' || attr == 'text') {
-        return null;
-      }
-      else {
+    let attrElements = Object.keys(attrs).reduce(function(acc, attr) {
+      if (attr != 'title' && attr != 'text') {
         idDigit += 1;
-        return (
-            <div
-              key={attr}
-              id={"note" + that.props.node.content.id + "attr" + idDigit}
-              onDoubleClick={that.attrDoubleClick.bind(this, attr, attrs[attr])}
-              className="attr"
-            >
-              <span className="attr-text">
-                <b>{attr}:</b> {attrs[attr]}
-              </span>
-              <Button close
-                className="delete-attr-button"
-                onClick={() => that.deleteNoteAttr(attr)}
-              />
-            </div>
+        let isInheritedAttr = that.state.inheritedAttrs.includes(attr);
+        let style = {color: isInheritedAttr ? "red" : "black"};
+
+        acc.push(
+          <div
+            key={attr}
+            id={"note" + that.props.node.content.id + "attr" + idDigit}
+            onDoubleClick={that.attrDoubleClick.bind(this, attr, attrs[attr])}
+            className="attr"
+          >
+            <span className="attr-text" style={style}>
+              <b>{attr}:</b> {attrs[attr]}
+            </span>
+            <Button close
+              className="delete-attr-button"
+              onClick={() => that.deleteNoteAttr(attr)}
+            />
+          </div>
         );
       }
+      return acc;
+    }, []);
+
+    return attrElements.sort(function(a, b) {
+      if (a.key < b.key) return -1;
+      else return 1;
     })
   }
 
