@@ -27,7 +27,7 @@ class NoteWidget extends React.Component {
       showButtons: false,
       showTextForm: false,
       selected: false,
-      prototypeId: null
+      prototypeId: this.props.node.content.prototype_id
     };
 
     this.textData = null;
@@ -245,11 +245,11 @@ class NoteWidget extends React.Component {
     this.updateNoteAttr(null, {attr: "Color", val: color.hex});
   }
 
-  displayPrototype() {
-    if (!this.state.prototype) return null;
+  renderPrototype() {
+    if (!this.state.prototypeId) return null;
 
     return (
-      <h4>Prototype: {this.props.node.model.nodes[this.state.prototypeId]}</h4>
+      <h4>Prototype: {this.props.node.model.nodes[this.state.prototypeId].content.attrs.title}</h4>
     )
   }
 
@@ -322,7 +322,7 @@ class NoteWidget extends React.Component {
               className="protoype-button"
               onClick={() => this.props.node.app.createDescendantNote(this.props.node.id)}
             >Create Descendant</Button>
-            {this.displayPrototype()}
+            {this.renderPrototype()}
           </ReactModal>
           <ReactModal
             isOpen={this.state.showTextForm}

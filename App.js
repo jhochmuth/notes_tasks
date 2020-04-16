@@ -115,7 +115,6 @@ class App extends React.Component {
 
         that.updateListView();
         that.noteRefs[note.id] = ref;
-        that.noteRefs[note.id].current.state.prototypeId = prototypeId;
       }
     });
   }
