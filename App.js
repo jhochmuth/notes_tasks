@@ -129,8 +129,10 @@ class App extends React.Component {
       const attrs = noteReply.attrs;
       const newState = Object.assign({}, note.state);
       newState.attrs = attrs;
+
+      newState.inherited_attrs = noteReply.inherited_attrs;
       note.setState(newState);
-      note.props.node.content.attrs = attrs;
+      note.props.node.content = noteReply;
       note.props.node.app.updateListView();
     });
   }

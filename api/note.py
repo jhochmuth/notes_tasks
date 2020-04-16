@@ -126,16 +126,18 @@ class Note:
                 descendant.inherited_attrs.add(attr)
                 descendant.add_attr(attr, value, True)
 
-    def update_attr(self, attr, value):
+    def update_attr(self, attr, value, descendant=False):
         if attr == "text":
             self.update_text(value)
         else:
+            if not descendant and attr in self.inherited_attrs:
+                self.inherited_attrs.remove(attr)
             self.update_last_changed()
             self.attrs[attr] = value
 
         for descendant in self.descendant_notes:
             if attr in descendant.inherited_attrs:
-                yield from descendant.update_attr(attr, value)
+                yield from descendant.update_attr(attr, value, True)
 
         yield self
 

@@ -103,7 +103,10 @@ class NoteWidget extends React.Component {
       document_id: this.props.node.app.documentId
     }
 
-    this.props.node.app.updateNoteAttr(updateAttrRequest);
+    if (attr == 'Color' && event) {
+      alert('Use the color selector tool to update note color.')
+    }
+    else this.props.node.app.updateNoteAttr(updateAttrRequest);
   }
 
   deleteNoteAttr(attr) {

@@ -60,7 +60,8 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
 
         for note in updated_notes:
             yield tasks_pb2.NoteReply(id=note.id,
-                                      attrs=note.attrs)
+                                      attrs=note.attrs,
+                                      inherited_attrs=list(note.inherited_attrs))
 
     def CreateDescendantNote(self, request, context):
         document = documents[request.document_id]
