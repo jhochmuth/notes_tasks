@@ -1,5 +1,6 @@
 const React = require('react');
 const stubs = require('../stubs.js');
+const Filter = require('../utils/filter.js');
 import {PortWidget} from '@projectstorm/react-diagrams';
 import {Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Popover, PopoverBody, PopoverHeader, UncontrolledTooltip} from 'reactstrap';
 import CKEditor from '@ckeditor/ckeditor5-react';
@@ -28,7 +29,8 @@ class NoteWidget extends React.Component {
       showTextForm: false,
       selected: false,
       prototypeId: this.props.node.content.prototype_id,
-      inheritedAttrs: this.props.node.content.inherited_attrs
+      inheritedAttrs: this.props.node.content.inherited_attrs,
+      filters: new Set()
     };
 
     this.textData = null;
@@ -257,6 +259,14 @@ class NoteWidget extends React.Component {
     this.updateNoteAttr(null, {attr: "Color", val: color.hex});
   }
 
+  applyFilter(filter) {
+    if (filter.doesFilter(this.state.attrs)) {
+      const newState = Object.assign({}, this.state);
+      newState.filters.add(filter);
+      this.setState(newState);
+    }
+  }
+
   renderPrototype() {
     if (!this.state.prototypeId) return null;
 
@@ -268,6 +278,8 @@ class NoteWidget extends React.Component {
   render() {
     const attrs = this.state.attrs;
     const height = this.state.height;
+
+    if (this.state.filters.size > 0) return null;
 
     return (
       <ResizableBox

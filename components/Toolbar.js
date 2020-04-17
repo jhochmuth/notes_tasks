@@ -8,7 +8,13 @@ React component for the toolbar of the main app page.
 class Toolbar extends React.Component {
   constructor() {
     super();
-    this.state = {title: "Title", text: "Text", displayNoteForm: false, displayLoadForm: false};
+    this.state = {
+      title: "Title",
+      text: "Text",
+      displayNoteForm: false,
+      displayFilterForm: false,
+      displayLoadForm: false
+    };
     this.addNote = this.addNote.bind(this);
     this.onChange = this.onChange.bind(this);
     this.toggleNoteForm = this.toggleNoteForm.bind(this);
@@ -41,11 +47,20 @@ class Toolbar extends React.Component {
     this.setState(newState);
   }
 
+  toggleFilterForm() {
+    const newState = Object.assign({}, this.state);
+    newState.displayFilterForm = !this.state.displayFilterForm;
+    this.setState(newState);
+  }
+
   render() {
     return (
       <div>
         <Button id="noteFormButton" className="toolbar-button" color="secondary" style={{left: '3%'}} onClick={this.toggleNoteForm}>
           <img src="/home/julius/notes_tasks/icons/note.png" className="toolbar-icon" />
+        </Button>
+        <Button id="filterFormButton" className="toolbar-button" style={{left: '10%'}} onClick={() => this.toggleFilterForm()}>
+          Filter
         </Button>
         <Button id="saveButton" className="toolbar-button" style={{left: '80%'}} onClick={this.props.save}>
           <img src="/home/julius/notes_tasks/icons/save.png" className="toolbar-icon" />
@@ -65,6 +80,26 @@ class Toolbar extends React.Component {
                   <InputGroupText className="attr-form-text">Title</InputGroupText>
                 </InputGroupAddon>
                 <Input name="title" className="attr-form-input"/>
+              </InputGroup>
+              <Button>Submit</Button>
+            </Form>
+          </PopoverBody>
+        </Popover>
+        <Popover trigger="legacy" placement="bottom" target="filterFormButton" isOpen={this.state.displayFilterForm} toggle={() => this.toggleFilterForm()}>
+          <PopoverHeader>Create new filter</PopoverHeader>
+          <PopoverBody>
+            <Form onSubmit={this.props.addFilter}>
+              <InputGroup className="attr-form-group">
+                <InputGroupAddon addonType="prepend" className="attr-form-label">
+                  <InputGroupText className="attr-form-text">Attribute</InputGroupText>
+                </InputGroupAddon>
+                <Input name="attr" className="attr-form-input"/>
+              </InputGroup>
+              <InputGroup className="attr-form-group">
+                <InputGroupAddon addonType="prepend" className="attr-form-label">
+                  <InputGroupText className="attr-form-text">Value</InputGroupText>
+                </InputGroupAddon>
+                <Input name="value" className="attr-form-input"/>
               </InputGroup>
               <Button>Submit</Button>
             </Form>

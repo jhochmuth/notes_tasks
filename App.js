@@ -13,6 +13,7 @@ const NotePortFactory = require('./components/NotePortFactory.js');
 const ContainerModel = require('./components/ContainerModel.js');
 const ContainerFactory = require('./components/ContainerFactory.js');
 const stubs = require('./stubs.js');
+const Filter = require('./utils/filter.js');
 const path = require('path');
 
 const engine = new SRD.DiagramEngine();
@@ -34,6 +35,8 @@ class App extends React.Component {
   // todo: add way to delete connection labels
   constructor() {
     super();
+
+    this.state = {filters: new Set()};
 
     this.listWin = null;
     this.documentId = null;
@@ -280,12 +283,27 @@ class App extends React.Component {
     });
   }
 
+  addFilter(event) {
+    event.preventDefault();
+    const that = this;
+
+    const filter = new Filter(event.target.attr.value, event.target.value.value, "contains");
+
+    for (let ref in that.noteRefs) {
+      that.noteRefs[ref].current.applyFilter(filter)
+    }
+
+
+
+  }
+
   render() {
     return (
       <div className="app">
         <div className="toolbar">
           <Toolbar addNote={this.addNote}
             addContainer={this.addContainer}
+            addFilter={(event) => this.addFilter(event)}
             save={this.save}
             load={this.onLoadButtonClick}
             openListView={this.openListView}/>
