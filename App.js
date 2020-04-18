@@ -290,10 +290,10 @@ class App extends React.Component {
     const filter = new Filter(event.target.attr.value, event.target.value.value, "contains");
 
     for (let ref in that.noteRefs) {
-      that.noteRefs[ref].current.applyFilter(filter)
+      that.noteRefs[ref].current.applyFilter(filter);
     }
 
-    this.state.filters.push(filter);
+    this.filters.push(filter);
   }
 
   render() {

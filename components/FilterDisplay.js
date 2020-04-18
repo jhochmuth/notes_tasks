@@ -10,7 +10,8 @@ class FilterDisplay extends React.Component {
 
   renderFilters() {
     this.state.filters.reduce(function(acc, filter) {
-      
+      acc.push(<div>{filter.attr} {filter.value}</div>)
+      return acc;
     }, [])
   }
 
