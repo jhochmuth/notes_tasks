@@ -233,6 +233,7 @@ class NoteWidget extends React.Component {
   }
 
   deleteNote() {
+    delete this.props.node.app.noteRefs[this.props.node.id];
     this.props.node.remove();
   }
 
@@ -263,6 +264,14 @@ class NoteWidget extends React.Component {
     if (filter.doesFilter(this.state.attrs)) {
       const newState = Object.assign({}, this.state);
       newState.filters.add(filter);
+      this.setState(newState);
+    }
+  }
+
+  removeFilter(filter) {
+    if (this.state.filters.has(filter)) {
+      const newState = Object.assign({}, this.state);
+      newState.filters.delete(filter);
       this.setState(newState);
     }
   }

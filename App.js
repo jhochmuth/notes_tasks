@@ -37,11 +37,12 @@ class App extends React.Component {
   constructor() {
     super();
 
+    this.state = {filters: []};
+
     this.listWin = null;
     this.documentId = null;
     this.diagramRef = React.createRef();
     this.noteRefs = {};
-    this.filters = [];
 
     this.addNote = this.addNote.bind(this);
     this.addContainer = this.addContainer.bind(this);
@@ -85,6 +86,11 @@ class App extends React.Component {
       }
       else {
         note.content = noteReply;
+
+        that.state.filters.forEach((filter) => {
+          that.noteRefs[noteReply.id].current.applyFilter(filter)
+        });
+
         model.addAll(note);
         engine.setDiagramModel(model);
         that.forceUpdate();
@@ -122,6 +128,7 @@ class App extends React.Component {
     });
   }
 
+  //todo: should check filters
   updateNoteAttr(updateAttrRequest) {
     const that = this;
 
@@ -293,7 +300,22 @@ class App extends React.Component {
       that.noteRefs[ref].current.applyFilter(filter);
     }
 
-    this.filters.push(filter);
+    const newState = Object.assign({}, this.state);
+    newState.filters.push(filter);
+    this.setState(newState);
+  }
+
+  deleteFilter(filter) {
+    const that = this;
+    let index = this.state.filters.indexOf(filter);
+
+    const newState = Object.assign({}, this.state);
+    newState.filters.splice(index, 1);
+    this.setState(newState);
+
+    for (let ref in that.noteRefs) {
+      that.noteRefs[ref].current.removeFilter(filter);
+    }
   }
 
   render() {
@@ -315,7 +337,10 @@ class App extends React.Component {
           deleteKeys={[27]}
           ref={this.diagramRef}
         />
-        <FilterDisplay filters={this.filters} />
+        <FilterDisplay
+          filters={this.state.filters}
+          deleteFilter={(filter) => this.deleteFilter(filter)}
+        />
       </div>
     );
   }
