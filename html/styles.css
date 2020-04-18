@@ -79,10 +79,21 @@
 
 .srd-diagram {
 	height: 100%;
+	position: relative;
 }
 
 .app-button {
 	margin: 10;
+}
+
+.filter-display {
+	position: fixed;
+	background: "white";
+	border: solid;
+	height: 30%;
+	width: 15%;
+	bottom: 10%;
+	z-index: 10;
 }
 
 .note {

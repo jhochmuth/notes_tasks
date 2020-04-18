@@ -6,6 +6,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const SRD = require('@projectstorm/react-diagrams');
 const Toolbar = require('./components/Toolbar.js');
+const FilterDisplay = require('./components/FilterDisplay.js');
 const NoteModel = require('./components/NoteModel.js');
 const NoteFactory = require('./components/NoteFactory.js');
 const NoteLinkFactory = require('./components/NoteLinkFactory.js');
@@ -36,12 +37,11 @@ class App extends React.Component {
   constructor() {
     super();
 
-    this.state = {filters: new Set()};
-
     this.listWin = null;
     this.documentId = null;
     this.diagramRef = React.createRef();
     this.noteRefs = {};
+    this.filters = [];
 
     this.addNote = this.addNote.bind(this);
     this.addContainer = this.addContainer.bind(this);
@@ -293,8 +293,7 @@ class App extends React.Component {
       that.noteRefs[ref].current.applyFilter(filter)
     }
 
-
-
+    this.state.filters.push(filter);
   }
 
   render() {
@@ -316,6 +315,7 @@ class App extends React.Component {
           deleteKeys={[27]}
           ref={this.diagramRef}
         />
+        <FilterDisplay filters={this.filters} />
       </div>
     );
   }
