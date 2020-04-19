@@ -37,8 +37,22 @@ def run():
         print("Updating notes using inheritance hierarchy.")
         responses = note_stub.UpdateNoteAttr(tasks_pb2.UpdateAttrRequest(note_id=note1_id,
                                                                          attr="birth",
+                                                                         new_value="1858",
+                                                                         document_id=document_id))
+        for response in responses:
+            print(response.id)
+            print(response.attrs)
+
+        print("Deleting note.")
+        response = note_stub.DeleteNote(tasks_pb2.NoteRequest(id=note2_id,
+                                                              document_id=document_id))
+
+        print("Ensure note is deleted.")
+        responses = note_stub.UpdateNoteAttr(tasks_pb2.UpdateAttrRequest(note_id=note1_id,
+                                                                         attr="birth",
                                                                          new_value="1857",
                                                                          document_id=document_id))
+
         for response in responses:
             print(response.id)
             print(response.attrs)

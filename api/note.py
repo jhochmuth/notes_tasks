@@ -225,6 +225,9 @@ class Note:
             descendant.prototype = None
             self.descendant_notes.remove(descendant)
 
+        if self.prototype:
+            self.prototype.descendant_notes.remove(self)
+
     @classmethod
     def from_dict(cls, data):
         return cls(id=data["id"],
