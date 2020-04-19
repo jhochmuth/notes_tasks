@@ -86,17 +86,16 @@ class App extends React.Component {
       }
       else {
         note.content = noteReply;
-
-        that.state.filters.forEach((filter) => {
-          that.noteRefs[noteReply.id].current.applyFilter(filter)
-        });
-
         model.addAll(note);
         engine.setDiagramModel(model);
         that.forceUpdate();
 
         that.updateListView();
         that.noteRefs[note.id] = ref;
+
+        that.state.filters.forEach((filter) => {
+          that.noteRefs[noteReply.id].current.applyFilter(filter)
+        });
       }
     });
   }
@@ -124,17 +123,22 @@ class App extends React.Component {
 
         that.updateListView();
         that.noteRefs[note.id] = ref;
+
+        that.state.filters.forEach((filter) => {
+          that.noteRefs[noteReply.id].current.applyFilter(filter)
+        });
       }
     });
   }
 
-  //todo: should check filters
   updateNoteAttr(updateAttrRequest) {
     const that = this;
 
     let call = stubs.noteStub.updateNoteAttr(updateAttrRequest);
 
     call.on('data', function(noteReply) {
+      console.log(noteReply)
+      console.log(that.noteRefs)
       const note = that.noteRefs[noteReply.id].current;
       const attrs = noteReply.attrs;
       const newState = Object.assign({}, note.state);
@@ -143,6 +147,11 @@ class App extends React.Component {
       newState.inherited_attrs = noteReply.inherited_attrs;
       note.setState(newState);
       note.props.node.content = noteReply;
+
+      that.state.filters.forEach((filter) => {
+        note.applyFilter(filter)
+      });
+
       note.props.node.app.updateListView();
     });
   }
@@ -291,7 +300,6 @@ class App extends React.Component {
   }
 
   addFilter(event) {
-    event.preventDefault();
     const that = this;
 
     const filter = new Filter(event.target.attr.value, event.target.value.value, "contains");

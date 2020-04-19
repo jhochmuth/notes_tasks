@@ -41,6 +41,13 @@ class Toolbar extends React.Component {
     this.toggleNoteForm();
   }
 
+  addFilter(event) {
+    event.preventDefault();
+
+    this.props.addFilter(event);
+    this.toggleFilterForm();
+  }
+
   toggleNoteForm() {
     const newState = Object.assign({}, this.state);
     newState.displayNoteForm = !this.state.displayNoteForm;
@@ -88,7 +95,7 @@ class Toolbar extends React.Component {
         <Popover trigger="legacy" placement="bottom" target="filterFormButton" isOpen={this.state.displayFilterForm} toggle={() => this.toggleFilterForm()}>
           <PopoverHeader>Create new filter</PopoverHeader>
           <PopoverBody>
-            <Form onSubmit={this.props.addFilter}>
+            <Form onSubmit={(event) => this.addFilter(event)}>
               <InputGroup className="attr-form-group">
                 <InputGroupAddon addonType="prepend" className="attr-form-label">
                   <InputGroupText className="attr-form-text">Attribute</InputGroupText>
