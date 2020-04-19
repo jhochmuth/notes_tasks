@@ -130,7 +130,7 @@ class NoteManagerStub(object):
     self.DeleteNote = channel.unary_unary(
         '/NoteManager/DeleteNote',
         request_serializer=tasks__pb2.NoteRequest.SerializeToString,
-        response_deserializer=tasks__pb2.BoolWrapper.FromString,
+        response_deserializer=tasks__pb2.DeleteNoteReply.FromString,
         )
 
 
@@ -199,7 +199,7 @@ def add_NoteManagerServicer_to_server(servicer, server):
       'DeleteNote': grpc.unary_unary_rpc_method_handler(
           servicer.DeleteNote,
           request_deserializer=tasks__pb2.NoteRequest.FromString,
-          response_serializer=tasks__pb2.BoolWrapper.SerializeToString,
+          response_serializer=tasks__pb2.DeleteNoteReply.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
