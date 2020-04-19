@@ -58,6 +58,10 @@ message DeleteAttrRequest {
     string document_id = 3;
 }
 
+message DeleteNoteReply {
+    repeated string descendant_notes = 1;
+}
+
 message ContainerRequest {
     map<string, string> attrs = 1;
     repeated string child_note_ids = 2;
@@ -143,7 +147,7 @@ service NoteManager {
     rpc UpdateNoteAttr (UpdateAttrRequest) returns (stream NoteReply) {}
     rpc CreateDescendantNote (DescendantNoteRequest) returns (NoteReply) {}
     rpc DeleteNoteAttr (DeleteAttrRequest) returns (BoolWrapper) {}
-    rpc DeleteNote (NoteRequest) returns (BoolWrapper) {}
+    rpc DeleteNote (NoteRequest) returns (DeleteNoteReply) {}
 }
 
 service ConnectionManager {

@@ -86,9 +86,10 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
 
     def DeleteNote(self, request, context):
         note = documents[request.document_id].children[request.id]
-        note.delete()
+        descendants = note.prepare_deletion()
+        descendant_ids = [descendant.id for descendant in descendants]
         del documents[request.document_id].children[request.id]
-        return tasks_pb2.BoolWrapper(val=True)
+        return tasks_pb2.DeleteNoteReply(descendant_ids)
 
 
 class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):

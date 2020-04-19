@@ -217,16 +217,17 @@ class Note:
         data["inherited_attrs"] = list(self.inherited_attrs)
         return data
 
-    def delete(self):
+    def prepare_deletion(self):
         if self.parent_container:
             self.parent_container.remove_note(self)
 
         for descendant in self.descendant_notes:
             descendant.prototype = None
-            self.descendant_notes.remove(descendant)
 
         if self.prototype:
             self.prototype.descendant_notes.remove(self)
+
+        return self.descendant_notes
 
     @classmethod
     def from_dict(cls, data):
