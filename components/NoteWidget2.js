@@ -12,7 +12,9 @@ const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
 
-
+// todo: make ability to break prototype relationship
+// todo: deleteNoteAttr must send stream for prototypes
+// todo: creating new attr in prototype should update descendants
 class NoteWidget extends React.Component {
   // todo: refactor attributes into separate component
   // todo: create functionality to hide reserved attributes such as text len
@@ -278,6 +280,7 @@ class NoteWidget extends React.Component {
 
   renderPrototype() {
     if (!this.state.prototypeId) return null;
+    else if (!this.props.node.model.nodes[this.state.prototypeId]) return null;
 
     return (
       <h4>Prototype: {this.props.node.model.nodes[this.state.prototypeId].content.attrs.title}</h4>

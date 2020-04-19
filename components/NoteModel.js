@@ -39,7 +39,7 @@ class NoteModel extends SRD.NodeModel {
   remove() {
     const that = this;
     const noteRequest = {id: this.content.id, document_id: this.app.documentId};
-    
+
     for (let linkId in this.ports.bottom.links) {
       this.ports.bottom.links[linkId].remove();
     }
@@ -50,10 +50,11 @@ class NoteModel extends SRD.NodeModel {
       }
 
       else {
-        if (response.val) {
-          that.model.removeNode(that);
-          that.app.forceUpdate();
-          that.app.updateListView();
+        that.model.removeNode(that);
+        that.app.forceUpdate();
+        that.app.updateListView();
+        if (response.descendant_notes) {
+          that.app.removePrototypes(response.descendant_notes);
         }
       }
     })
