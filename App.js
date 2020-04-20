@@ -137,8 +137,6 @@ class App extends React.Component {
     let call = stubs.noteStub.updateNoteAttr(updateAttrRequest);
 
     call.on('data', function(noteReply) {
-      console.log(noteReply)
-      console.log(that.noteRefs)
       const note = that.noteRefs[noteReply.id].current;
       const attrs = noteReply.attrs;
       const newState = Object.assign({}, note.state);
@@ -153,6 +151,16 @@ class App extends React.Component {
       });
 
       note.props.node.app.updateListView();
+    });
+  }
+
+  removePrototypes(descendantIds) {
+    const that = this;
+    descendantIds.forEach((descendantId) => {
+      const descendant = that.noteRefs[descendantId].current;
+      const newState = Object.assign({}, descendant.state);
+      newState.prototypeId = null;
+      descendant.setState(newState);
     });
   }
 
