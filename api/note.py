@@ -63,7 +63,7 @@ class Note:
         self.attrs["Text char len"] = str(len(self.attrs["text"]))
         self.attrs["Text word len"] = str(len(self.attrs["text"].split()))
 
-        self.attrs["Color"] = attrs["Color"] if "Color" in attrs else "#686868"
+        self.attrs["Color"] = attrs["Color"] if "Color" in self.attrs else "#686868"
 
         self.connections = list()
 
@@ -93,10 +93,6 @@ class Note:
             self.update_last_changed()
             self.attrs["Text char len"] = str(len(self.attrs["text"]))
             self.attrs["Text word len"] = str(len(self.attrs["text"].split()))
-
-            for descendant in self.descendant_notes:
-                if "text" in descendant.inherited_attrs:
-                    descendant.update_text(new_text)
 
     def update_title(self, new_title):
         """Changes the title of a note."""
@@ -140,6 +136,18 @@ class Note:
                 yield from descendant.update_attr(attr, value, True)
 
         yield self
+
+    def update_attr_archetype(self, attr, val):
+        if attr in self.inherited_attrs:
+            self.attrs[attr] = val
+
+        self.update_last_changed()
+
+    def delete_attr_archetype(self, attr):
+        if attr in self.inherited_attrs:
+            del self.attrs[attr]
+
+        self.update_last_changed
 
     def create_duplicate(self):
         """Copies a note without creating an inheritance link."""
