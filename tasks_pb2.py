@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x0btasks.proto\"\x07\n\x05\x45mpty\"!\n\x13\x43reateDocumentReply\x12\n\n\x02id\x18\x01 \x01(\t\"\"\n\x14\x43loseDocumentRequest\x12\n\n\x02id\x18\x01 \x01(\t\"4\n\x0bSaveRequest\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x02 \x01(\t\"\x1b\n\x0bLoadRequest\x12\x0c\n\x04\x66ile\x18\x01 \x01(\t\"\xa1\x01\n\x0bNoteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12&\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x17.NoteRequest.AttrsEntry\x12\x1b\n\x13parent_container_id\x18\x03 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x04 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xb7\x01\n\tNoteReply\x12\n\n\x02id\x18\x01 \x01(\t\x12$\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x15.NoteReply.AttrsEntry\x12\x1b\n\x13parent_container_id\x18\x03 \x01(\t\x12\x14\n\x0cprototype_id\x18\x04 \x01(\t\x12\x17\n\x0finherited_attrs\x18\x05 \x03(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xcc\x01\n\x15\x44\x65scendantNoteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x30\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32!.DescendantNoteRequest.AttrsEntry\x12\x1b\n\x13parent_container_id\x18\x03 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x04 \x01(\t\x12\x15\n\rdescendant_id\x18\x05 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"Z\n\x11UpdateAttrRequest\x12\x0f\n\x07note_id\x18\x01 \x01(\t\x12\x0c\n\x04\x61ttr\x18\x02 \x01(\t\x12\x11\n\tnew_value\x18\x03 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x04 \x01(\t\"G\n\x11\x44\x65leteAttrRequest\x12\x0f\n\x07note_id\x18\x01 \x01(\t\x12\x0c\n\x04\x61ttr\x18\x02 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x03 \x01(\t\"+\n\x0f\x44\x65leteNoteReply\x12\x18\n\x10\x64\x65scendant_notes\x18\x01 \x03(\t\"\x9a\x01\n\x10\x43ontainerRequest\x12+\n\x05\x61ttrs\x18\x01 \x03(\x0b\x32\x1c.ContainerRequest.AttrsEntry\x12\x16\n\x0e\x63hild_note_ids\x18\x02 \x03(\t\x12\x13\n\x0b\x64ocument_id\x18\x03 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8d\x01\n\x0e\x43ontainerReply\x12\n\n\x02id\x18\x01 \x01(\t\x12)\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x1a.ContainerReply.AttrsEntry\x12\x16\n\x0e\x63hild_note_ids\x18\x03 \x03(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"7\n\x0e\x41\x64\x64NoteRequest\x12\x14\n\x0c\x63ontainer_id\x18\x01 \x01(\t\x12\x0f\n\x07note_id\x18\x02 \x01(\t\"t\n\x11\x43onnectionRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0f\x65ndpoint_one_id\x18\x02 \x01(\t\x12\x17\n\x0f\x65ndpoint_two_id\x18\x03 \x01(\t\x12\x0c\n\x04text\x18\x04 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x05 \x01(\t\"]\n\x0f\x43onnectionReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0f\x65ndpoint_one_id\x18\x02 \x01(\t\x12\x17\n\x0f\x65ndpoint_two_id\x18\x03 \x01(\t\x12\x0c\n\x04text\x18\x04 \x01(\t\"T\n\x0bRuleRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x10\n\x08\x61\x64\x64_text\x18\x03 \x01(\t\x12\x17\n\x0f\x65\x66\x66\x65\x63t_location\x18\x04 \x01(\t\"R\n\tRuleReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x10\n\x08\x61\x64\x64_text\x18\x03 \x01(\t\x12\x17\n\x0f\x65\x66\x66\x65\x63t_location\x18\x04 \x01(\t\"C\n\x12\x43onditionalRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x11\n\tcondition\x18\x03 \x01(\t\"A\n\x10\x43onditionalReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x11\n\tcondition\x18\x03 \x01(\t\"U\n\x16\x43ontainerSearchRequest\x12\x14\n\x0c\x63ontainer_id\x18\x01 \x01(\t\x12\x16\n\x0e\x63onditional_id\x18\x02 \x01(\t\x12\r\n\x05\x61ttrs\x18\x03 \x03(\t\"&\n\x14\x43ontainerSearchReply\x12\x0e\n\x06result\x18\x01 \x03(\t\"\x1a\n\x0b\x42oolWrapper\x12\x0b\n\x03val\x18\x01 \x01(\x08\x32\xdf\x01\n\x0f\x44ocumentManager\x12\x30\n\x0e\x43reateDocument\x12\x06.Empty\x1a\x14.CreateDocumentReply\"\x00\x12\x36\n\rCloseDocument\x12\x15.CloseDocumentRequest\x1a\x0c.BoolWrapper\"\x00\x12,\n\x0cSaveDocument\x12\x0c.SaveRequest\x1a\x0c.BoolWrapper\"\x00\x12\x34\n\x0cLoadDocument\x12\x0c.LoadRequest\x1a\x14.CreateDocumentReply\"\x00\x32\x91\x02\n\x0bNoteManager\x12(\n\nCreateNote\x12\x0c.NoteRequest\x1a\n.NoteReply\"\x00\x12\x34\n\x0eUpdateNoteAttr\x12\x12.UpdateAttrRequest\x1a\n.NoteReply\"\x00\x30\x01\x12<\n\x14\x43reateDescendantNote\x12\x16.DescendantNoteRequest\x1a\n.NoteReply\"\x00\x12\x34\n\x0e\x44\x65leteNoteAttr\x12\x12.DeleteAttrRequest\x1a\x0c.BoolWrapper\"\x00\x12.\n\nDeleteNote\x12\x0c.NoteRequest\x1a\x10.DeleteNoteReply\"\x00\x32\xf2\x01\n\x11\x43onnectionManager\x12:\n\x10\x43reateConnection\x12\x12.ConnectionRequest\x1a\x10.ConnectionReply\"\x00\x12\x35\n\x0b\x41\x64\x64\x45ndpoint\x12\x12.ConnectionRequest\x1a\x10.ConnectionReply\"\x00\x12\x32\n\x08\x41\x64\x64Label\x12\x12.ConnectionRequest\x1a\x10.ConnectionReply\"\x00\x12\x36\n\x10\x44\x65leteConnection\x12\x12.ConnectionRequest\x1a\x0c.BoolWrapper\"\x00\x32\xac\x02\n\x10\x43ontainerManager\x12\x37\n\x0f\x43reateContainer\x12\x11.ContainerRequest\x1a\x0f.ContainerReply\"\x00\x12-\n\x07\x41\x64\x64Note\x12\x0f.AddNoteRequest\x1a\x0f.ContainerReply\"\x00\x12\x30\n\nRemoveNote\x12\x0f.AddNoteRequest\x1a\x0f.ContainerReply\"\x00\x12H\n\x14SearchChildNoteAttrs\x12\x17.ContainerSearchRequest\x1a\x15.ContainerSearchReply\"\x00\x12\x34\n\x0f\x44\x65leteContainer\x12\x11.ContainerRequest\x1a\x0c.BoolWrapper\"\x00\x32S\n\x12\x43onditionalManager\x12=\n\x11\x43reateConditional\x12\x13.ConditionalRequest\x1a\x11.ConditionalReply\"\x00\x32\x37\n\x0bRuleManager\x12(\n\nCreateRule\x12\x0c.RuleRequest\x1a\n.RuleReply\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x0btasks.proto\"\x07\n\x05\x45mpty\"!\n\x13\x43reateDocumentReply\x12\n\n\x02id\x18\x01 \x01(\t\"\"\n\x14\x43loseDocumentRequest\x12\n\n\x02id\x18\x01 \x01(\t\"4\n\x0bSaveRequest\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x02 \x01(\t\"\x1b\n\x0bLoadRequest\x12\x0c\n\x04\x66ile\x18\x01 \x01(\t\"\xa1\x01\n\x0bNoteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12&\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x17.NoteRequest.AttrsEntry\x12\x1b\n\x13parent_container_id\x18\x03 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x04 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xb7\x01\n\tNoteReply\x12\n\n\x02id\x18\x01 \x01(\t\x12$\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x15.NoteReply.AttrsEntry\x12\x1b\n\x13parent_container_id\x18\x03 \x01(\t\x12\x14\n\x0cprototype_id\x18\x04 \x01(\t\x12\x17\n\x0finherited_attrs\x18\x05 \x03(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xcc\x01\n\x15\x44\x65scendantNoteRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x30\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32!.DescendantNoteRequest.AttrsEntry\x12\x1b\n\x13parent_container_id\x18\x03 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x04 \x01(\t\x12\x15\n\rdescendant_id\x18\x05 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"Z\n\x11UpdateAttrRequest\x12\x0f\n\x07note_id\x18\x01 \x01(\t\x12\x0c\n\x04\x61ttr\x18\x02 \x01(\t\x12\x11\n\tnew_value\x18\x03 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x04 \x01(\t\"G\n\x11\x44\x65leteAttrRequest\x12\x0f\n\x07note_id\x18\x01 \x01(\t\x12\x0c\n\x04\x61ttr\x18\x02 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x03 \x01(\t\"+\n\x0f\x44\x65leteNoteReply\x12\x18\n\x10\x64\x65scendant_notes\x18\x01 \x03(\t\"\x8e\x01\n\x10\x41rchetypeRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12+\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x1c.ArchetypeRequest.AttrsEntry\x12\x13\n\x0b\x64ocument_id\x18\x03 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"u\n\x0e\x41rchetypeReply\x12\n\n\x02id\x18\x01 \x01(\t\x12)\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x1a.ArchetypeReply.AttrsEntry\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"T\n\x16\x43reateInheritorRequest\x12\x0f\n\x07note_id\x18\x01 \x01(\t\x12\x14\n\x0c\x61rchetype_id\x18\x02 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x03 \x01(\t\"^\n\x16UpdateArchetypeRequest\x12\x14\n\x0c\x61rchetype_id\x18\x01 \x01(\t\x12\x0c\n\x04\x61ttr\x18\x02 \x01(\t\x12\x0b\n\x03val\x18\x03 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x04 \x01(\t\"\x86\x01\n\x14UpdateArchetypeReply\x12\x0f\n\x07note_id\x18\x01 \x01(\t\x12/\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32 .UpdateArchetypeReply.AttrsEntry\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x9a\x01\n\x10\x43ontainerRequest\x12+\n\x05\x61ttrs\x18\x01 \x03(\x0b\x32\x1c.ContainerRequest.AttrsEntry\x12\x16\n\x0e\x63hild_note_ids\x18\x02 \x03(\t\x12\x13\n\x0b\x64ocument_id\x18\x03 \x01(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x8d\x01\n\x0e\x43ontainerReply\x12\n\n\x02id\x18\x01 \x01(\t\x12)\n\x05\x61ttrs\x18\x02 \x03(\x0b\x32\x1a.ContainerReply.AttrsEntry\x12\x16\n\x0e\x63hild_note_ids\x18\x03 \x03(\t\x1a,\n\nAttrsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"7\n\x0e\x41\x64\x64NoteRequest\x12\x14\n\x0c\x63ontainer_id\x18\x01 \x01(\t\x12\x0f\n\x07note_id\x18\x02 \x01(\t\"t\n\x11\x43onnectionRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0f\x65ndpoint_one_id\x18\x02 \x01(\t\x12\x17\n\x0f\x65ndpoint_two_id\x18\x03 \x01(\t\x12\x0c\n\x04text\x18\x04 \x01(\t\x12\x13\n\x0b\x64ocument_id\x18\x05 \x01(\t\"]\n\x0f\x43onnectionReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x17\n\x0f\x65ndpoint_one_id\x18\x02 \x01(\t\x12\x17\n\x0f\x65ndpoint_two_id\x18\x03 \x01(\t\x12\x0c\n\x04text\x18\x04 \x01(\t\"T\n\x0bRuleRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x10\n\x08\x61\x64\x64_text\x18\x03 \x01(\t\x12\x17\n\x0f\x65\x66\x66\x65\x63t_location\x18\x04 \x01(\t\"R\n\tRuleReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x10\n\x08\x61\x64\x64_text\x18\x03 \x01(\t\x12\x17\n\x0f\x65\x66\x66\x65\x63t_location\x18\x04 \x01(\t\"C\n\x12\x43onditionalRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x11\n\tcondition\x18\x03 \x01(\t\"A\n\x10\x43onditionalReply\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0e\n\x06target\x18\x02 \x01(\t\x12\x11\n\tcondition\x18\x03 \x01(\t\"U\n\x16\x43ontainerSearchRequest\x12\x14\n\x0c\x63ontainer_id\x18\x01 \x01(\t\x12\x16\n\x0e\x63onditional_id\x18\x02 \x01(\t\x12\r\n\x05\x61ttrs\x18\x03 \x03(\t\"&\n\x14\x43ontainerSearchReply\x12\x0e\n\x06result\x18\x01 \x03(\t\"\x1a\n\x0b\x42oolWrapper\x12\x0b\n\x03val\x18\x01 \x01(\x08\x32\xdf\x01\n\x0f\x44ocumentManager\x12\x30\n\x0e\x43reateDocument\x12\x06.Empty\x1a\x14.CreateDocumentReply\"\x00\x12\x36\n\rCloseDocument\x12\x15.CloseDocumentRequest\x1a\x0c.BoolWrapper\"\x00\x12,\n\x0cSaveDocument\x12\x0c.SaveRequest\x1a\x0c.BoolWrapper\"\x00\x12\x34\n\x0cLoadDocument\x12\x0c.LoadRequest\x1a\x14.CreateDocumentReply\"\x00\x32\xcf\x03\n\x0bNoteManager\x12(\n\nCreateNote\x12\x0c.NoteRequest\x1a\n.NoteReply\"\x00\x12\x34\n\x0eUpdateNoteAttr\x12\x12.UpdateAttrRequest\x1a\n.NoteReply\"\x00\x30\x01\x12<\n\x14\x43reateDescendantNote\x12\x16.DescendantNoteRequest\x1a\n.NoteReply\"\x00\x12\x34\n\x0e\x44\x65leteNoteAttr\x12\x12.DeleteAttrRequest\x1a\x0c.BoolWrapper\"\x00\x12.\n\nDeleteNote\x12\x0c.NoteRequest\x1a\x10.DeleteNoteReply\"\x00\x12\x37\n\x0f\x43reateArchetype\x12\x11.ArchetypeRequest\x1a\x0f.ArchetypeReply\"\x00\x12\x38\n\x0f\x43reateInheritor\x12\x17.CreateInheritorRequest\x1a\n.NoteReply\"\x00\x12I\n\x13UpdateArchetypeAttr\x12\x17.UpdateArchetypeRequest\x1a\x15.UpdateArchetypeReply\"\x00\x30\x01\x32\xf2\x01\n\x11\x43onnectionManager\x12:\n\x10\x43reateConnection\x12\x12.ConnectionRequest\x1a\x10.ConnectionReply\"\x00\x12\x35\n\x0b\x41\x64\x64\x45ndpoint\x12\x12.ConnectionRequest\x1a\x10.ConnectionReply\"\x00\x12\x32\n\x08\x41\x64\x64Label\x12\x12.ConnectionRequest\x1a\x10.ConnectionReply\"\x00\x12\x36\n\x10\x44\x65leteConnection\x12\x12.ConnectionRequest\x1a\x0c.BoolWrapper\"\x00\x32\xac\x02\n\x10\x43ontainerManager\x12\x37\n\x0f\x43reateContainer\x12\x11.ContainerRequest\x1a\x0f.ContainerReply\"\x00\x12-\n\x07\x41\x64\x64Note\x12\x0f.AddNoteRequest\x1a\x0f.ContainerReply\"\x00\x12\x30\n\nRemoveNote\x12\x0f.AddNoteRequest\x1a\x0f.ContainerReply\"\x00\x12H\n\x14SearchChildNoteAttrs\x12\x17.ContainerSearchRequest\x1a\x15.ContainerSearchReply\"\x00\x12\x34\n\x0f\x44\x65leteContainer\x12\x11.ContainerRequest\x1a\x0c.BoolWrapper\"\x00\x32S\n\x12\x43onditionalManager\x12=\n\x11\x43reateConditional\x12\x13.ConditionalRequest\x1a\x11.ConditionalReply\"\x00\x32\x37\n\x0bRuleManager\x12(\n\nCreateRule\x12\x0c.RuleRequest\x1a\n.RuleReply\"\x00\x62\x06proto3')
 )
 
 
@@ -590,6 +590,335 @@ _DELETENOTEREPLY = _descriptor.Descriptor(
 )
 
 
+_ARCHETYPEREQUEST_ATTRSENTRY = _descriptor.Descriptor(
+  name='AttrsEntry',
+  full_name='ArchetypeRequest.AttrsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='ArchetypeRequest.AttrsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='ArchetypeRequest.AttrsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=296,
+  serialized_end=340,
+)
+
+_ARCHETYPEREQUEST = _descriptor.Descriptor(
+  name='ArchetypeRequest',
+  full_name='ArchetypeRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='ArchetypeRequest.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='attrs', full_name='ArchetypeRequest.attrs', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='document_id', full_name='ArchetypeRequest.document_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_ARCHETYPEREQUEST_ATTRSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=946,
+  serialized_end=1088,
+)
+
+
+_ARCHETYPEREPLY_ATTRSENTRY = _descriptor.Descriptor(
+  name='AttrsEntry',
+  full_name='ArchetypeReply.AttrsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='ArchetypeReply.AttrsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='ArchetypeReply.AttrsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=296,
+  serialized_end=340,
+)
+
+_ARCHETYPEREPLY = _descriptor.Descriptor(
+  name='ArchetypeReply',
+  full_name='ArchetypeReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='ArchetypeReply.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='attrs', full_name='ArchetypeReply.attrs', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_ARCHETYPEREPLY_ATTRSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1090,
+  serialized_end=1207,
+)
+
+
+_CREATEINHERITORREQUEST = _descriptor.Descriptor(
+  name='CreateInheritorRequest',
+  full_name='CreateInheritorRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='note_id', full_name='CreateInheritorRequest.note_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='archetype_id', full_name='CreateInheritorRequest.archetype_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='document_id', full_name='CreateInheritorRequest.document_id', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1209,
+  serialized_end=1293,
+)
+
+
+_UPDATEARCHETYPEREQUEST = _descriptor.Descriptor(
+  name='UpdateArchetypeRequest',
+  full_name='UpdateArchetypeRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='archetype_id', full_name='UpdateArchetypeRequest.archetype_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='attr', full_name='UpdateArchetypeRequest.attr', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='val', full_name='UpdateArchetypeRequest.val', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='document_id', full_name='UpdateArchetypeRequest.document_id', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1295,
+  serialized_end=1389,
+)
+
+
+_UPDATEARCHETYPEREPLY_ATTRSENTRY = _descriptor.Descriptor(
+  name='AttrsEntry',
+  full_name='UpdateArchetypeReply.AttrsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='UpdateArchetypeReply.AttrsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='UpdateArchetypeReply.AttrsEntry.value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=296,
+  serialized_end=340,
+)
+
+_UPDATEARCHETYPEREPLY = _descriptor.Descriptor(
+  name='UpdateArchetypeReply',
+  full_name='UpdateArchetypeReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='note_id', full_name='UpdateArchetypeReply.note_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='attrs', full_name='UpdateArchetypeReply.attrs', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_UPDATEARCHETYPEREPLY_ATTRSENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1392,
+  serialized_end=1526,
+)
+
+
 _CONTAINERREQUEST_ATTRSENTRY = _descriptor.Descriptor(
   name='AttrsEntry',
   full_name='ContainerRequest.AttrsEntry',
@@ -667,8 +996,8 @@ _CONTAINERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=946,
-  serialized_end=1100,
+  serialized_start=1529,
+  serialized_end=1683,
 )
 
 
@@ -749,8 +1078,8 @@ _CONTAINERREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1103,
-  serialized_end=1244,
+  serialized_start=1686,
+  serialized_end=1827,
 )
 
 
@@ -787,8 +1116,8 @@ _ADDNOTEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1246,
-  serialized_end=1301,
+  serialized_start=1829,
+  serialized_end=1884,
 )
 
 
@@ -846,8 +1175,8 @@ _CONNECTIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1303,
-  serialized_end=1419,
+  serialized_start=1886,
+  serialized_end=2002,
 )
 
 
@@ -898,8 +1227,8 @@ _CONNECTIONREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1421,
-  serialized_end=1514,
+  serialized_start=2004,
+  serialized_end=2097,
 )
 
 
@@ -950,8 +1279,8 @@ _RULEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1516,
-  serialized_end=1600,
+  serialized_start=2099,
+  serialized_end=2183,
 )
 
 
@@ -1002,8 +1331,8 @@ _RULEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1602,
-  serialized_end=1684,
+  serialized_start=2185,
+  serialized_end=2267,
 )
 
 
@@ -1047,8 +1376,8 @@ _CONDITIONALREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1686,
-  serialized_end=1753,
+  serialized_start=2269,
+  serialized_end=2336,
 )
 
 
@@ -1092,8 +1421,8 @@ _CONDITIONALREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1755,
-  serialized_end=1820,
+  serialized_start=2338,
+  serialized_end=2403,
 )
 
 
@@ -1137,8 +1466,8 @@ _CONTAINERSEARCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1822,
-  serialized_end=1907,
+  serialized_start=2405,
+  serialized_end=2490,
 )
 
 
@@ -1168,8 +1497,8 @@ _CONTAINERSEARCHREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1909,
-  serialized_end=1947,
+  serialized_start=2492,
+  serialized_end=2530,
 )
 
 
@@ -1199,8 +1528,8 @@ _BOOLWRAPPER = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1949,
-  serialized_end=1975,
+  serialized_start=2532,
+  serialized_end=2558,
 )
 
 _NOTEREQUEST_ATTRSENTRY.containing_type = _NOTEREQUEST
@@ -1209,6 +1538,12 @@ _NOTEREPLY_ATTRSENTRY.containing_type = _NOTEREPLY
 _NOTEREPLY.fields_by_name['attrs'].message_type = _NOTEREPLY_ATTRSENTRY
 _DESCENDANTNOTEREQUEST_ATTRSENTRY.containing_type = _DESCENDANTNOTEREQUEST
 _DESCENDANTNOTEREQUEST.fields_by_name['attrs'].message_type = _DESCENDANTNOTEREQUEST_ATTRSENTRY
+_ARCHETYPEREQUEST_ATTRSENTRY.containing_type = _ARCHETYPEREQUEST
+_ARCHETYPEREQUEST.fields_by_name['attrs'].message_type = _ARCHETYPEREQUEST_ATTRSENTRY
+_ARCHETYPEREPLY_ATTRSENTRY.containing_type = _ARCHETYPEREPLY
+_ARCHETYPEREPLY.fields_by_name['attrs'].message_type = _ARCHETYPEREPLY_ATTRSENTRY
+_UPDATEARCHETYPEREPLY_ATTRSENTRY.containing_type = _UPDATEARCHETYPEREPLY
+_UPDATEARCHETYPEREPLY.fields_by_name['attrs'].message_type = _UPDATEARCHETYPEREPLY_ATTRSENTRY
 _CONTAINERREQUEST_ATTRSENTRY.containing_type = _CONTAINERREQUEST
 _CONTAINERREQUEST.fields_by_name['attrs'].message_type = _CONTAINERREQUEST_ATTRSENTRY
 _CONTAINERREPLY_ATTRSENTRY.containing_type = _CONTAINERREPLY
@@ -1224,6 +1559,11 @@ DESCRIPTOR.message_types_by_name['DescendantNoteRequest'] = _DESCENDANTNOTEREQUE
 DESCRIPTOR.message_types_by_name['UpdateAttrRequest'] = _UPDATEATTRREQUEST
 DESCRIPTOR.message_types_by_name['DeleteAttrRequest'] = _DELETEATTRREQUEST
 DESCRIPTOR.message_types_by_name['DeleteNoteReply'] = _DELETENOTEREPLY
+DESCRIPTOR.message_types_by_name['ArchetypeRequest'] = _ARCHETYPEREQUEST
+DESCRIPTOR.message_types_by_name['ArchetypeReply'] = _ARCHETYPEREPLY
+DESCRIPTOR.message_types_by_name['CreateInheritorRequest'] = _CREATEINHERITORREQUEST
+DESCRIPTOR.message_types_by_name['UpdateArchetypeRequest'] = _UPDATEARCHETYPEREQUEST
+DESCRIPTOR.message_types_by_name['UpdateArchetypeReply'] = _UPDATEARCHETYPEREPLY
 DESCRIPTOR.message_types_by_name['ContainerRequest'] = _CONTAINERREQUEST
 DESCRIPTOR.message_types_by_name['ContainerReply'] = _CONTAINERREPLY
 DESCRIPTOR.message_types_by_name['AddNoteRequest'] = _ADDNOTEREQUEST
@@ -1339,6 +1679,65 @@ DeleteNoteReply = _reflection.GeneratedProtocolMessageType('DeleteNoteReply', (_
   })
 _sym_db.RegisterMessage(DeleteNoteReply)
 
+ArchetypeRequest = _reflection.GeneratedProtocolMessageType('ArchetypeRequest', (_message.Message,), {
+
+  'AttrsEntry' : _reflection.GeneratedProtocolMessageType('AttrsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _ARCHETYPEREQUEST_ATTRSENTRY,
+    '__module__' : 'tasks_pb2'
+    # @@protoc_insertion_point(class_scope:ArchetypeRequest.AttrsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _ARCHETYPEREQUEST,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:ArchetypeRequest)
+  })
+_sym_db.RegisterMessage(ArchetypeRequest)
+_sym_db.RegisterMessage(ArchetypeRequest.AttrsEntry)
+
+ArchetypeReply = _reflection.GeneratedProtocolMessageType('ArchetypeReply', (_message.Message,), {
+
+  'AttrsEntry' : _reflection.GeneratedProtocolMessageType('AttrsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _ARCHETYPEREPLY_ATTRSENTRY,
+    '__module__' : 'tasks_pb2'
+    # @@protoc_insertion_point(class_scope:ArchetypeReply.AttrsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _ARCHETYPEREPLY,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:ArchetypeReply)
+  })
+_sym_db.RegisterMessage(ArchetypeReply)
+_sym_db.RegisterMessage(ArchetypeReply.AttrsEntry)
+
+CreateInheritorRequest = _reflection.GeneratedProtocolMessageType('CreateInheritorRequest', (_message.Message,), {
+  'DESCRIPTOR' : _CREATEINHERITORREQUEST,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:CreateInheritorRequest)
+  })
+_sym_db.RegisterMessage(CreateInheritorRequest)
+
+UpdateArchetypeRequest = _reflection.GeneratedProtocolMessageType('UpdateArchetypeRequest', (_message.Message,), {
+  'DESCRIPTOR' : _UPDATEARCHETYPEREQUEST,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:UpdateArchetypeRequest)
+  })
+_sym_db.RegisterMessage(UpdateArchetypeRequest)
+
+UpdateArchetypeReply = _reflection.GeneratedProtocolMessageType('UpdateArchetypeReply', (_message.Message,), {
+
+  'AttrsEntry' : _reflection.GeneratedProtocolMessageType('AttrsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _UPDATEARCHETYPEREPLY_ATTRSENTRY,
+    '__module__' : 'tasks_pb2'
+    # @@protoc_insertion_point(class_scope:UpdateArchetypeReply.AttrsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _UPDATEARCHETYPEREPLY,
+  '__module__' : 'tasks_pb2'
+  # @@protoc_insertion_point(class_scope:UpdateArchetypeReply)
+  })
+_sym_db.RegisterMessage(UpdateArchetypeReply)
+_sym_db.RegisterMessage(UpdateArchetypeReply.AttrsEntry)
+
 ContainerRequest = _reflection.GeneratedProtocolMessageType('ContainerRequest', (_message.Message,), {
 
   'AttrsEntry' : _reflection.GeneratedProtocolMessageType('AttrsEntry', (_message.Message,), {
@@ -1443,6 +1842,9 @@ _sym_db.RegisterMessage(BoolWrapper)
 _NOTEREQUEST_ATTRSENTRY._options = None
 _NOTEREPLY_ATTRSENTRY._options = None
 _DESCENDANTNOTEREQUEST_ATTRSENTRY._options = None
+_ARCHETYPEREQUEST_ATTRSENTRY._options = None
+_ARCHETYPEREPLY_ATTRSENTRY._options = None
+_UPDATEARCHETYPEREPLY_ATTRSENTRY._options = None
 _CONTAINERREQUEST_ATTRSENTRY._options = None
 _CONTAINERREPLY_ATTRSENTRY._options = None
 
@@ -1452,8 +1854,8 @@ _DOCUMENTMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=1978,
-  serialized_end=2201,
+  serialized_start=2561,
+  serialized_end=2784,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateDocument',
@@ -1503,8 +1905,8 @@ _NOTEMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=1,
   serialized_options=None,
-  serialized_start=2204,
-  serialized_end=2477,
+  serialized_start=2787,
+  serialized_end=3250,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateNote',
@@ -1551,6 +1953,33 @@ _NOTEMANAGER = _descriptor.ServiceDescriptor(
     output_type=_DELETENOTEREPLY,
     serialized_options=None,
   ),
+  _descriptor.MethodDescriptor(
+    name='CreateArchetype',
+    full_name='NoteManager.CreateArchetype',
+    index=5,
+    containing_service=None,
+    input_type=_ARCHETYPEREQUEST,
+    output_type=_ARCHETYPEREPLY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='CreateInheritor',
+    full_name='NoteManager.CreateInheritor',
+    index=6,
+    containing_service=None,
+    input_type=_CREATEINHERITORREQUEST,
+    output_type=_NOTEREPLY,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='UpdateArchetypeAttr',
+    full_name='NoteManager.UpdateArchetypeAttr',
+    index=7,
+    containing_service=None,
+    input_type=_UPDATEARCHETYPEREQUEST,
+    output_type=_UPDATEARCHETYPEREPLY,
+    serialized_options=None,
+  ),
 ])
 _sym_db.RegisterServiceDescriptor(_NOTEMANAGER)
 
@@ -1563,8 +1992,8 @@ _CONNECTIONMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=2,
   serialized_options=None,
-  serialized_start=2480,
-  serialized_end=2722,
+  serialized_start=3253,
+  serialized_end=3495,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateConnection',
@@ -1614,8 +2043,8 @@ _CONTAINERMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=3,
   serialized_options=None,
-  serialized_start=2725,
-  serialized_end=3025,
+  serialized_start=3498,
+  serialized_end=3798,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateContainer',
@@ -1674,8 +2103,8 @@ _CONDITIONALMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=4,
   serialized_options=None,
-  serialized_start=3027,
-  serialized_end=3110,
+  serialized_start=3800,
+  serialized_end=3883,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateConditional',
@@ -1698,8 +2127,8 @@ _RULEMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=5,
   serialized_options=None,
-  serialized_start=3112,
-  serialized_end=3167,
+  serialized_start=3885,
+  serialized_end=3940,
   methods=[
   _descriptor.MethodDescriptor(
     name='CreateRule',

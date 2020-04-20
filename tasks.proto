@@ -62,6 +62,35 @@ message DeleteNoteReply {
     repeated string descendant_notes = 1;
 }
 
+message ArchetypeRequest {
+    string id = 1;
+    map<string, string> attrs = 2;
+    string document_id = 3;
+}
+
+message ArchetypeReply {
+    string id = 1;
+    map<string, string> attrs = 2;
+}
+
+message CreateInheritorRequest {
+    string note_id = 1;
+    string archetype_id = 2;
+    string document_id = 3;
+}
+
+message UpdateArchetypeRequest {
+    string archetype_id = 1;
+    string attr = 2;
+    string val = 3;
+    string document_id = 4;
+}
+
+message UpdateArchetypeReply {
+    string note_id = 1;
+    map<string, string> attrs = 2;
+}
+
 message ContainerRequest {
     map<string, string> attrs = 1;
     repeated string child_note_ids = 2;
@@ -148,6 +177,10 @@ service NoteManager {
     rpc CreateDescendantNote (DescendantNoteRequest) returns (NoteReply) {}
     rpc DeleteNoteAttr (DeleteAttrRequest) returns (BoolWrapper) {}
     rpc DeleteNote (NoteRequest) returns (DeleteNoteReply) {}
+
+    rpc CreateArchetype (ArchetypeRequest) returns (ArchetypeReply) {}
+    rpc CreateInheritor (CreateInheritorRequest) returns (NoteReply) {}
+    rpc UpdateArchetypeAttr (UpdateArchetypeRequest) returns (stream UpdateArchetypeReply) {}
 }
 
 service ConnectionManager {

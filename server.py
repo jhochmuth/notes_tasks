@@ -2,6 +2,7 @@ from concurrent import futures
 import time
 import grpc
 
+from api.archetype import Archetype
 from api.conditional import Conditional
 from api.connection import Connection
 from api.container import Container
@@ -90,6 +91,26 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
         descendant_ids = [descendant.id for descendant in descendants]
         del documents[request.document_id].children[request.id]
         return tasks_pb2.DeleteNoteReply(descendant_notes=descendant_ids)
+
+    def CreateArchetype(self, request, context):
+        archetype = Archetype(request.id)
+        documents[request.document_id].children[request.id] = archetype
+        return tasks_pb2.ArchetypeReply(id=archetype.id, attrs=archetype.attrs)
+
+    def CreateInheritor(self, request, context):
+        archetype = documents[request.document_id].children[request.archetype_id]
+        note = archetype.create_inheritor(id=request.note_id)
+        return tasks_pb2.NoteReply(id=note.id,
+                                   attrs=note.attrs,
+                                   prototype_id=archetype.id,
+                                   inherited_attrs=list(note.inherited_attrs))
+
+    def UpdateArchetypeAttr(self, request, context):
+        archetype = documents[request.document_id].children[request.archetype_id]
+        updated = archetype.update_attr(attr=request.attr, val=request.val)
+
+        for note in updated:
+            yield tasks_pb2.UpdateArchetypeReply(note_id=note.id, attrs=note.attrs)
 
 
 class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):

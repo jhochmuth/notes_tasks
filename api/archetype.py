@@ -16,10 +16,10 @@ class Archetype:
 
         self.descendant_notes = list()
 
-    def create_inheritor(self, title, text):
-        note = Note(id=None,
-                    title=title,
-                    text=text,
+    def create_inheritor(self, id):
+        note = Note(id=id,
+                    title="(Not specified)",
+                    text="",
                     attrs=self.attrs,
                     prototype=self,
                     inherited_attrs=set(self.attrs.keys()))

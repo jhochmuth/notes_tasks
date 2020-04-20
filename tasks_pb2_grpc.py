@@ -132,6 +132,21 @@ class NoteManagerStub(object):
         request_serializer=tasks__pb2.NoteRequest.SerializeToString,
         response_deserializer=tasks__pb2.DeleteNoteReply.FromString,
         )
+    self.CreateArchetype = channel.unary_unary(
+        '/NoteManager/CreateArchetype',
+        request_serializer=tasks__pb2.ArchetypeRequest.SerializeToString,
+        response_deserializer=tasks__pb2.ArchetypeReply.FromString,
+        )
+    self.CreateInheritor = channel.unary_unary(
+        '/NoteManager/CreateInheritor',
+        request_serializer=tasks__pb2.CreateInheritorRequest.SerializeToString,
+        response_deserializer=tasks__pb2.NoteReply.FromString,
+        )
+    self.UpdateArchetypeAttr = channel.unary_stream(
+        '/NoteManager/UpdateArchetypeAttr',
+        request_serializer=tasks__pb2.UpdateArchetypeRequest.SerializeToString,
+        response_deserializer=tasks__pb2.UpdateArchetypeReply.FromString,
+        )
 
 
 class NoteManagerServicer(object):
@@ -173,6 +188,27 @@ class NoteManagerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def CreateArchetype(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def CreateInheritor(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def UpdateArchetypeAttr(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_NoteManagerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -200,6 +236,21 @@ def add_NoteManagerServicer_to_server(servicer, server):
           servicer.DeleteNote,
           request_deserializer=tasks__pb2.NoteRequest.FromString,
           response_serializer=tasks__pb2.DeleteNoteReply.SerializeToString,
+      ),
+      'CreateArchetype': grpc.unary_unary_rpc_method_handler(
+          servicer.CreateArchetype,
+          request_deserializer=tasks__pb2.ArchetypeRequest.FromString,
+          response_serializer=tasks__pb2.ArchetypeReply.SerializeToString,
+      ),
+      'CreateInheritor': grpc.unary_unary_rpc_method_handler(
+          servicer.CreateInheritor,
+          request_deserializer=tasks__pb2.CreateInheritorRequest.FromString,
+          response_serializer=tasks__pb2.NoteReply.SerializeToString,
+      ),
+      'UpdateArchetypeAttr': grpc.unary_stream_rpc_method_handler(
+          servicer.UpdateArchetypeAttr,
+          request_deserializer=tasks__pb2.UpdateArchetypeRequest.FromString,
+          response_serializer=tasks__pb2.UpdateArchetypeReply.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
