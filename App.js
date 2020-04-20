@@ -32,7 +32,6 @@ class App extends React.Component {
   // todo: add change title button
   // todo: connection remove() method does not activate when esc button pressed
   // todo: find solution for removing documents from dict when window is closed
-  // todo: close any popups when esc button pressed (particularly connection label popup)
   // todo: add way to delete connection labels
   constructor() {
     super();

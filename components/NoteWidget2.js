@@ -12,6 +12,8 @@ const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
 
+const RESERVED_ATTRS = new Set(["Color", "Text char len", "Text word len", "Date created", "Last updated"]);
+
 // todo: make ability to break prototype relationship
 // todo: deleteNoteAttr must send stream for prototypes
 // todo: creating new attr in prototype should update descendants
@@ -110,11 +112,18 @@ class NoteWidget extends React.Component {
     if (attr == 'Color' && event) {
       alert('Use the color selector tool to update note color.')
     }
+    else if (RESERVED_ATTRS.has(attr)) {
+      alert('Can not update reserved attributes manually.')
+    }
     else this.props.node.app.updateNoteAttr(updateAttrRequest);
   }
 
   deleteNoteAttr(attr) {
     const that = this;
+
+    if (RESERVED_ATTRS.has(attr)) {
+      //add to hidden_attrs state
+    }
 
     const deleteAttrRequest = {
       note_id: this.props.node.content.id,
@@ -165,7 +174,8 @@ class NoteWidget extends React.Component {
       if (attr != 'title' && attr != 'text') {
         idDigit += 1;
         let isInheritedAttr = that.state.inheritedAttrs.includes(attr);
-        let style = {color: isInheritedAttr ? "red" : "black"};
+        let isReservedAttr = RESERVED_ATTRS.has(attr);
+        let style = {color: isInheritedAttr ? "red" : (isReservedAttr ? "gray" : "black")};
 
         acc.push(
           <div
@@ -307,17 +317,23 @@ class NoteWidget extends React.Component {
           onMouseEnter={this.showButtons}
           onMouseLeave={this.hideButtons}>
           <h4 className="note-title">{attrs.title}</h4>
-          <button id={"toggleDisplayData" + this.props.node.content.id}
+          <button
+            id={"toggleDisplayData" + this.props.node.content.id}
             className="edit-note-button"
             onClick={() => this.toggleDisplayData(true)}
             style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>⚙</button>
-          <button id={"colorButton" + this.props.node.content.id}
+          <button
+            id={"colorButton" + this.props.node.content.id}
             className="color-selector-button"
             style={{visibility: this.state.showButtons ? "visible" : "hidden"}}
             onClick={() => this.toggleColorSelector(true)}>{String.fromCharCode(55356, 57256)}</button>
           <Button close
             className="delete-note-button"
-            style={{color: "crimson", textShadow: "0px 0px", visibility: this.state.showButtons ? "visible" : "hidden"}}
+            style={{
+              color: "crimson",
+              textShadow: "0px 0px",
+              visibility: this.state.showButtons ? "visible" : "hidden"
+            }}
             onClick={this.deleteNote}/>
           <ReactModal
             isOpen={this.state.displayData}
@@ -330,11 +346,15 @@ class NoteWidget extends React.Component {
                 width: "36%"
               }
             }}
-            ariaHideApp={false}>
+            ariaHideApp={false}
+          >
             <h2 className="note-data-title">{attrs.title}</h2>
             <h4 style={{marginTop: 10}}>Attributes</h4>
             <div>{this.renderAttrs()}</div>
-            <Form className="attr-form" onSubmit={(event) => this.updateNoteAttr(event)}>
+            <Form
+              className="attr-form"
+              onSubmit={(event) => this.updateNoteAttr(event)}
+            >
               <h5>Create new attribute</h5>
               <InputGroup className="attr-form-group">
                 <InputGroupAddon addonType="prepend" className="attr-form-label">
