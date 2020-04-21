@@ -112,7 +112,7 @@ class NoteWidget extends React.Component {
     if (attr == 'Color' && event) {
       alert('Use the color selector tool to update note color.')
     }
-    else if (RESERVED_ATTRS.has(attr)) {
+    else if (RESERVED_ATTRS.has(attr) && event) {
       alert('Can not update reserved attributes manually.')
     }
     else this.props.node.app.updateNoteAttr(updateAttrRequest);

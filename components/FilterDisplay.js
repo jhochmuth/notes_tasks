@@ -41,6 +41,14 @@ class FilterDisplay extends React.Component {
   }
 
   render() {
+    return (
+      <Drawer width="20%" style={{zIndex: "12"}}>
+        {this.renderFilters()}
+      </Drawer>
+    )
+  }
+
+  render2() {
     if (this.state.open) {
       return (
         <div id="filter-display" className="open">
