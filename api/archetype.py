@@ -3,11 +3,13 @@ from api.uid import UID
 
 
 class Archetype:
-    def __init__(self, id=None, attrs=None):
+    def __init__(self, name, id=None, attrs=None):
         if not id:
             self.id = UID().assign_uid()
         else:
             self.id = id
+
+        self.name = name
 
         if self.attrs:
             self.attrs = attrs;
