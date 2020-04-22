@@ -10,7 +10,7 @@ class Archetype extends React.Component {
   render() {
     return (
       <div
-        style={{border: "solid"}}
+        className="archetype"
         draggable={true}
         onDragStart={(event) => {
           event.dataTransfer.setData("create-from-archetype", JSON.stringify(this.state));

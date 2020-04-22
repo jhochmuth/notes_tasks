@@ -127,7 +127,7 @@ class App extends React.Component {
     const that = this;
     const ref = React.createRef();
     const note = new NoteModel(null, model, this, ref);
-    console.log(data);
+
     const request = {
       note_id: note.id,
       archetype_id: data.id,
@@ -143,7 +143,7 @@ class App extends React.Component {
         model.addAll(note);
         engine.setDiagramModel(model);
         that.forceUpdate();
-        
+
         that.updateListView();
         that.noteRefs[note.id] = ref;
 

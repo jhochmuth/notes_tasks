@@ -5,7 +5,7 @@ const stubs = require('../stubs.js');
 import {Button} from 'reactstrap';
 import Drawer from 'rc-drawer';
 import {Menu} from 'antd';
-import {MinusCircleOutlined} from '@ant-design/icons';
+import {MinusCircleOutlined, PartitionOutlined} from '@ant-design/icons';
 
 
 class FilterDisplay extends React.Component {
@@ -95,12 +95,19 @@ class FilterDisplay extends React.Component {
           <Menu.SubMenu
             key="subFilters"
             title={
-              <span><MinusCircleOutlined /><span>Filters</span></span>
+              <span><MinusCircleOutlined />Filters</span>
             }
           >
           {this.renderFilters()}
           </Menu.SubMenu>
+          <Menu.SubMenu
+            key="subArchetypes"
+            title={
+              <span><PartitionOutlined />Archetypes</span>
+            }
+          >
           {this.state.archetypes}
+          </Menu.SubMenu>
         </Menu>
         <Button onClick={() => this.createArchetype()}>Create archetype</Button>
       </Drawer>
