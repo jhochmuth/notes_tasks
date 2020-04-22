@@ -57,5 +57,16 @@ def run():
             print(response.id)
             print(response.attrs)
 
+        print("Creating archetype.")
+        attrs = {"type": "blah"}
+        response = note_stub.CreateArchetype(tasks_pb2.ArchetypeRequest(attrs=attrs,
+                                                                        document_id=document_id,
+                                                                        name="blah"))
+        print(response.id, response.name, response.attrs)
+
+        print("Creating note from archetype.")
+        response = note_stub.CreateInheritor(tasks_pb2.CreateInheritorRequest(archetype_id=response.id,
+                                                                              document_id=document_id))
+        print(response.attrs)
 
 run()

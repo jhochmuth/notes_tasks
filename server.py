@@ -94,7 +94,7 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
 
     def CreateArchetype(self, request, context):
         archetype = Archetype(name=request.name, attrs=request.attrs)
-        documents[request.document_id].children[request.id] = archetype
+        documents[request.document_id].children[archetype.id] = archetype
         return tasks_pb2.ArchetypeReply(name=archetype.name,
                                         id=archetype.id,
                                         attrs=archetype.attrs)
