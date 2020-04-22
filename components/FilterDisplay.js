@@ -1,5 +1,9 @@
 const React = require('react');
+const DrawerHandle = require('./DrawerHandle.js');
 import {Button} from 'reactstrap';
+import Drawer from 'rc-drawer';
+import {Menu} from 'antd';
+import {MinusCircleOutlined} from '@ant-design/icons';
 
 
 class FilterDisplay extends React.Component {
@@ -20,13 +24,13 @@ class FilterDisplay extends React.Component {
     let key = 1;
     return this.state.filters.reduce(function(acc, filter) {
       let filterElement = (
-        <div key={key}>
+        <Menu.Item key={key}>
           {filter.attr} {filter.value}
           <Button close
             onClick={() => that.props.deleteFilter(filter)}
             className="filter-list-el-close"
           />
-        </div>
+        </Menu.Item>
       )
       acc.push(filterElement)
       key += 1;
@@ -42,36 +46,23 @@ class FilterDisplay extends React.Component {
 
   render() {
     return (
-      <Drawer width="20%" style={{zIndex: "12"}}>
-        {this.renderFilters()}
+      <Drawer width="20%"
+        handler={<DrawerHandle toggleForm={() => this.toggleForm()}/>}
+        open={this.state.open}
+        onClose={() => this.toggleForm()}
+      >
+        <Menu mode="inline" selectable={false}>
+          <Menu.SubMenu
+            key="subFilters"
+            title={
+              <span><MinusCircleOutlined /><span>Filters</span></span>
+            }
+          >
+          {this.renderFilters()}
+          </Menu.SubMenu>
+        </Menu>
       </Drawer>
     )
-  }
-
-  render2() {
-    if (this.state.open) {
-      return (
-        <div id="filter-display" className="open">
-          <h5
-            id="filter-display-label"
-            className="open"
-            onClick={() => this.toggleForm()}
-          >Filters</h5>
-          {this.renderFilters()}
-        </div>
-      )
-    }
-    else {
-      return (
-        <div id="filter-display" className="closed">
-          <h5
-            id="filter-display-label"
-            className="closed"
-            onClick={() => this.toggleForm()}
-          >Filters</h5>
-        </div>
-      )
-    }
   }
 }
 

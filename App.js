@@ -16,7 +16,6 @@ const ContainerFactory = require('./components/ContainerFactory.js');
 const stubs = require('./stubs.js');
 const Filter = require('./utils/filter.js');
 const path = require('path');
-import Drawer from 'rc-drawer';
 
 const engine = new SRD.DiagramEngine();
 engine.installDefaultFactories();
