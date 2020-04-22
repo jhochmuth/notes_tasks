@@ -66,11 +66,13 @@ message ArchetypeRequest {
     string id = 1;
     map<string, string> attrs = 2;
     string document_id = 3;
+    string name = 4;
 }
 
 message ArchetypeReply {
     string id = 1;
     map<string, string> attrs = 2;
+    string name = 3;
 }
 
 message CreateInheritorRequest {
