@@ -1,5 +1,7 @@
 const React = require('react');
 const DrawerHandle = require('./DrawerHandle.js');
+const Archetype = require('./Archetype.js');
+const stubs = require('../stubs.js');
 import {Button} from 'reactstrap';
 import Drawer from 'rc-drawer';
 import {Menu} from 'antd';
@@ -10,12 +12,20 @@ class FilterDisplay extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {filters: this.props.filters, open: false};
+    this.documentId = this.props.documentId;
+
+    this.state = {
+      filters: this.props.filters,
+      open: false,
+      archetypes: []
+    };
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.filters.length != this.props.filters.length) {
-      this.setState({filters: this.props.filters});
+      const newState = Object.assign({}, this.state);
+      newState.filters = this.props.filters;
+      this.setState(newState);
     }
   }
 
@@ -36,6 +46,36 @@ class FilterDisplay extends React.Component {
       key += 1;
       return acc;
     }, []);
+  }
+
+  createArchetype() {
+    const that = this;
+
+    const attrs = {type: "blah"}
+
+    const archetypeRequest = {
+      attrs: attrs,
+      name: "blah",
+      document_id: this.documentId
+    }
+
+    stubs.noteStub.createArchetype(archetypeRequest, function(err, reply) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        const archetype = <Archetype
+          name={reply.name}
+          attrs={reply.attrs}
+          id={reply.id}
+          key={reply.id}
+          toggleForm={() => that.toggleForm()}
+        />
+        const newState = Object.assign({}, that.state);
+        newState.archetypes.push(archetype);
+        that.setState(newState);
+      }
+    })
   }
 
   toggleForm() {
@@ -60,7 +100,9 @@ class FilterDisplay extends React.Component {
           >
           {this.renderFilters()}
           </Menu.SubMenu>
+          {this.state.archetypes}
         </Menu>
+        <Button onClick={() => this.createArchetype()}>Create archetype</Button>
       </Drawer>
     )
   }

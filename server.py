@@ -93,9 +93,11 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
         return tasks_pb2.DeleteNoteReply(descendant_notes=descendant_ids)
 
     def CreateArchetype(self, request, context):
-        archetype = Archetype(name=request.name, id=request.id)
+        archetype = Archetype(name=request.name, attrs=request.attrs)
         documents[request.document_id].children[request.id] = archetype
-        return tasks_pb2.ArchetypeReply(id=archetype.id, attrs=archetype.attrs)
+        return tasks_pb2.ArchetypeReply(name=archetype.name,
+                                        id=archetype.id,
+                                        attrs=archetype.attrs)
 
     def CreateInheritor(self, request, context):
         archetype = documents[request.document_id].children[request.archetype_id]

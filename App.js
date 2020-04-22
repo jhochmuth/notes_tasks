@@ -33,13 +33,13 @@ class App extends React.Component {
   // todo: connection remove() method does not activate when esc button pressed
   // todo: find solution for removing documents from dict when window is closed
   // todo: add way to delete connection labels
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {filters: []};
 
     this.listWin = null;
-    this.documentId = null;
+    this.documentId = props.documentId;
     this.diagramRef = React.createRef();
     this.noteRefs = {};
 
@@ -60,15 +60,6 @@ class App extends React.Component {
 
     ipcRenderer.on('close', function(event) {
       that.sendCloseRequest();
-    });
-
-    stubs.documentStub.createDocument(null, function(err, documentReply) {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        that.documentId = documentReply.id;
-      }
     });
   }
 
@@ -120,6 +111,39 @@ class App extends React.Component {
         engine.setDiagramModel(model);
         that.forceUpdate();
 
+        that.updateListView();
+        that.noteRefs[note.id] = ref;
+
+        that.state.filters.forEach((filter) => {
+          that.noteRefs[noteReply.id].current.applyFilter(filter)
+        });
+      }
+    });
+  }
+
+  createInheritorNote(event) {
+    const data = JSON.parse(event.dataTransfer.getData('create-from-archetype'));
+
+    const that = this;
+    const ref = React.createRef();
+    const note = new NoteModel(null, model, this, ref);
+    console.log(data);
+    const request = {
+      note_id: note.id,
+      archetype_id: data.id,
+      document_id: this.documentId
+    }
+
+    stubs.noteStub.createInheritor(request, function(err, reply) {
+      if (err) {
+        console.log(err);
+      }
+      else {
+        note.content = reply;
+        model.addAll(note);
+        engine.setDiagramModel(model);
+        that.forceUpdate();
+        
         that.updateListView();
         that.noteRefs[note.id] = ref;
 
@@ -344,17 +368,23 @@ class App extends React.Component {
             load={this.onLoadButtonClick}
             openListView={this.openListView}/>
         </div>
-        <SRD.DiagramWidget
-          diagramEngine={engine}
-          smartRouting={false}
-          className="srd-diagram"
-          maxNumberPointsPerLink="0"
-          deleteKeys={[27]}
-          ref={this.diagramRef}
-        />
+        <div
+          onDrop={(event) => this.createInheritorNote(event)}
+          onDragOver={(event) => event.preventDefault()}
+        >
+          <SRD.DiagramWidget
+            diagramEngine={engine}
+            smartRouting={false}
+            className="srd-diagram"
+            maxNumberPointsPerLink="0"
+            deleteKeys={[27]}
+            ref={this.diagramRef}
+          />
+        </div>
         <FilterDisplay
           filters={this.state.filters}
           deleteFilter={(filter) => this.deleteFilter(filter)}
+          documentId={this.documentId}
         />
       </div>
     );

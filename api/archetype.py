@@ -11,7 +11,7 @@ class Archetype:
 
         self.name = name
 
-        if self.attrs:
+        if attrs:
             self.attrs = attrs;
         else:
             self.attrs = dict()
