@@ -92,7 +92,13 @@ class Toolbar extends React.Component {
             </Form>
           </PopoverBody>
         </Popover>
-        <Popover trigger="legacy" placement="bottom" target="filterFormButton" isOpen={this.state.displayFilterForm} toggle={() => this.toggleFilterForm()}>
+        <Popover
+          trigger="legacy"
+          placement="bottom"
+          target="filterFormButton"
+          isOpen={this.state.displayFilterForm}
+          toggle={() => this.toggleFilterForm()}
+        >
           <PopoverHeader>Create new filter</PopoverHeader>
           <PopoverBody>
             <Form onSubmit={(event) => this.addFilter(event)}>

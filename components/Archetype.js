@@ -1,4 +1,5 @@
 const React = require('react');
+import {Menu} from 'antd';
 
 
 class Archetype extends React.Component {
@@ -10,14 +11,13 @@ class Archetype extends React.Component {
   render() {
     return (
       <div
-        className="archetype"
         draggable={true}
         onDragStart={(event) => {
           event.dataTransfer.setData("create-from-archetype", JSON.stringify(this.state));
           this.props.toggleForm();
         }}
       >
-        <h3>{this.state.name}</h3>
+        <span>{this.state.name}</span>
       </div>
     )
   }

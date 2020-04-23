@@ -14,6 +14,7 @@ const BrowserWindow = remote.BrowserWindow;
 
 const RESERVED_ATTRS = new Set(["Color", "Text char len", "Text word len", "Date created", "Last updated"]);
 
+// todo: delete prototype functionality, make archetype show
 // todo: make ability to break prototype relationship
 // todo: deleteNoteAttr must send stream for prototypes
 // todo: creating new attr in prototype should update descendants

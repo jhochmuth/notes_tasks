@@ -2,7 +2,7 @@ const React = require('react');
 const DrawerHandle = require('./DrawerHandle.js');
 const Archetype = require('./Archetype.js');
 const stubs = require('../stubs.js');
-import {Button} from 'reactstrap';
+import {Button, Popover, Form, Input, InputGroupAddon, InputGroupText, InputGroup} from 'reactstrap';
 import Drawer from 'rc-drawer';
 import {Menu} from 'antd';
 import {MinusCircleOutlined, PartitionOutlined} from '@ant-design/icons';
@@ -17,7 +17,8 @@ class FilterDisplay extends React.Component {
     this.state = {
       filters: this.props.filters,
       open: false,
-      archetypes: []
+      archetypes: [],
+      displayArchetypeCreation: false
     };
   }
 
@@ -49,13 +50,11 @@ class FilterDisplay extends React.Component {
   }
 
   createArchetype() {
+    event.preventDefault();
     const that = this;
 
-    const attrs = {type: "blah"}
-
     const archetypeRequest = {
-      attrs: attrs,
-      name: "blah",
+      name: event.target.name.value,
       document_id: this.documentId
     }
 
@@ -68,28 +67,36 @@ class FilterDisplay extends React.Component {
           name={reply.name}
           attrs={reply.attrs}
           id={reply.id}
-          key={reply.id}
-          toggleForm={() => that.toggleForm()}
+          toggle={() => that.toggle()}
         />
         const newState = Object.assign({}, that.state);
-        newState.archetypes.push(archetype);
+        newState.archetypes.push(
+          <Menu.Item key={reply.id}>
+            {archetype}
+          </Menu.Item>);
         that.setState(newState);
       }
     })
   }
 
-  toggleForm() {
+  toggle() {
     const newState = Object.assign({}, this.state);
     newState.open = !newState.open;
+    this.setState(newState);
+  }
+
+  toggleArchetypeCreation() {
+    const newState = Object.assign({}, this.state);
+    newState.displayArchetypeCreation = !newState.displayArchetypeCreation;
     this.setState(newState);
   }
 
   render() {
     return (
       <Drawer width="20%"
-        handler={<DrawerHandle toggleForm={() => this.toggleForm()}/>}
+        handler={<DrawerHandle toggleForm={() => this.toggle()}/>}
         open={this.state.open}
-        onClose={() => this.toggleForm()}
+        onClose={() => this.toggle()}
       >
         <Menu mode="inline" selectable={false}>
           <Menu.SubMenu
@@ -109,7 +116,27 @@ class FilterDisplay extends React.Component {
           {this.state.archetypes}
           </Menu.SubMenu>
         </Menu>
-        <Button onClick={() => this.createArchetype()}>Create archetype</Button>
+        <Button
+          onClick={() => this.toggleArchetypeCreation()}
+          id="archetype-button"
+        >Create archetype</Button>
+        <Popover
+          trigger="legacy"
+          placement="top"
+          target="archetype-button"
+          isOpen={this.state.displayArchetypeCreation}
+          toggle={() => this.toggleArchetypeCreation()}
+        >
+          <Form onSubmit={(event) => this.createArchetype(event)}>
+            <InputGroup className="attr-form-group">
+              <InputGroupAddon addonType="prepend" className="attr-form-label">
+                <InputGroupText className="attr-form-text">Name</InputGroupText>
+              </InputGroupAddon>
+              <Input name="name" className="attr-form-input"/>
+            </InputGroup>
+            <Button className="app-button">Submit</Button>
+          </Form>
+        </Popover>
       </Drawer>
     )
   }

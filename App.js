@@ -67,6 +67,9 @@ class App extends React.Component {
     const that = this;
     const ref = React.createRef();
     const note = new NoteModel(null, model, this, ref);
+    note.x = 200;
+    note.y = 200;
+
     const attrs = {title: event.target.title.value};
     const noteRequest = {id: note.id, attrs: attrs, document_id: this.documentId};
 
@@ -123,10 +126,13 @@ class App extends React.Component {
 
   createInheritorNote(event) {
     const data = JSON.parse(event.dataTransfer.getData('create-from-archetype'));
+    const points = engine.getRelativeMousePoint(event);
 
     const that = this;
     const ref = React.createRef();
     const note = new NoteModel(null, model, this, ref);
+    note.x = points.x;
+    note.y = points.y;
 
     const request = {
       note_id: note.id,

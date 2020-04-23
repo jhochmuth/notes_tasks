@@ -95,16 +95,15 @@
 	transform: translateY(-50%);
 }
 
-.archetype {
-	border: solid;
-	height: 80px;
-	width: 80%;
+#archetype-button {
+	position: absolute;
+	bottom: 10;
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 .note {
 	position: relative;
-	top: 300;
-	left: 300;
 	border-radius: 5px;
 }
 

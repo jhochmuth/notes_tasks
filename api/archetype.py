@@ -20,7 +20,7 @@ class Archetype:
 
     def create_inheritor(self, id):
         note = Note(id=id,
-                    title="(Not specified)",
+                    title=self.name,
                     text="",
                     attrs=self.attrs,
                     prototype=self,

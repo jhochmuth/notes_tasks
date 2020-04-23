@@ -102,6 +102,7 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
     def CreateInheritor(self, request, context):
         archetype = documents[request.document_id].children[request.archetype_id]
         note = archetype.create_inheritor(id=request.note_id)
+        documents[request.document_id].children[note.id] = note
         return tasks_pb2.NoteReply(id=note.id,
                                    attrs=note.attrs,
                                    prototype_id=archetype.id,
