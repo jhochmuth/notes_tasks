@@ -18,7 +18,7 @@ def run():
         response = document_stub.CreateDocument(tasks_pb2.Empty())
         document_id = response.id
         print(document_id)
-
+        """
         print("Creating note.")
         response = note_stub.CreateNote(tasks_pb2.NoteRequest(attrs={"title": "Joseph Conrad",
                                                                      "text": "British author.",
@@ -56,17 +56,23 @@ def run():
         for response in responses:
             print(response.id)
             print(response.attrs)
-
+        """
         print("Creating archetype.")
         attrs = {"type": "blah"}
         response = note_stub.CreateArchetype(tasks_pb2.ArchetypeRequest(attrs=attrs,
                                                                         document_id=document_id,
                                                                         name="blah"))
-        print(response.id, response.name, response.attrs)
+        archetype_id = response.id
+        print(archetype_id, response.name, response.attrs)
 
         print("Creating note from archetype.")
-        response = note_stub.CreateInheritor(tasks_pb2.CreateInheritorRequest(archetype_id=response.id,
+        response = note_stub.CreateInheritor(tasks_pb2.CreateInheritorRequest(archetype_id=archetype_id,
                                                                               document_id=document_id))
-        print(response.attrs)
+        print(response)
+
+        print("Creating second note from archetype.")
+        response = note_stub.CreateInheritor(tasks_pb2.CreateInheritorRequest(archetype_id=archetype_id,
+                                                                              document_id=document_id))
+        print(response)
 
 run()

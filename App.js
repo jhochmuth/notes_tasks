@@ -34,6 +34,7 @@ class App extends React.Component {
   // todo: connection remove() method does not activate when esc button pressed
   // todo: find solution for removing documents from dict when window is closed
   // todo: add way to delete connection labels
+  // TODO: CHECK BACKEND FOR OBJECT COPIES/REFS
   constructor(props) {
     super(props);
 
@@ -146,6 +147,7 @@ class App extends React.Component {
       }
       else {
         note.content = reply;
+
         model.addAll(note);
         engine.setDiagramModel(model);
         that.forceUpdate();
@@ -181,6 +183,19 @@ class App extends React.Component {
 
       note.props.node.app.updateListView();
     });
+  }
+
+  updateNoteAttrArchetype(id, attrs) {
+    const note = this.noteRefs[id].current;
+    const newState = Object.assign({}, note.state);
+    newState.attrs = attrs;
+    note.setState(newState);
+
+    this.state.filters.forEach((filter) => {
+      note.applyFilter(filter)
+    });
+
+    note.props.node.app.updateListView();
   }
 
   removePrototypes(descendantIds) {
@@ -391,6 +406,7 @@ class App extends React.Component {
           filters={this.state.filters}
           deleteFilter={(filter) => this.deleteFilter(filter)}
           documentId={this.documentId}
+          updateNoteAttr={(id, attrs) => this.updateNoteAttrArchetype(id, attrs)}
         />
         <Button style={{postion: "absolute", zIndex: 20, top: 10, left: 10}} onClick={() => this.toggleModal()}>Click</Button>
       </div>

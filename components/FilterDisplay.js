@@ -7,7 +7,7 @@ import Drawer from 'rc-drawer';
 import {Menu} from 'antd';
 import {MinusCircleOutlined, PartitionOutlined} from '@ant-design/icons';
 
-
+// todo: add archetype attr delete functionality
 class FilterDisplay extends React.Component {
   constructor(props) {
     super(props);
@@ -145,6 +145,8 @@ class FilterDisplay extends React.Component {
   addAttribute(event) {
     event.preventDefault();
 
+    const that = this;
+
     const request = {
       archetype_id: this.archetypeId,
       attr: event.target.attr.value,
@@ -152,12 +154,16 @@ class FilterDisplay extends React.Component {
       document_id: this.documentId
     }
 
-    stubs.noteStub.updateArchetypeAttr(request)
+    let call = stubs.noteStub.updateArchetypeAttr(request)
 
     const newState = Object.assign({}, this.state);
     newState.archetypeAttrs[request.attr] = request.val;
     newState.archetypesAttrsData[this.archetypeId][request.attr] = request.val;
     this.setState(newState);
+
+    call.on('data', function(reply) {
+      that.props.updateNoteAttr(reply.note_id, reply.attrs);
+    })
   }
 
   render() {

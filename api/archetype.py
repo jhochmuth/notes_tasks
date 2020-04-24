@@ -12,7 +12,7 @@ class Archetype:
         self.name = name
 
         if attrs:
-            self.attrs = attrs;
+            self.attrs = dict(attrs);
         else:
             self.attrs = dict()
 
@@ -22,7 +22,7 @@ class Archetype:
         note = Note(id=id,
                     title=self.name,
                     text="",
-                    attrs=self.attrs,
+                    attrs=self.attrs.copy(),
                     prototype=self,
                     inherited_attrs=set(self.attrs.keys()))
 
