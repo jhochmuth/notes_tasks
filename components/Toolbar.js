@@ -64,19 +64,19 @@ class Toolbar extends React.Component {
     return (
       <div>
         <Button id="noteFormButton" className="toolbar-button" color="secondary" style={{left: '3%'}} onClick={this.toggleNoteForm}>
-          <img src="/home/julius/notes_tasks/icons/note.png" className="toolbar-icon" />
+          <img src="../icons/note.png" className="toolbar-icon" />
         </Button>
         <Button id="filterFormButton" className="toolbar-button" style={{left: '10%'}} onClick={() => this.toggleFilterForm()}>
           Filter
         </Button>
         <Button id="saveButton" className="toolbar-button" style={{left: '80%'}} onClick={this.props.save}>
-          <img src="/home/julius/notes_tasks/icons/save.png" className="toolbar-icon" />
+          <img src="../icons/save.png" className="toolbar-icon" />
         </Button>
         <Button id="loadButton" className="toolbar-button" style={{left: '82%'}} onClick={this.props.load}>
-          <img src="/home/julius/notes_tasks/icons/load.png" className="toolbar-icon" />
+          <img src="../icons/load.png" className="toolbar-icon" />
         </Button>
         <Button className="toolbar-button" style={{left: '5%'}} onClick={this.props.openListView}>
-          <img src="/home/julius/notes_tasks/icons/list.png" className="toolbar-icon" />
+          <img src="../icons/list.png" className="toolbar-icon" />
         </Button>
         <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.toggleNoteForm}>
           <PopoverHeader>Create new note</PopoverHeader>

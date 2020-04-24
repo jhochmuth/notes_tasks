@@ -50,7 +50,7 @@ class MainMenu extends React.Component {
   render() {
     return (
       <div className="mainmenu">
-        <img className="mainmenu-icon" src="/home/julius/notes_tasks/icons/mainIcon.png"/>
+        <img className="mainmenu-icon" src="../icons/mainIcon.png"/>
         <div className="mainmenu-title">Bibbit</div>
         <button id="new-document-button" className="mainmenu-button" onClick={this.createDiagram}>Create new mindmap</button>
         <button id="load-document-button" className="mainmenu-button" onClick={this.loadDiagram}>Load saved mindmap</button>
