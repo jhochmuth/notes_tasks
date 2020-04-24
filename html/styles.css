@@ -102,6 +102,19 @@
 	transform: translateX(-50%);
 }
 
+#archetype-name {
+	position: relative;
+	top: 20;
+	text-align: center;
+	text-decoration: underline;
+}
+
+#archetype-attrs {
+	position: relative;
+	top: 100;
+	text-align: center;
+}
+
 .note {
 	position: relative;
 	border-radius: 5px;

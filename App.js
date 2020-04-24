@@ -16,6 +16,7 @@ const ContainerFactory = require('./components/ContainerFactory.js');
 const stubs = require('./stubs.js');
 const Filter = require('./utils/filter.js');
 const path = require('path');
+import {Button} from 'reactstrap';
 
 const engine = new SRD.DiagramEngine();
 engine.installDefaultFactories();
@@ -127,7 +128,6 @@ class App extends React.Component {
   createInheritorNote(event) {
     const data = JSON.parse(event.dataTransfer.getData('create-from-archetype'));
     const points = engine.getRelativeMousePoint(event);
-
     const that = this;
     const ref = React.createRef();
     const note = new NoteModel(null, model, this, ref);
@@ -392,6 +392,7 @@ class App extends React.Component {
           deleteFilter={(filter) => this.deleteFilter(filter)}
           documentId={this.documentId}
         />
+        <Button style={{postion: "absolute", zIndex: 20, top: 10, left: 10}} onClick={() => this.toggleModal()}>Click</Button>
       </div>
     );
   }
