@@ -15,12 +15,14 @@ import {
   PopoverBody
 } from 'reactstrap';
 import {TreeViewComponent} from '@syncfusion/ej2-react-navigations';
+import Drawer from 'rc-drawer';
 const ipcRenderer = require('electron').ipcRenderer;
 
 /*
 React component for the outline view page.
 */
 class List extends React.Component {
+  //todo: optimize updateRenderedData method by splitting into multiple methods and only calling the one that is needed
   constructor() {
     super();
 
@@ -29,9 +31,14 @@ class List extends React.Component {
     this.sortAttr = [];
     this.renderedNotes = [];
     this.renderedAttrs = [];
-    this.outlineOrder = [];
 
-    this.state = {displayAttrs: false, renderedData: null, displaySortInfo: false};
+    this.state = {
+      hierarchy: [],
+      displayAttrs: false,
+      renderedData: null,
+      displaySortInfo: false,
+      displayHierarchyDrawer: false
+    };
   }
 
   componentDidMount() {
@@ -81,19 +88,22 @@ class List extends React.Component {
 
   updateRenderedData() {
     const that = this;
-    const newRenderedData = [];
+    let newRenderedData = [];
 
     if (that.renderedNotes.length > 0) {
       that.renderedNotes.forEach(function(id) {
         newRenderedData.push(that.notes[id]);
       });
     }
-
     else {
       for (let id in that.notes) {
         newRenderedData.push(that.notes[id]);
       }
     }
+
+    newRenderedData.forEach((note) => {
+      note.content = note.attrs.title;
+    })
 
     if (this.sortAttr) {
       newRenderedData.sort(function(a, b) {
@@ -103,6 +113,11 @@ class List extends React.Component {
         }
         return 0;
       });
+    }
+
+    if (this.state.hierarchy.length > 0) {
+      let data = this.createHierarchy(newRenderedData, this.state.hierarchy, null, 0);
+      newRenderedData = data.data;
     }
 
     const newState = Object.assign({}, that.state);
@@ -187,39 +202,122 @@ class List extends React.Component {
     return attrList;
   }
 
-  renderNotes() {
+  renderNotes(fields) {
     const that = this;
     if (Object.keys(that.notes).length == 0) return <h3>No notes present in diagram.</h3>
 
     else if (that.state.renderedData && that.state.renderedData.length > 0) {
-      return that.state.renderedData.map(function(note) {
-        return (
-          <ListGroupItem key={note.id}>
-            <ListGroupItemHeading>{note.attrs.title}</ListGroupItemHeading>
-            <ListGroupItemText>{note.attrs.text}</ListGroupItemText>
-              {that.state.displayAttrs ? <ul>{that.renderNoteAttrs(note)}</ul> : null}
-          </ListGroupItem>
-        )
-      })
+      return (
+        <TreeViewComponent fields={fields} />
+      )
     }
 
     else return <h3>No notes found fulfilling criteria.</h3>
   }
 
+  renderHierarchy() {
+    if (this.state.hierarchy.length == 0) return <h4>No hierarchy specified.</h4>
+
+    return this.state.hierarchy.map((attr) => {
+      return (
+        <p key={attr}>{attr}
+          <Button close onClick={() => this.deleteFromHierarchy(attr)}/>
+        </p>
+      )
+    })
+  }
+
+  addHierarchyAttr(event) {
+    event.preventDefault();
+    if (!this.state.hierarchy.includes(event.target.attr.value)) {
+      const newState = {...this.state};
+      newState.hierarchy.push(event.target.attr.value);
+      this.setState(newState);
+      this.updateRenderedData();
+    }
+  }
+
+  deleteFromHierarchy(attr) {
+    const newState = {...this.state};
+    newState.hierarchy = newState.hierarchy.filter((item) => item !== attr);
+    this.setState(newState, () => {
+      this.updateRenderedData();
+    });
+  }
+
+  toggleHierarchyDrawer() {
+    const newState = {...this.state};
+    newState.displayHierarchyDrawer = !newState.displayHierarchyDrawer;
+    this.setState(newState);
+  }
+
   render() {
-    let notes = [
-      {attrs: {title: "1", type: "Book", subject: "programming"}},
-      {attrs: {title: "2", type: "Book", subject: "programming"}},
-      {attrs: {title: "3", type: "Article", subject: "programming"}},
-      {attrs: {title: "4", type: "Book", subject: "science"}},
-      {attrs: {title: "5", type: "Article", subject: "science"}},
-    ]
-    let returnData = this.createHierarchy(notes, ["type", "subject"], null, 0);
-    let fields = {dataSource: returnData.data, id: "id", parentID: "pid", text: "content", hasChildren: "hasChild"};
+    let fields = {
+      dataSource: this.state.renderedData,
+      id: "id",
+      parentID: "pid",
+      text: "content",
+      hasChildren: "hasChild"
+    };
 
     return (
       <div>
-        <TreeViewComponent fields={fields}/>
+        <div className="list-view-toolbar">
+          <Button
+            className="toolbar-button"
+            onClick={() => this.toggleAttrs()}
+            style={{top: "10%", left: 20}}
+          >Show Attrs</Button>
+          <Button
+            id="sortPopover"
+            className="toolbar-button"
+            style={{top: "10%", left: "10%"}}
+          >Sort Options</Button>
+          <Button
+            className="toolbar-button"
+            style={{top: "10%", left: "20%"}}
+            onClick={() => this.toggleHierarchyDrawer()}
+          >Hierarchy</Button>
+          <Popover
+            trigger="legacy"
+            placement="bottom"
+            target="sortPopover"
+            isOpen={this.state.displaySortInfo}
+            toggle={() => this.toggleSortInfo()}
+          >
+            <PopoverHeader>Attribute sort order</PopoverHeader>
+            <PopoverBody>
+              {this.renderSortAttrs()}
+              <Form onSubmit={(event) => this.addSortAttr(event)}>
+                <Label>Sort by another attribute</Label>
+                <Input type="textarea" name="attr" />
+                <Button>Submit</Button>
+              </Form>
+            </PopoverBody>
+          </Popover>
+          <Form onChange={(event) => this.search(event)}>
+            <InputGroup style={{position: "absolute", top: "20%", right: 20, width: "33%"}}>
+              <InputGroupAddon addonType="prepend">🔎</InputGroupAddon>
+              <Input name="search" />
+            </InputGroup>
+          </Form>
+        </div>
+        <Drawer
+          width="30%"
+          handler={false}
+          open={this.state.displayHierarchyDrawer}
+          onClose={() => this.toggleHierarchyDrawer()}
+          placement="left"
+        >
+          <h3>Hierarchy</h3>
+          {this.renderHierarchy()}
+          <Form onSubmit={(event) => this.addHierarchyAttr(event)}>
+            <Label>Add to the hierarchy</Label>
+            <Input type="textarea" name="attr" />
+            <Button>Submit</Button>
+          </Form>
+        </Drawer>
+        {this.renderNotes(fields)}
       </div>
     )
   }
