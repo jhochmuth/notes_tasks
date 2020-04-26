@@ -44,10 +44,12 @@ class List extends React.Component {
   }
 
   createHierarchy(notes, order, pid, next_id) {
+    const that = this;
+
     if (order.length == 0) {
       let data = []
       notes.forEach((note) => {
-        data.push({content: note, id: next_id, pid: pid})
+        data.push({content: note.attrs.title, id: next_id, pid: pid})
         next_id += 1;
       })
       return {next_id: next_id, data: data};
@@ -66,9 +68,9 @@ class List extends React.Component {
     })
 
     let data = [];
-    for (attr in hierarchy) {
-      let obj = {content: attr, id: next_id, pid: pid};
-      let return_obj = createHierarchy(hierarchy[attr], order.slice(1), obj.id, next_id + 1);
+    for (let attr in hierarchy) {
+      let obj = {content: attr, id: next_id, pid: pid, hasChild: true};
+      let return_obj = that.createHierarchy(hierarchy[attr], order.slice(1), obj.id, next_id + 1);
       next_id = return_obj.next_id;
       data.push(...return_obj.data);
       data.push(obj);
@@ -205,42 +207,19 @@ class List extends React.Component {
   }
 
   render() {
+    let notes = [
+      {attrs: {title: "1", type: "Book", subject: "programming"}},
+      {attrs: {title: "2", type: "Book", subject: "programming"}},
+      {attrs: {title: "3", type: "Article", subject: "programming"}},
+      {attrs: {title: "4", type: "Book", subject: "science"}},
+      {attrs: {title: "5", type: "Article", subject: "science"}},
+    ]
+    let returnData = this.createHierarchy(notes, ["type", "subject"], null, 0);
+    let fields = {dataSource: returnData.data, id: "id", parentID: "pid", text: "content", hasChildren: "hasChild"};
+
     return (
       <div>
-        <div className="list-view-toolbar">
-          <Button className="toolbar-button"
-            onClick={() => this.toggleAttrs()}
-            style={{position: "absolute", top: "10%", left: 20}}>
-            Show Attrs
-          </Button>
-          <Button id="sortPopover" className="toolbar-button" style={{position: "absolute", top: "10%", left: "40%"}}>Sort Options</Button>
-          <Popover
-            trigger="legacy"
-            placement="bottom"
-            target="sortPopover"
-            isOpen={this.state.displaySortInfo}
-            toggle={() => this.toggleSortInfo()}
-          >
-            <PopoverHeader>Attribute sort order</PopoverHeader>
-            <PopoverBody>
-              {this.renderSortAttrs()}
-              <Form onSubmit={(event) => this.addSortAttr(event)}>
-                <Label>Sort by another attribute</Label>
-                <Input type="textarea" name="attr" />
-                <Button>Submit</Button>
-              </Form>
-            </PopoverBody>
-          </Popover>
-          <Form onChange={(event) => this.search(event)}>
-            <InputGroup style={{position: "absolute", top: "20%", right: 20, width: "33%"}}>
-              <InputGroupAddon addonType="prepend">🔎</InputGroupAddon>
-              <Input name="search" />
-            </InputGroup>
-          </Form>
-        </div>
-        <ListGroup>
-          {this.renderNotes()}
-        </ListGroup>
+        <TreeViewComponent fields={fields}/>
       </div>
     )
   }

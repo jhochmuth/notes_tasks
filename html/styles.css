@@ -1,5 +1,10 @@
 @import '../node_modules/antd/dist/antd.css';
 
+@import "../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-react-navigations/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-inputs/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+
 #nav-tabs-add {
 	visibility: hidden;
 }
