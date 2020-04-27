@@ -1,45 +1,59 @@
 const React = require('react');
 const stubs = require('../stubs.js');
+const Filter = require('../utils/filter.js');
 import {PortWidget} from '@projectstorm/react-diagrams';
-import {Button, Form, FormGroup, Input, Label, Popover, PopoverBody, PopoverHeader, UncontrolledTooltip} from 'reactstrap';
+import {Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Popover, PopoverBody, PopoverHeader, UncontrolledTooltip} from 'reactstrap';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ReactModal from 'react-modal';
+import {ChromePicker} from 'react-color';
 const ResizableBox = require('react-resizable').ResizableBox;
 const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
 
-const shapeSettings = {
-  rectangle: 15,
-  circle: "50%"
-}
+const RESERVED_ATTRS = new Set(["Color", "Text char len", "Text word len", "Date created", "Last updated"]);
 
+// todo: delete prototype functionality, make archetype show
+// todo: make ability to break prototype relationship
+// todo: deleteNoteAttr must send stream for prototypes
+// todo: creating new attr in prototype should update descendants
 class NoteWidget extends React.Component {
   // todo: refactor attributes into separate component
+  // todo: create functionality to hide reserved attributes such as text len
   constructor(props) {
     super(props);
 
     this.state = {
       attrs: this.props.node.content.attrs,
-      displayAttrs: false,
       width: 200,
-      showAttrForm: false,
-      borderRadius: "15px",
+      height: 80,
+      displayData: false,
+      displayColorSelector: false,
       showButtons: false,
-      showTextForm: false
+      showTextForm: false,
+      selected: false,
+      prototypeId: this.props.node.content.prototype_id,
+      inheritedAttrs: this.props.node.content.inherited_attrs,
+      filters: new Set()
     };
 
     this.textData = null;
+    this.diagramListenerId = null;
+
+    this.props.node.addListener({
+      selectionChanged: (event) => this.toggleSelection(event)
+    })
 
     this.showButtons = this.showButtons.bind(this);
     this.hideButtons = this.hideButtons.bind(this);
-    this.toggleAttrs = this.toggleAttrs.bind(this);
-    this.toggleEditNote = this.toggleEditNote.bind(this);
-    this.editNoteAttr = this.editNoteAttr.bind(this);
-    this.toggleEditLabel = this.toggleEditLabel.bind(this);
-    this.toggleEditText = this.toggleEditText.bind(this);
     this.deleteNote = this.deleteNote.bind(this);
+  }
+
+  toggleSelection(event) {
+    const newState = Object.assign({}, this.state);
+    newState.selected = event.isSelected;
+    this.setState(newState);
   }
 
   showButtons() {
@@ -54,28 +68,39 @@ class NoteWidget extends React.Component {
     this.setState(newState);
   }
 
-  toggleAttrs() {
+  toggleDisplayData(openModal) {
+    if (openModal) {
+      this.diagramListenerId = this.props.node.model.addListener({
+        offsetUpdated: (event) => this.props.node.app.diagramRef.current.stopFiringAction()
+      });
+    }
+    else {
+      this.props.node.model.removeListener(this.diagramListenerId);
+    }
+
     const newState = Object.assign({}, this.state);
-    newState.displayAttrs = !this.state.displayAttrs;
+    newState.displayData = !newState.displayData;
     this.setState(newState);
   }
 
-  toggleEditNote() {
+  toggleColorSelector(openSelector) {
     const newState = Object.assign({}, this.state);
-    newState.showAttrForm = !newState.showAttrForm;
+    newState.displayColorSelector = openSelector;
     this.setState(newState);
   }
 
-  editNoteAttr(event) {
-    const that = this;
-    const attr = event.target.attr.value;
-    const val = event.target.val.value;
-    event.preventDefault();
+  updateNoteAttr(event, attr_obj) {
+    let attr;
+    let val;
 
-    if (attr =="shape") {
-      const newState = Object.assign({}, this.state);
-      newState.borderRadius = shapeSettings[val];
-      this.setState(newState);
+    if (event) {
+      event.preventDefault();
+      attr = event.target.key.value;
+      val = event.target.value.value;
+    }
+    else {
+      attr = attr_obj.attr;
+      val = attr_obj.val;
     }
 
     const updateAttrRequest = {
@@ -85,22 +110,41 @@ class NoteWidget extends React.Component {
       document_id: this.props.node.app.documentId
     }
 
-    stubs.noteStub.updateNoteAttr(updateAttrRequest, function(err, noteReply) {
+    if (attr == 'Color' && event) {
+      alert('Use the color selector tool to update note color.')
+    }
+    else if (RESERVED_ATTRS.has(attr) && event) {
+      alert('Can not update reserved attributes manually.')
+    }
+    else this.props.node.app.updateNoteAttr(updateAttrRequest);
+  }
+
+  deleteNoteAttr(attr) {
+    const that = this;
+
+    if (RESERVED_ATTRS.has(attr)) {
+      //add to hidden_attrs state
+    }
+
+    const deleteAttrRequest = {
+      note_id: this.props.node.content.id,
+      attr: attr,
+      document_id: this.props.node.app.documentId
+    }
+
+    stubs.noteStub.deleteNoteAttr(deleteAttrRequest, function(err, noteReply) {
       if (err) {
         console.log(err);
       }
 
       else {
-        const attrs = noteReply.attrs;
         const newState = Object.assign({}, that.state);
-        newState.attrs = attrs;
+        delete newState.attrs[attr];
         that.setState(newState);
-        that.props.node.content.attrs = attrs;
+        that.props.node.content.attrs = newState.attrs;
         that.props.node.app.updateListView();
       }
     })
-
-    this.toggleEditNote();
   }
 
   attrDoubleClick(attr, val) {
@@ -121,33 +165,46 @@ class NoteWidget extends React.Component {
   }
 
   renderAttrs() {
+    if (!this.state.displayData) return null;
+
     const attrs = this.state.attrs;
     const that = this;
     let idDigit = 0;
 
-    return Object.keys(attrs).map(function(attr) {
-      if (attr == 'title' || attr == 'text') {
-        return null;
-      }
-      else {
+    let attrElements = Object.keys(attrs).reduce(function(acc, attr) {
+      if (attr != 'title' && attr != 'text') {
         idDigit += 1;
-        return (
-            <div key={attr} id={"note" + that.props.node.content.id + "attr" + idDigit} onDoubleClick={that.attrDoubleClick.bind(this, attr, attrs[attr])}>
-              <span className="attr-text">
-                <b>{attr}:</b> {attrs[attr]}
-              </span>
-              <UncontrolledTooltip placement="right"
-                target={"note" + that.props.node.content.id + "attr" + idDigit}
-                delay={{show: 1000, hide: 0}}>{attrs[attr]}
-              </UncontrolledTooltip>
-            </div>
+        let isInheritedAttr = that.state.inheritedAttrs.includes(attr);
+        let isReservedAttr = RESERVED_ATTRS.has(attr);
+        let style = {color: isInheritedAttr ? "red" : (isReservedAttr ? "gray" : "black")};
+
+        acc.push(
+          <div
+            key={attr}
+            id={"note" + that.props.node.content.id + "attr" + idDigit}
+            onDoubleClick={that.attrDoubleClick.bind(this, attr, attrs[attr])}
+            className="attr"
+          >
+            <span className="attr-text" style={style}>
+              <b>{attr}:</b> {attrs[attr]}
+            </span>
+            <Button close
+              className="delete-attr-button"
+              onClick={() => that.deleteNoteAttr(attr)}
+            />
+          </div>
         );
       }
+      return acc;
+    }, []);
+
+    return attrElements.sort(function(a, b) {
+      if (a.key < b.key) return -1;
+      else return 1;
     })
   }
 
-  toggleEditLabel(event) {
-    event.preventDefault();
+  toggleEditLabel() {
     this.props.node.display = !this.props.node.display;
     this.props.node.selectedLinkId = null;
     this.forceUpdate();
@@ -156,7 +213,7 @@ class NoteWidget extends React.Component {
   editLabel(id, event) {
     event.preventDefault();
     const that = this;
-    const text = event.target.label.value
+    const text = event.target.label.value;
 
     if (event.target.label.value !== "") {
       const connectionRequest = {id: id, text: text, document_id: this.props.node.app.documentId};
@@ -184,100 +241,156 @@ class NoteWidget extends React.Component {
 
   updateText() {
     const that = this;
-
-    const updateAttrRequest = {
-      note_id: this.props.node.content.id,
-      attr: "text",
-      new_value: this.textData,
-      document_id: this.props.node.app.documentId
-    }
-
-    stubs.noteStub.updateNoteAttr(updateAttrRequest, function(err, noteReply) {
-      if (err) {
-        console.log(err);
-      }
-
-      else {
-        const attrs = noteReply.attrs;
-        const newState = Object.assign({}, that.state);
-        newState.attrs = attrs;
-        that.setState(newState);
-        that.props.node.content.attrs = attrs;
-        that.props.node.app.updateListView();
-        that.toggleEditText()
-      }
-    })
+    this.updateNoteAttr(null, {attr: "text", val: this.textData});
+    that.toggleEditText();
   }
 
   deleteNote() {
+    delete this.props.node.app.noteRefs[this.props.node.id];
     this.props.node.remove();
   }
 
   onResizeStart() {
-    this.props.node.app.diagramRef.current.stopFiringAction()
-    this.props.node.model.setLocked()
+    this.props.node.app.diagramRef.current.stopFiringAction();
+    this.props.node.model.setLocked();
   }
 
   onResizeStop() {
-    this.props.node.model.setLocked(false)
+    this.props.node.model.setLocked(false);
+  }
+
+  onResize(data) {
+    const newState = Object.assign({}, this.state);
+    newState.width = data.size.width;
+    newState.height = data.size.height;
+    this.setState(newState);
+  }
+
+  colorSelectorChange(color) {
+    const newState = Object.assign({}, this.state);
+    newState.noteColor = color.hex;
+    this.setState(newState);
+    this.updateNoteAttr(null, {attr: "Color", val: color.hex});
+  }
+
+  applyFilter(filter) {
+    if (filter.doesFilter(this.state.attrs)) {
+      const newState = Object.assign({}, this.state);
+      newState.filters.add(filter);
+      this.setState(newState);
+    }
+  }
+
+  removeFilter(filter) {
+    if (this.state.filters.has(filter)) {
+      const newState = Object.assign({}, this.state);
+      newState.filters.delete(filter);
+      this.setState(newState);
+    }
+  }
+
+  renderPrototype() {
+    if (!this.state.prototypeId) return null;
+    else if (!this.props.node.model.nodes[this.state.prototypeId]) return null;
+
+    return (
+      <h4>Prototype: {this.props.node.model.nodes[this.state.prototypeId].content.attrs.title}</h4>
+    )
   }
 
   render() {
     const attrs = this.state.attrs;
-    const height = this.state.displayAttrs ? 100 + (25 * (Object.keys(this.state.attrs).length - 1)) : 80;
+    const height = this.state.height;
+
+    if (this.state.filters.size > 0) return null;
+
     return (
       <ResizableBox
         width={this.state.width}
         height={height}
         className="note"
         onResizeStart={(event, data) => this.onResizeStart()}
-        onResizeStop={(event, data) => this.onResizeStop()}>
+        onResizeStop={(event, data) => this.onResizeStop()}
+        onResize={(event, data) => this.onResize(data)}
+      >
         <div
-          style={{borderRadius: this.state.borderRadius, zIndex: 5}}
+          style={{zIndex: 5, border: this.state.selected ? "lightskyblue solid" : "none", width: this.state.width, height: height, backgroundColor: attrs.Color}}
           onMouseEnter={this.showButtons}
           onMouseLeave={this.hideButtons}>
-          <h4 className="note-title" style={{height: this.state.displayAttrs ? null : "100%"}}>{attrs.title}</h4>
-          <div className="note-text" style={{visibility: this.state.displayAttrs ? "visible" : "hidden"}}>{attrs.text}</div>
-          <div style={{visibility: this.state.displayAttrs ? "visible" : "hidden", margin: 10}}>{this.renderAttrs()}</div>
-          <button id={"attrFormControl" + this.props.node.content.id}
+          <h4 className="note-title">{attrs.title}</h4>
+          <button
+            id={"toggleDisplayData" + this.props.node.content.id}
             className="edit-note-button"
-            onClick={this.toggleEditNote}
+            onClick={() => this.toggleDisplayData(true)}
             style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>⚙</button>
-          <button className="toggle-note-display-button"
-            onClick={this.toggleAttrs}
-            style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>{this.state.displayAttrs ? "⤒" : "⤓"}</button>
+          <button
+            id={"colorButton" + this.props.node.content.id}
+            className="color-selector-button"
+            style={{visibility: this.state.showButtons ? "visible" : "hidden"}}
+            onClick={() => this.toggleColorSelector(true)}>{String.fromCharCode(55356, 57256)}</button>
           <Button close
             className="delete-note-button"
-            style={{color: "crimson", textShadow: "0px 0px", visibility: this.state.showButtons ? "visible" : "hidden"}}
+            style={{
+              color: "crimson",
+              textShadow: "0px 0px",
+              visibility: this.state.showButtons ? "visible" : "hidden"
+            }}
             onClick={this.deleteNote}/>
-          <Popover placement="right" trigger="legacy" target={"attrFormControl" + this.props.node.content.id} isOpen={this.state.showAttrForm} toggle={this.toggleEditNote}>
-            <PopoverHeader>Edit note</PopoverHeader>
-            <PopoverBody>
-              <Form onSubmit={this.editNoteAttr}>
-                <FormGroup>
-                  <Label for={"attrForm" + this.props.node.content.id}>Attribute name</Label>
-                  <Input type="textarea" name="attr" id={"attrForm" + this.props.node.content.id} />
-                </FormGroup>
-                <FormGroup>
-                  <Label>Attribute value</Label>
-                  <Input
-                    type="textarea"
-                    name="val"
-                    id={"valForm" + this.props.node.content.id} />
-                </FormGroup>
-                <Button>Submit</Button>
-              </Form>
-            </PopoverBody>
-          </Popover>
+          <ReactModal
+            isOpen={this.state.displayData}
+            onAfterOpen={() => this.hideButtons()}
+            onRequestClose={() => this.toggleDisplayData(false)}
+            style={{
+              content: {
+                backgroundColor: "#F5F5F5",
+                left: "60%",
+                width: "36%"
+              }
+            }}
+            ariaHideApp={false}
+          >
+            <h2 className="note-data-title">{attrs.title}</h2>
+            <h4 style={{marginTop: 10}}>Attributes</h4>
+            <div>{this.renderAttrs()}</div>
+            <Form
+              className="attr-form"
+              onSubmit={(event) => this.updateNoteAttr(event)}
+            >
+              <h5>Create new attribute</h5>
+              <InputGroup className="attr-form-group">
+                <InputGroupAddon addonType="prepend" className="attr-form-label">
+                  <InputGroupText className="attr-form-text">Attr</InputGroupText>
+                </InputGroupAddon>
+                <Input name="key" className="attr-form-input"/>
+              </InputGroup>
+              <InputGroup className="attr-form-group">
+                <InputGroupAddon addonType="prepend" className="attr-form-label">
+                  <InputGroupText className="attr-form-text">Value</InputGroupText>
+                </InputGroupAddon>
+                <Input name="value" className="attr-form-input"/>
+              </InputGroup>
+              <Button>Add</Button>
+            </Form>
+            <Button
+              className="edit-text-button"
+              onClick={() => this.toggleEditText()}
+            >Edit Text</Button>
+            <Button
+              className="protoype-button"
+              onClick={() => this.props.node.app.createDescendantNote(this.props.node.id)}
+            >Create Descendant</Button>
+            {this.renderPrototype()}
+          </ReactModal>
           <ReactModal
             isOpen={this.state.showTextForm}
-            onRequestClose={this.toggleEditText}
+            onRequestClose={() => this.toggleEditText()}
             style={{
               content: {
                 backgroundColor: "#F5F5F5"
               }
             }}
-            ariaHideApp={false}>
+            ariaHideApp={false}
+          >
             <CKEditor
               editor={ClassicEditor}
               onInit={(editor) => {
@@ -294,13 +407,13 @@ class NoteWidget extends React.Component {
             >Save</Button>
             <Button
               className="text-form-cancel-button"
-              onClick={this.toggleEditText}
+              onClick={() => this.toggleEditText()}
             >Cancel</Button>
           </ReactModal>
           <button
             id={"textEditControl" + this.props.node.content.id}
             className="edit-text-button"
-            onClick={this.toggleEditText}
+            onClick={() => this.toggleEditText()}
             style={{visibility: this.state.displayAttrs ? "visible" : "hidden"}}
           >Edit</button>
           <div id={"port" + this.props.node.content.id}
@@ -309,19 +422,39 @@ class NoteWidget extends React.Component {
           </div>
           <Popover placement="left"
             trigger="legacy"
-            target={"port" + this.props.node.content.id}
-            isOpen={this.props.node.display}>
-            <PopoverHeader>Add label to link</PopoverHeader>
+            isOpen={this.state.displayColorSelector}
+            target={"colorButton" + this.props.node.content.id}
+            toggle={() => this.toggleColorSelector(false)}>
             <PopoverBody>
-              <Form onSubmit={this.editLabel.bind(this, this.props.node.selectedLinkId)}>
-                <Input type="textarea"
-                  name="label"
-                  id={"labelForm" + this.props.node.content.id} />
-                <Button>Submit</Button>
-                <Button onClick={this.toggleEditLabel}>Cancel</Button>
-              </Form>
+              <ChromePicker
+                color={this.state.noteColor}
+                onChangeComplete={(color, event) => this.colorSelectorChange(color)}
+              />
             </PopoverBody>
           </Popover>
+          <ReactModal
+            isOpen={this.props.node.display}
+            onRequestClose={() => this.toggleEditLabel()}
+            style={{
+              content: {
+                backgroundColor: "#F5F5F5",
+                height: "40%",
+                width: "40%"
+              }
+            }}
+            ariaHideApp={false}
+          >
+            <Form onSubmit={(event) => this.editLabel(this.props.node.selectedLinkId, event)}>
+              <InputGroup className="attr-form-group">
+                <InputGroupAddon addonType="prepend" className="attr-form-label">
+                  <InputGroupText className="attr-form-text">Label</InputGroupText>
+                </InputGroupAddon>
+                <Input name="label" className="attr-form-input"/>
+              </InputGroup>
+              <Button className="app-button">Submit</Button>
+              <Button className="app-button" onClick={() => this.toggleEditLabel()}>Cancel</Button>
+            </Form>
+          </ReactModal>
         </div>
       </ResizableBox>
     )
