@@ -181,6 +181,7 @@ service NoteManager {
     rpc DeleteNote (NoteRequest) returns (DeleteNoteReply) {}
 
     rpc CreateArchetype (ArchetypeRequest) returns (ArchetypeReply) {}
+    rpc EditArchetypeName (ArchetypeRequest) returns (ArchetypeReply) {}
     rpc CreateInheritor (CreateInheritorRequest) returns (NoteReply) {}
     rpc UpdateArchetypeAttr (UpdateArchetypeRequest) returns (stream UpdateArchetypeReply) {}
 }

@@ -99,6 +99,12 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
                                         id=archetype.id,
                                         attrs=archetype.attrs)
 
+    def EditArchetypeName(self, request, context):
+        archetype = documents[request.document_id].children[request.id]
+        archetype.name = request.name
+        return tasks_pb2.ArchetypeReply(name=archetype.name,
+                                        id=archetype.id)
+
     def CreateInheritor(self, request, context):
         archetype = documents[request.document_id].children[request.archetype_id]
         note = archetype.create_inheritor(id=request.note_id)

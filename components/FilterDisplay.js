@@ -4,7 +4,7 @@ const Archetype = require('./Archetype.js');
 const stubs = require('../stubs.js');
 import {Button, Form, FormGroup, Input, InputGroup, Label} from 'reactstrap';
 import Drawer from 'rc-drawer';
-import {Menu} from 'antd';
+import {Menu, Popover} from 'antd';
 import {MinusCircleOutlined, PartitionOutlined} from '@ant-design/icons';
 
 // todo: add archetype attr delete functionality
@@ -19,7 +19,8 @@ class FilterDisplay extends React.Component {
       filters: this.props.filters,
       open: false,
       openArchetypeDrawer: false,
-      archetypes: [],
+      displayEditArchetypeName: false,
+      archetypes: {},
       archetypesAttrsData: {},
       archetypeName: null,
       archetypeAttrs: {}
@@ -53,6 +54,16 @@ class FilterDisplay extends React.Component {
     }, []);
   }
 
+  renderArchetypes() {
+    return Object.values(this.state.archetypes).map((archetype) => {
+      return (
+        <Menu.Item key={archetype.id}>
+          {archetype}
+        </Menu.Item>
+      )
+    });
+  }
+
   createArchetype() {
     const that = this;
 
@@ -75,14 +86,8 @@ class FilterDisplay extends React.Component {
         />
 
         const newState = Object.assign({}, that.state);
-
-        newState.archetypes.push(
-          <Menu.Item key={reply.id}>
-            {archetype}
-          </Menu.Item>);
-
+        newState.archetypes[reply.id] = archetype;
         newState.archetypesAttrsData[reply.id] = reply.attrs;
-
         that.setState(newState);
         that.toggleArchetypeDrawer(reply.id, reply.name, reply.attrs);
       }
@@ -110,6 +115,12 @@ class FilterDisplay extends React.Component {
       newState.archetypeAttrs = attrs;
     }
 
+    this.setState(newState);
+  }
+
+  toggleArchetypeName() {
+    const newState = Object.assign({}, this.state);
+    newState.displayEditArchetypeName = !newState.displayEditArchetypeName;
     this.setState(newState);
   }
 
@@ -166,6 +177,27 @@ class FilterDisplay extends React.Component {
     })
   }
 
+  editName(event) {
+    event.preventDefault();
+    const that = this;
+
+    const request = {
+      id: this.archetypeId,
+      name: event.target.name.value,
+      document_id: this.documentId
+    }
+
+    stubs.noteStub.editArchetypeName(request, function(err, response) {
+      if (err) console.log(err);
+      else {
+        const newState = Object.assign({}, that.state);
+        newState.archetypeName = response.name;
+        console.log(newState.archetypes[response.id])
+        newState.archetypes[response.id].updateName(response.name);
+      }
+    })
+  }
+
   render() {
     return (
       <Drawer width="20%"
@@ -188,7 +220,7 @@ class FilterDisplay extends React.Component {
               <span><PartitionOutlined />Archetypes</span>
             }
           >
-          {this.state.archetypes}
+          {this.renderArchetypes()}
           </Menu.SubMenu>
         </Menu>
         <Button onClick={() => this.createArchetype()}>Create archetype</Button>
@@ -199,7 +231,10 @@ class FilterDisplay extends React.Component {
           onClose={() => this.toggleArchetypeDrawer()}
           placement="left"
         >
-          <h3 id="archetype-name">{this.state.archetypeName}</h3>
+          <h3
+            id="archetype-name"
+            onDoubleClick={() => this.toggleArchetypeName()}
+          >{this.state.archetypeName}</h3>
           <div id="archetype-attrs">
             <h4>Attributes</h4>
             {this.renderArchetypeAttrs()}
@@ -215,6 +250,21 @@ class FilterDisplay extends React.Component {
               <Button>Add attribute</Button>
             </Form>
           </div>
+          <Drawer
+            width="30%"
+            handler={false}
+            open={this.state.displayEditArchetypeName}
+            onClose={() => this.toggleArchetypeName()}
+            placement="left"
+          >
+            <Form onSubmit={(event) => this.editName(event)}>
+              <FormGroup>
+                <Label>Name</Label>
+                <Input name="name" placeholder={this.state.archetypeName} />
+              </FormGroup>
+              <Button>Change name</Button>
+            </Form>
+          </Drawer>
         </Drawer>
       </Drawer>
     )

@@ -1,11 +1,18 @@
 const React = require('react');
 import {Menu} from 'antd';
+import Drawer from 'rc-drawer';
 
 
 class Archetype extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {name: props.name, attrs: props.attrs, id: props.id};
+    this.state = {name: props.name, attrs: props.attrs, id: props.id, toggleDrawer: false};
+  }
+
+  updateName(newName) {
+    const newState = {...this.state};
+    newState.name = newName;
+    this.setState(newState);
   }
 
   render() {
