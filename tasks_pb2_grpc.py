@@ -34,6 +34,11 @@ class DocumentManagerStub(object):
         request_serializer=tasks__pb2.LoadRequest.SerializeToString,
         response_deserializer=tasks__pb2.CreateDocumentReply.FromString,
         )
+    self.SyncOneDrive = channel.unary_stream(
+        '/DocumentManager/SyncOneDrive',
+        request_serializer=tasks__pb2.DriveRequest.SerializeToString,
+        response_deserializer=tasks__pb2.NoteReply.FromString,
+        )
 
 
 class DocumentManagerServicer(object):
@@ -68,6 +73,13 @@ class DocumentManagerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def SyncOneDrive(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_DocumentManagerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -90,6 +102,11 @@ def add_DocumentManagerServicer_to_server(servicer, server):
           servicer.LoadDocument,
           request_deserializer=tasks__pb2.LoadRequest.FromString,
           response_serializer=tasks__pb2.CreateDocumentReply.SerializeToString,
+      ),
+      'SyncOneDrive': grpc.unary_stream_rpc_method_handler(
+          servicer.SyncOneDrive,
+          request_deserializer=tasks__pb2.DriveRequest.FromString,
+          response_serializer=tasks__pb2.NoteReply.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

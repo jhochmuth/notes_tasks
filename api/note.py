@@ -1,6 +1,9 @@
 from datetime import datetime
 
+import onedrivesdk_fork as onedrivesdk
+
 from api.uid import UID
+from utils.onedrive_authentication import client
 
 
 RESERVED_ATTRS = {"title",
@@ -57,7 +60,11 @@ class Note:
         self.attrs["title"] = title
         self.attrs["text"] = text
 
-        self.attrs["Date created"] = get_current_time()
+        if "Date created" in self.attrs:
+            self.attrs["Date created"] = self.attrs["Date created"].strftime("%Y/%m/%d %I:%M %p")
+        else:
+            self.attrs["Date created"] = get_current_time()
+
         self.update_last_changed()
 
         self.attrs["Text char len"] = str(len(self.attrs["text"]))

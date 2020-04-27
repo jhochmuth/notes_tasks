@@ -34,6 +34,14 @@ class DocumentServicer(tasks_pb2_grpc.DocumentManagerServicer):
         documents[document.id] = document
         return tasks_pb2.CreateDocumentReply(id=document.id)
 
+    def SyncOneDrive(self, request, context):
+        document = documents[request.document_id]
+        new_notes = document.create_notes_from_drive_folder(request.item_id)
+
+        for note in new_notes.values():
+            yield tasks_pb2.NoteReply(id=note.id,
+                                      attrs=note.attrs)
+
 
 class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
     def CreateNote(self, request, context):

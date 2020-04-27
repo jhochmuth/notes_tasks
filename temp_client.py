@@ -18,6 +18,12 @@ def run():
         response = document_stub.CreateDocument(tasks_pb2.Empty())
         document_id = response.id
         print(document_id)
+
+        print("Syncing with onedrive.")
+        response = document_stub.SyncOneDrive(tasks_pb2.DriveRequest(document_id=document_id,
+                                                                     item_id="F27A5B9996AB72E1%2128460"))
+        for note in response:
+            print(note)
         """
         print("Creating note.")
         response = note_stub.CreateNote(tasks_pb2.NoteRequest(attrs={"title": "Joseph Conrad",

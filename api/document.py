@@ -3,6 +3,7 @@ import uuid
 
 from api.note import Note
 from api.connection import Connection
+from utils.onedrive_authentication import client
 
 
 class Document:
@@ -35,3 +36,24 @@ class Document:
                     document.children[connection.id] = connection
 
         return document
+
+    def create_notes_from_drive_folder(self, item_id):
+        collection = client.item(drive="me", id=item_id).children.request().get()
+
+        new_notes = dict()
+
+        for item in collection:
+            # Checks if note has already been created for this item.
+            # todo: Add ability to update note if note already exists.
+            if item.id in self.children:
+                pass
+            else:
+                attrs = dict()
+                attrs["Date created"] = item.created_date_time
+                attrs["OneDrive id"] = item.id
+                attrs["link"] = item.web_url
+
+                new_notes[item.id] = Note(id=item.id, title=item.name, text="", attrs=attrs)
+                self.children.update(new_notes)
+
+        return new_notes

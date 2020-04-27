@@ -93,6 +93,11 @@ message UpdateArchetypeReply {
     map<string, string> attrs = 2;
 }
 
+message DriveRequest {
+    string document_id = 1;
+    string item_id = 2;
+}
+
 message ContainerRequest {
     map<string, string> attrs = 1;
     repeated string child_note_ids = 2;
@@ -171,6 +176,8 @@ service DocumentManager {
     rpc CloseDocument (CloseDocumentRequest) returns (BoolWrapper) {}
     rpc SaveDocument (SaveRequest) returns (BoolWrapper) {}
     rpc LoadDocument (LoadRequest) returns (CreateDocumentReply) {}
+
+    rpc SyncOneDrive (DriveRequest) returns (stream NoteReply) {}
 }
 
 service NoteManager {
