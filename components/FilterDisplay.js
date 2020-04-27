@@ -18,12 +18,7 @@ class FilterDisplay extends React.Component {
     this.state = {
       filters: this.props.filters,
       open: false,
-      openArchetypeDrawer: false,
-      displayEditArchetypeName: false,
       archetypes: {},
-      archetypesAttrsData: {},
-      archetypeName: null,
-      archetypeAttrs: {}
     };
   }
 
@@ -37,10 +32,10 @@ class FilterDisplay extends React.Component {
 
   renderFilters() {
     const that = this;
-    let key = 1;
+
     return this.state.filters.reduce(function(acc, filter) {
       let filterElement = (
-        <Menu.Item key={key}>
+        <Menu.Item key={filter.attr + ":" + filter.value}>
           {filter.attr} {filter.value}
           <Button close
             onClick={() => that.props.deleteFilter(filter)}
@@ -49,7 +44,6 @@ class FilterDisplay extends React.Component {
         </Menu.Item>
       )
       acc.push(filterElement)
-      key += 1;
       return acc;
     }, []);
   }
@@ -57,7 +51,7 @@ class FilterDisplay extends React.Component {
   renderArchetypes() {
     return Object.values(this.state.archetypes).map((archetype) => {
       return (
-        <Menu.Item key={archetype.id}>
+        <Menu.Item key={archetype.props.id}>
           {archetype}
         </Menu.Item>
       )
@@ -82,21 +76,15 @@ class FilterDisplay extends React.Component {
           attrs={reply.attrs}
           id={reply.id}
           toggle={() => that.toggle()}
-          doubleClick={(id, name) => that.attrDoubleClick(id, name)}
+          documentId={that.documentId}
+          updateInheritors={(request) => that.updateInheritors(request)}
         />
 
         const newState = Object.assign({}, that.state);
         newState.archetypes[reply.id] = archetype;
-        newState.archetypesAttrsData[reply.id] = reply.attrs;
         that.setState(newState);
-        that.toggleArchetypeDrawer(reply.id, reply.name, reply.attrs);
       }
     })
-  }
-
-  attrDoubleClick(id, name) {
-    const attrs = this.state.archetypesAttrsData[id];
-    this.toggleArchetypeDrawer(id, name, attrs);
   }
 
   toggle() {
@@ -105,96 +93,11 @@ class FilterDisplay extends React.Component {
     this.setState(newState);
   }
 
-  toggleArchetypeDrawer(id, name, attrs) {
-    const newState = Object.assign({}, this.state);
-    newState.openArchetypeDrawer = !newState.openArchetypeDrawer;
-
-    if (newState.openArchetypeDrawer === true) {
-      this.archetypeId = id;
-      newState.archetypeName = name;
-      newState.archetypeAttrs = attrs;
-    }
-
-    this.setState(newState);
-  }
-
-  toggleArchetypeName() {
-    const newState = Object.assign({}, this.state);
-    newState.displayEditArchetypeName = !newState.displayEditArchetypeName;
-    this.setState(newState);
-  }
-
-  renderArchetypeAttrs() {
-    const that = this;
-
-    if (!this.state.archetypeAttrs || !Object.keys(this.state.archetypeAttrs).length) {
-      return <span>No attributes</span>
-    }
-
-    const attrs = this.state.archetypeAttrs;
-
-    return Object.keys(attrs).map(function(attr) {
-      return (
-          <div
-          key={attr}
-          id={"archetype" + that.state.archetypeName + attr}
-          onDoubleClick={() => that.attrDoubleClick(this, attr, attrs[attr])}
-          className="attr"
-          >
-            <span className="attr-text">
-              <b>{attr}:</b> {attrs[attr]}
-            </span>
-            <Button close
-              className="delete-attr-button"
-              onClick={() => that.deleteArchetypeAttr(attr)}
-            />
-          </div>
-        )
-    });
-  }
-
-  addAttribute(event) {
-    event.preventDefault();
-
-    const that = this;
-
-    const request = {
-      archetype_id: this.archetypeId,
-      attr: event.target.attr.value,
-      val: event.target.val.value,
-      document_id: this.documentId
-    }
-
+  updateInheritors(request) {
     let call = stubs.noteStub.updateArchetypeAttr(request)
-
-    const newState = Object.assign({}, this.state);
-    newState.archetypeAttrs[request.attr] = request.val;
-    newState.archetypesAttrsData[this.archetypeId][request.attr] = request.val;
-    this.setState(newState);
 
     call.on('data', function(reply) {
       that.props.updateNoteAttr(reply.note_id, reply.attrs);
-    })
-  }
-
-  editName(event) {
-    event.preventDefault();
-    const that = this;
-
-    const request = {
-      id: this.archetypeId,
-      name: event.target.name.value,
-      document_id: this.documentId
-    }
-
-    stubs.noteStub.editArchetypeName(request, function(err, response) {
-      if (err) console.log(err);
-      else {
-        const newState = Object.assign({}, that.state);
-        newState.archetypeName = response.name;
-        console.log(newState.archetypes[response.id])
-        newState.archetypes[response.id].updateName(response.name);
-      }
     })
   }
 
@@ -224,48 +127,6 @@ class FilterDisplay extends React.Component {
           </Menu.SubMenu>
         </Menu>
         <Button onClick={() => this.createArchetype()}>Create archetype</Button>
-        <Drawer
-          width="30%"
-          handler={false}
-          open={this.state.openArchetypeDrawer}
-          onClose={() => this.toggleArchetypeDrawer()}
-          placement="left"
-        >
-          <h3
-            id="archetype-name"
-            onDoubleClick={() => this.toggleArchetypeName()}
-          >{this.state.archetypeName}</h3>
-          <div id="archetype-attrs">
-            <h4>Attributes</h4>
-            {this.renderArchetypeAttrs()}
-            <Form onSubmit={(event) => this.addAttribute(event)}>
-              <FormGroup>
-                <Label>Attribute</Label>
-                <Input name="attr" />
-              </FormGroup>
-              <FormGroup>
-                <Label>Value</Label>
-                <Input name="val" />
-              </FormGroup>
-              <Button>Add attribute</Button>
-            </Form>
-          </div>
-          <Drawer
-            width="30%"
-            handler={false}
-            open={this.state.displayEditArchetypeName}
-            onClose={() => this.toggleArchetypeName()}
-            placement="left"
-          >
-            <Form onSubmit={(event) => this.editName(event)}>
-              <FormGroup>
-                <Label>Name</Label>
-                <Input name="name" placeholder={this.state.archetypeName} />
-              </FormGroup>
-              <Button>Change name</Button>
-            </Form>
-          </Drawer>
-        </Drawer>
       </Drawer>
     )
   }
