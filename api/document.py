@@ -43,17 +43,23 @@ class Document:
         new_notes = dict()
 
         for item in collection:
-            # Checks if note has already been created for this item.
-            # todo: Add ability to update note if note already exists.
             if item.id in self.children:
-                pass
+                note = self.children[item.id]
+                if note.attrs["title"] != item.name:
+                    note.update_title(item.name)
+
             else:
                 attrs = dict()
                 attrs["Date created"] = item.created_date_time
+                attrs["OneDrive parent id"] = item_id
                 attrs["OneDrive id"] = item.id
                 attrs["link"] = item.web_url
+                id = item.id.replace("!", "")
 
-                new_notes[item.id] = Note(title=item.name, text="", attrs=attrs)
+                new_notes[item.id] = Note(id=id, title=item.name, text="", attrs=attrs)
                 self.children.update(new_notes)
 
         return new_notes
+
+    def update_drive_folder(self, ):
+        pass

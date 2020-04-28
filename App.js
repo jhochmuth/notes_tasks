@@ -461,7 +461,6 @@ class App extends React.Component {
           documentId={this.documentId}
           updateNoteAttr={(id, attrs) => this.updateNoteAttrArchetype(id, attrs)}
         />
-        <Button style={{postion: "absolute", zIndex: 20, top: 10, left: 10}} onClick={() => this.toggleModal()}>Click</Button>
       </div>
     );
   }

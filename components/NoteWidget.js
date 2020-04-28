@@ -8,6 +8,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ReactModal from 'react-modal';
 import {ChromePicker} from 'react-color';
 const ResizableBox = require('react-resizable').ResizableBox;
+import ScaleText from 'react-scale-text';
 const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
@@ -300,24 +301,33 @@ class NoteWidget extends React.Component {
 
   render() {
     const attrs = this.state.attrs;
-    const height = this.state.height;
+
+    const noteDivStyling = {
+      zIndex: 5,
+      border: this.state.selected ? "lightskyblue solid" : "none",
+      width: this.state.width,
+      height: this.state.height,
+      backgroundColor: attrs.Color
+    }
 
     if (this.state.filters.size > 0) return null;
 
     return (
       <ResizableBox
         width={this.state.width}
-        height={height}
+        height={this.state.height}
         className="note"
         onResizeStart={(event, data) => this.onResizeStart()}
         onResizeStop={(event, data) => this.onResizeStop()}
         onResize={(event, data) => this.onResize(data)}
       >
         <div
-          style={{zIndex: 5, border: this.state.selected ? "lightskyblue solid" : "none", width: this.state.width, height: height, backgroundColor: attrs.Color}}
+          style={noteDivStyling}
           onMouseEnter={this.showButtons}
           onMouseLeave={this.hideButtons}>
-          <h4 className="note-title">{attrs.title}</h4>
+          <ScaleText>
+            <p className="note-title">{attrs.title}</p>
+          </ScaleText>
           <button
             id={"toggleDisplayData" + this.props.node.content.id}
             className="edit-note-button"

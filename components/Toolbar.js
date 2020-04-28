@@ -148,7 +148,7 @@ class Toolbar extends React.Component {
         >
           <PopoverHeader>Sync with OneDrive</PopoverHeader>
           <PopoverBody>
-            <Form onSubmit={(event) => this.props.syncOneDrive(event)}>
+            <Form onSubmit={(event) => {this.toggleSyncPopover(); this.props.syncOneDrive(event)}}>
               <InputGroup className="attr-form-group">
                 <InputGroupAddon addonType="prepend" className="attr-form-label">
                   <InputGroupText className="attr-form-text">Folder ID</InputGroupText>
