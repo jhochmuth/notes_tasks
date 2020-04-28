@@ -378,6 +378,58 @@ class App extends React.Component {
     }
   }
 
+  syncOneDrive(event) {
+    event.preventDefault();
+
+    const that = this;
+
+    const request = {
+      item_id: event.target.drive.value,
+      document_id: this.documentId
+    }
+
+    let call = stubs.documentStub.syncOneDrive(request);
+
+    call.on('data', function(noteReply) {
+      if (noteReply.id in that.noteRefs) {
+        const note = that.noteRefs[noteReply.id].current;
+        const attrs = noteReply.attrs;
+        const newState = Object.assign({}, note.state);
+        newState.attrs = attrs;
+
+        note.setState(newState);
+        note.props.node.content = noteReply;
+
+        that.state.filters.forEach((filter) => {
+          note.applyFilter(filter)
+        });
+
+        note.props.node.app.updateListView();
+      }
+
+      else {
+        const ref = React.createRef();
+        const note = new NoteModel(null, model, that, ref);
+        note.id = noteReply.id
+        note.x = 200;
+        note.y = 200;
+        console.log(note)
+
+        note.content = noteReply;
+        model.addAll(note);
+        engine.setDiagramModel(model);
+        that.forceUpdate();
+
+        that.updateListView();
+        that.noteRefs[note.id] = ref;
+
+        that.state.filters.forEach((filter) => {
+          that.noteRefs[noteReply.id].current.applyFilter(filter)
+        })
+      }
+    });
+  }
+
   render() {
     return (
       <div className="app">
@@ -387,6 +439,7 @@ class App extends React.Component {
             addFilter={(event) => this.addFilter(event)}
             save={this.save}
             load={this.onLoadButtonClick}
+            syncOneDrive={(event) => this.syncOneDrive(event)}
             openListView={this.openListView}/>
         </div>
         <div

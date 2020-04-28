@@ -53,7 +53,7 @@ class Document:
                 attrs["OneDrive id"] = item.id
                 attrs["link"] = item.web_url
 
-                new_notes[item.id] = Note(id=item.id, title=item.name, text="", attrs=attrs)
+                new_notes[item.id] = Note(title=item.name, text="", attrs=attrs)
                 self.children.update(new_notes)
 
         return new_notes

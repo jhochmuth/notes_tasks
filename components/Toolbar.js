@@ -8,24 +8,15 @@ React component for the toolbar of the main app page.
 class Toolbar extends React.Component {
   constructor() {
     super();
+
     this.state = {
       title: "Title",
       text: "Text",
       displayNoteForm: false,
       displayFilterForm: false,
-      displayLoadForm: false
+      displayLoadForm: false,
+      displaySyncPopover: false
     };
-    this.addNote = this.addNote.bind(this);
-    this.onChange = this.onChange.bind(this);
-    this.toggleNoteForm = this.toggleNoteForm.bind(this);
-  }
-
-  onChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-
-    this.setState({[name]: value});
   }
 
   addNote(event) {
@@ -37,7 +28,6 @@ class Toolbar extends React.Component {
     }
 
     this.props.addNote(event);
-
     this.toggleNoteForm();
   }
 
@@ -60,13 +50,30 @@ class Toolbar extends React.Component {
     this.setState(newState);
   }
 
+  toggleSyncPopover() {
+    const newState = Object.assign({}, this.state);
+    newState.displaySyncPopover = !this.state.displaySyncPopover;
+    this.setState(newState);
+  }
+
   render() {
     return (
       <div>
-        <Button id="noteFormButton" className="toolbar-button" color="secondary" style={{left: '3%'}} onClick={this.toggleNoteForm}>
+        <Button
+          id="noteFormButton"
+          className="toolbar-button"
+          color="secondary"
+          style={{left: '3%'}}
+          onClick={() => this.toggleNoteForm()}
+        >
           <img src="../icons/note.png" className="toolbar-icon" />
         </Button>
-        <Button id="filterFormButton" className="toolbar-button" style={{left: '10%'}} onClick={() => this.toggleFilterForm()}>
+        <Button
+          id="filterFormButton"
+          className="toolbar-button"
+          style={{left: '10%'}}
+          onClick={() => this.toggleFilterForm()}
+        >
           Filter
         </Button>
         <Button id="saveButton" className="toolbar-button" style={{left: '80%'}} onClick={this.props.save}>
@@ -78,10 +85,24 @@ class Toolbar extends React.Component {
         <Button className="toolbar-button" style={{left: '5%'}} onClick={this.props.openListView}>
           <img src="../icons/list.png" className="toolbar-icon" />
         </Button>
-        <Popover trigger="legacy" placement="bottom" target="noteFormButton" isOpen={this.state.displayNoteForm} toggle={this.toggleNoteForm}>
+        <Button
+          id="syncFormButton"
+          className="toolbar-button"
+          style={{left: '15%'}}
+          onClick={() => this.toggleSyncPopover()}
+        >
+          Sync
+        </Button>
+        <Popover
+          trigger="legacy"
+          placement="bottom"
+          target="noteFormButton"
+          isOpen={this.state.displayNoteForm}
+          toggle={() => this.toggleNoteForm()}
+        >
           <PopoverHeader>Create new note</PopoverHeader>
           <PopoverBody>
-            <Form onSubmit={this.addNote}>
+            <Form onSubmit={(event) => this.addNote(event)}>
               <InputGroup className="attr-form-group">
                 <InputGroupAddon addonType="prepend" className="attr-form-label">
                   <InputGroupText className="attr-form-text">Title</InputGroupText>
@@ -113,6 +134,26 @@ class Toolbar extends React.Component {
                   <InputGroupText className="attr-form-text">Value</InputGroupText>
                 </InputGroupAddon>
                 <Input name="value" className="attr-form-input"/>
+              </InputGroup>
+              <Button>Submit</Button>
+            </Form>
+          </PopoverBody>
+        </Popover>
+        <Popover
+          trigger="legacy"
+          placement="bottom"
+          target="syncFormButton"
+          isOpen={this.state.displaySyncPopover}
+          toggle={() => this.toggleSyncPopover()}
+        >
+          <PopoverHeader>Sync with OneDrive</PopoverHeader>
+          <PopoverBody>
+            <Form onSubmit={(event) => this.props.syncOneDrive(event)}>
+              <InputGroup className="attr-form-group">
+                <InputGroupAddon addonType="prepend" className="attr-form-label">
+                  <InputGroupText className="attr-form-text">Folder ID</InputGroupText>
+                </InputGroupAddon>
+                <Input name="drive" className="attr-form-input"/>
               </InputGroup>
               <Button>Submit</Button>
             </Form>
