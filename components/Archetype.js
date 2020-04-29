@@ -110,7 +110,7 @@ class Archetype extends React.Component {
         draggable={true}
         onDragStart={(event) => {
           this.props.toggle();
-          event.dataTransfer.setData("create-from-archetype", JSON.stringify(this.state));
+          event.dataTransfer.setData("create-from-archetype", JSON.stringify(this.id));
         }}
         onDoubleClick={() => this.handleDoubleClick()}
       >

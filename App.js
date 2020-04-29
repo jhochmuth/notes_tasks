@@ -137,7 +137,7 @@ class App extends React.Component {
 
     const request = {
       note_id: note.id,
-      archetype_id: data.id,
+      archetype_id: data,
       document_id: this.documentId
     }
 
@@ -413,7 +413,6 @@ class App extends React.Component {
         note.id = noteReply.id
         note.x = 200;
         note.y = 200;
-        console.log(note)
 
         note.content = noteReply;
         model.addAll(note);

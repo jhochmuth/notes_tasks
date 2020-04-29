@@ -11,7 +11,7 @@ const ResizableBox = require('react-resizable').ResizableBox;
 import ScaleText from 'react-scale-text';
 const electron = require('electron');
 const remote = electron.remote;
-const BrowserWindow = remote.BrowserWindow;
+
 
 const RESERVED_ATTRS = new Set(["Color", "Text char len", "Text word len", "Date created", "Last updated"]);
 
@@ -150,18 +150,7 @@ class NoteWidget extends React.Component {
 
   attrDoubleClick(attr, val) {
     if (attr === "link") {
-      let win = new BrowserWindow({width: 1000, height: 1000, show: false});
-
-      win.on('closed', () => {
-        win = null;
-      });
-
-      win.loadURL(val);
-
-      win.once('ready-to-show', function() {
-        win.webContents.openDevTools();
-        win.show();
-      });
+      electron.shell.openExternal(val)
     }
   }
 

@@ -5,3 +5,4 @@
 node_modules/
 saved_diagrams/
 onedrive_authentication.py
+session.pickle

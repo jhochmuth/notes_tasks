@@ -61,5 +61,5 @@ class Document:
 
         return new_notes
 
-    def update_drive_folder(self, ):
+    def update_drive_folder(self):
         pass
