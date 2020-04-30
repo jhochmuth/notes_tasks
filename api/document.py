@@ -1,4 +1,5 @@
 import json
+import onedrivesdk_fork as onedrivesdk
 import uuid
 
 from api.note import Note
@@ -54,6 +55,7 @@ class Document:
                 attrs["OneDrive parent id"] = item_id
                 attrs["OneDrive id"] = item.id
                 attrs["link"] = item.web_url
+                attrs["source"] = "OneDrive"
                 id = item.id.replace("!", "")
 
                 new_notes[item.id] = Note(id=id, title=item.name, text="", attrs=attrs)
@@ -61,5 +63,24 @@ class Document:
 
         return new_notes
 
-    def update_drive_folder(self):
-        pass
+    def upload_notes_to_one_drive(self):
+        for item in self.children.values():
+            if isinstance(item, Note):
+                if item.attrs["Source"] != "OneDrive":
+                    name = item.attrs["title"]
+                    if "extension" in item.attrs:
+                        name += item.attrs["extension"]
+
+                    if "path" in item.attrs:
+                        path = item.attrs["path"]
+                    else:
+                        #Create txt file from text, upload, and delete file
+                        pass
+
+                    parent = "root"
+                    if "OneDrive parent id" in item.attrs:
+                        parent = item.attrs["OneDrive parent id"]
+
+                    drive_item = client.item(drive="me", id=parent).children[name].upload(path)
+
+                    item.attrs["link"] = drive_item.web_url

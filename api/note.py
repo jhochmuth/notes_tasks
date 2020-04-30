@@ -2,6 +2,10 @@ from datetime import datetime
 
 import onedrivesdk_fork as onedrivesdk
 
+import os
+
+import PyPDF2
+
 from api.uid import UID
 from utils.onedrive_authentication import client
 
@@ -71,6 +75,8 @@ class Note:
         self.attrs["Text word len"] = str(len(self.attrs["text"].split()))
 
         self.attrs["Color"] = attrs["Color"] if "Color" in self.attrs else "#686868"
+
+        self.attrs["Source"] = attrs["Source"] if "Source" in self.attrs else "Manual"
 
         self.connections = list()
 
@@ -253,6 +259,21 @@ class Note:
                    parent_container=data["parent_container"],
                    prototype=data["prototype"],
                    inherited_attrs=set(data["inherited_attrs"]))
+
+    @classmethod
+    def from_file(cls, path):
+        filename, file_extension = os.path.splitext(path)
+
+        if file_extension == ".pdf":
+            reader = PyPDF2.PdfFileReader(path)
+            file_info = PyPDF2.PdfFileReader(path).getDocumentInfo()
+            title = file_info.title
+
+            author = file_info.author
+            pages = reader.getNumPages()
+            attrs = {"author": author, "pages": pages}
+
+            return cls(title=title, text="", attrs=attrs)
 
     def __str__(self):
         return self.attrs["title"]

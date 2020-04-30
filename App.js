@@ -69,8 +69,6 @@ class App extends React.Component {
     const that = this;
     const ref = React.createRef();
     const note = new NoteModel(null, model, this, ref);
-    note.x = 200;
-    note.y = 200;
 
     const attrs = {title: event.target.title.value};
     const noteRequest = {id: note.id, attrs: attrs, document_id: this.documentId};
@@ -411,8 +409,6 @@ class App extends React.Component {
         const ref = React.createRef();
         const note = new NoteModel(null, model, that, ref);
         note.id = noteReply.id
-        note.x = 200;
-        note.y = 200;
 
         note.content = noteReply;
         model.addAll(note);
