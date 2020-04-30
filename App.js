@@ -419,10 +419,59 @@ class App extends React.Component {
         that.noteRefs[note.id] = ref;
 
         that.state.filters.forEach((filter) => {
-          that.noteRefs[noteReply.id].current.applyFilter(filter)
+          that.noteRefs[noteReply.id].current.applyFilter(filter);
         })
       }
     });
+  }
+
+  uploadToOneDrive() {
+    const that = this;
+
+    const request = {
+      document_id: this.documentId
+    }
+
+    stubs.documentStub.uploadToOneDrive(request, function(err, response) {
+      if (err) console.log(err);
+      else alert('Notes uploaded.');
+    })
+  }
+
+  // todo: make streaming method for multiple notes at one time
+  createNoteFromFile() {
+    const that = this;
+
+    remote.dialog.showOpenDialog(function(filename) {
+      if (!filename) return;
+
+      const ref = React.createRef();
+      const note = new NoteModel(null, model, that, ref);
+
+      const request = {
+        note_id: note.id,
+        document_id: that.documentId,
+        path: filename
+      }
+      console.log(filename)
+
+      stubs.noteStub.createNoteFromFile(request, function(err, response) {
+        if (err) console.log(err);
+        else {
+          note.content = response;
+          model.addAll(note);
+          engine.setDiagramModel(model);
+          that.forceUpdate();
+
+          that.updateListView();
+          that.noteRefs[note.id] = ref;
+
+          that.state.filters.forEach((filter) => {
+            that.noteRefs[noteReply.id].current.applyFilter(filter)
+          });
+        }
+      })
+    })
   }
 
   render() {
@@ -435,7 +484,10 @@ class App extends React.Component {
             save={this.save}
             load={this.onLoadButtonClick}
             syncOneDrive={(event) => this.syncOneDrive(event)}
-            openListView={this.openListView}/>
+            openListView={this.openListView}
+            uploadToOneDrive={() => this.uploadToOneDrive()}
+            createNoteFromFile={() => this.createNoteFromFile()}
+          />
         </div>
         <div
           onDrop={(event) => this.createInheritorNote(event)}

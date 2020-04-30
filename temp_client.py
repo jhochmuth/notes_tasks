@@ -19,12 +19,18 @@ def run():
         document_id = response.id
         print(document_id)
 
+        print("Creating note from file.")
+        response = note_stub.CreateNoteFromFile(tasks_pb2.NoteFromFileRequest(document_id=document_id,
+                                                                              note_id="123",
+                                                                              path="/Users/juliushochmuth/Documents/Textbooks/Clean Architecture.pdf"))
+        print(response)
+        """
         print("Syncing with onedrive.")
         response = document_stub.SyncOneDrive(tasks_pb2.DriveRequest(document_id=document_id,
                                                                      item_id="F27A5B9996AB72E1%2128460"))
         for note in response:
             print(note)
-        """
+        
         print("Creating note.")
         response = note_stub.CreateNote(tasks_pb2.NoteRequest(attrs={"title": "Joseph Conrad",
                                                                      "text": "British author.",

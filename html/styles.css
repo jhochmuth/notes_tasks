@@ -133,6 +133,9 @@
 	transform: translate(-50%, -50%);
 	font-family: Arial;
 	color: white;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
 }
 
 .note-data-title {

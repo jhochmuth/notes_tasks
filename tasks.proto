@@ -98,6 +98,12 @@ message DriveRequest {
     string item_id = 2;
 }
 
+message NoteFromFileRequest {
+    string note_id = 1;
+    string document_id = 2;
+    string path = 3;
+}
+
 message ContainerRequest {
     map<string, string> attrs = 1;
     repeated string child_note_ids = 2;
@@ -178,6 +184,7 @@ service DocumentManager {
     rpc LoadDocument (LoadRequest) returns (CreateDocumentReply) {}
 
     rpc SyncOneDrive (DriveRequest) returns (stream NoteReply) {}
+    rpc UploadToOneDrive (DriveRequest) returns (BoolWrapper) {}
 }
 
 service NoteManager {
@@ -186,6 +193,7 @@ service NoteManager {
     rpc CreateDescendantNote (DescendantNoteRequest) returns (NoteReply) {}
     rpc DeleteNoteAttr (DeleteAttrRequest) returns (BoolWrapper) {}
     rpc DeleteNote (NoteRequest) returns (DeleteNoteReply) {}
+    rpc CreateNoteFromFile (NoteFromFileRequest) returns (NoteReply) {}
 
     rpc CreateArchetype (ArchetypeRequest) returns (ArchetypeReply) {}
     rpc EditArchetypeName (ArchetypeRequest) returns (ArchetypeReply) {}

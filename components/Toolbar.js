@@ -1,4 +1,5 @@
 const React = require('react');
+const ReactDOM = require('react-dom');
 const stubs = require('../stubs.js');
 import {Button, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Popover, PopoverBody, PopoverHeader} from 'reactstrap';
 
@@ -93,6 +94,20 @@ class Toolbar extends React.Component {
         >
           Sync
         </Button>
+        <Button
+          className="toolbar-button"
+          style={{left: '20%'}}
+          onClick={() => this.props.uploadToOneDrive()}
+        >
+          Upload
+        </Button>
+        <Button
+          className="toolbar-button"
+          style={{left: "25%"}}
+          onClick={() => this.props.createNoteFromFile()}
+        >
+          From File
+        </Button>
         <Popover
           trigger="legacy"
           placement="bottom"
@@ -171,4 +186,12 @@ For Later use:
 <Button className="toolbar-button" style={{left: '10%'}} onClick={this.props.addContainer}>
   Container
 </Button>
+
+  getAuthenticationToken() {
+    return Promise.resolve('M6ed6c579-2085-fefb-dbeb-0bee7eb33ceb');
+  }
+
+
+        <GraphFileBrowser
+          getAuthenticationToken={() => this.getAuthenticationToken()} />
 */

@@ -39,6 +39,11 @@ class DocumentManagerStub(object):
         request_serializer=tasks__pb2.DriveRequest.SerializeToString,
         response_deserializer=tasks__pb2.NoteReply.FromString,
         )
+    self.UploadToOneDrive = channel.unary_unary(
+        '/DocumentManager/UploadToOneDrive',
+        request_serializer=tasks__pb2.DriveRequest.SerializeToString,
+        response_deserializer=tasks__pb2.BoolWrapper.FromString,
+        )
 
 
 class DocumentManagerServicer(object):
@@ -80,6 +85,13 @@ class DocumentManagerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def UploadToOneDrive(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_DocumentManagerServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -107,6 +119,11 @@ def add_DocumentManagerServicer_to_server(servicer, server):
           servicer.SyncOneDrive,
           request_deserializer=tasks__pb2.DriveRequest.FromString,
           response_serializer=tasks__pb2.NoteReply.SerializeToString,
+      ),
+      'UploadToOneDrive': grpc.unary_unary_rpc_method_handler(
+          servicer.UploadToOneDrive,
+          request_deserializer=tasks__pb2.DriveRequest.FromString,
+          response_serializer=tasks__pb2.BoolWrapper.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
@@ -148,6 +165,11 @@ class NoteManagerStub(object):
         '/NoteManager/DeleteNote',
         request_serializer=tasks__pb2.NoteRequest.SerializeToString,
         response_deserializer=tasks__pb2.DeleteNoteReply.FromString,
+        )
+    self.CreateNoteFromFile = channel.unary_unary(
+        '/NoteManager/CreateNoteFromFile',
+        request_serializer=tasks__pb2.NoteFromFileRequest.SerializeToString,
+        response_deserializer=tasks__pb2.NoteReply.FromString,
         )
     self.CreateArchetype = channel.unary_unary(
         '/NoteManager/CreateArchetype',
@@ -210,6 +232,13 @@ class NoteManagerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def CreateNoteFromFile(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def CreateArchetype(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -265,6 +294,11 @@ def add_NoteManagerServicer_to_server(servicer, server):
           servicer.DeleteNote,
           request_deserializer=tasks__pb2.NoteRequest.FromString,
           response_serializer=tasks__pb2.DeleteNoteReply.SerializeToString,
+      ),
+      'CreateNoteFromFile': grpc.unary_unary_rpc_method_handler(
+          servicer.CreateNoteFromFile,
+          request_deserializer=tasks__pb2.NoteFromFileRequest.FromString,
+          response_serializer=tasks__pb2.NoteReply.SerializeToString,
       ),
       'CreateArchetype': grpc.unary_unary_rpc_method_handler(
           servicer.CreateArchetype,

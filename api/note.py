@@ -261,7 +261,7 @@ class Note:
                    inherited_attrs=set(data["inherited_attrs"]))
 
     @classmethod
-    def from_file(cls, path):
+    def from_file(cls, path, id=None):
         filename, file_extension = os.path.splitext(path)
 
         if file_extension == ".pdf":
@@ -271,9 +271,9 @@ class Note:
 
             author = file_info.author
             pages = reader.getNumPages()
-            attrs = {"author": author, "pages": pages}
+            attrs = {"author": author, "pages": str(pages), "path": path}
 
-            return cls(title=title, text="", attrs=attrs)
+            return cls(id=id, title=title, text="", attrs=attrs)
 
     def __str__(self):
         return self.attrs["title"]

@@ -42,6 +42,11 @@ class DocumentServicer(tasks_pb2_grpc.DocumentManagerServicer):
             yield tasks_pb2.NoteReply(id=note.id,
                                       attrs=note.attrs)
 
+    def UploadToOneDrive(self, request, context):
+        document = documents[request.document_id]
+        document.upload_notes_to_one_drive()
+        return tasks_pb2.BoolWrapper(val=True)
+
 
 class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
     def CreateNote(self, request, context):
@@ -128,6 +133,13 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
 
         for note in updated:
             yield tasks_pb2.UpdateArchetypeReply(note_id=note.id, attrs=note.attrs)
+
+    def CreateNoteFromFile(self, request, context):
+        document = documents[request.document_id]
+        note = Note.from_file(request.path, id=request.note_id)
+        document.children[note.id] = note
+        return tasks_pb2.NoteReply(id=note.id,
+                                   attrs=note.attrs)
 
 
 class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):

@@ -1,5 +1,9 @@
 import json
+
 import onedrivesdk_fork as onedrivesdk
+
+import os
+
 import uuid
 
 from api.note import Note
@@ -68,14 +72,18 @@ class Document:
             if isinstance(item, Note):
                 if item.attrs["Source"] != "OneDrive":
                     name = item.attrs["title"]
+
                     if "extension" in item.attrs:
                         name += item.attrs["extension"]
+                    else:
+                        filename, file_extension = os.path.splitext(item.attrs["path"])
+                        name += file_extension
 
                     if "path" in item.attrs:
                         path = item.attrs["path"]
                     else:
                         #Create txt file from text, upload, and delete file
-                        pass
+                        path = ""
 
                     parent = "root"
                     if "OneDrive parent id" in item.attrs:
