@@ -1,13 +1,12 @@
-from api.note import Note
-from api.uid import UID
+from uuid import uuid1
 
-# from urllib import request
+from api.note import Note
 
 
 class Connection:
     """Class used for creating links between notes."""
     def __init__(self, endpoint_one, endpoint_two, text=None, id=None):
-        self.id = id if id else UID().assign_uid()
+        self.id = id if id else uuid1
         self.endpoint_one = endpoint_one if endpoint_one else None
         self.endpoint_two = endpoint_two if endpoint_two else None
 

@@ -1,6 +1,7 @@
 from concurrent import futures
 import time
 import grpc
+import os
 
 from api.archetype import Archetype
 from api.conditional import Conditional
@@ -136,10 +137,24 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
 
     def CreateNoteFromFile(self, request, context):
         document = documents[request.document_id]
-        note = Note.from_file(request.path, id=request.note_id)
-        document.children[note.id] = note
-        return tasks_pb2.NoteReply(id=note.id,
-                                   attrs=note.attrs)
+
+        for path in request.paths:
+            # todo: make recursive
+            if os.path.isdir(path):
+                for filename in os.listdir(path):
+                    if not filename.startswith("."):
+                        note = Note.from_file(os.path.join(path, filename))
+                        if note:
+                            document.children[note.id] = note
+                            yield tasks_pb2.NoteReply(id=note.id,
+                                                      attrs=note.attrs)
+
+            else:
+                note = Note.from_file(path)
+                if note:
+                    document.children[note.id] = note
+                    yield tasks_pb2.NoteReply(id=note.id,
+                                              attrs=note.attrs)
 
 
 class ConnectionServicer(tasks_pb2_grpc.ConnectionManagerServicer):

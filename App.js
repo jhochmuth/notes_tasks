@@ -439,37 +439,40 @@ class App extends React.Component {
   }
 
   // todo: make streaming method for multiple notes at one time
+  // note: Windows and Linux does not allow selectors to be both file and dir.
   createNoteFromFile() {
     const that = this;
 
-    remote.dialog.showOpenDialog(function(filename) {
-      if (!filename) return;
-
-      const ref = React.createRef();
-      const note = new NoteModel(null, model, that, ref);
+    remote.dialog.showOpenDialog({properties: ['openFile', 'openDirectory']}, function(result) {
+      if (!result) return;
 
       const request = {
-        note_id: note.id,
         document_id: that.documentId,
-        path: filename
+        paths: result
       }
-      console.log(filename)
 
-      stubs.noteStub.createNoteFromFile(request, function(err, response) {
-        if (err) console.log(err);
-        else {
-          note.content = response;
-          model.addAll(note);
-          engine.setDiagramModel(model);
-          that.forceUpdate();
+      let call = stubs.noteStub.createNoteFromFile(request);
 
-          that.updateListView();
-          that.noteRefs[note.id] = ref;
+      call.on('data', function(response) {
+        const ref = React.createRef();
+        const note = new NoteModel(null, model, that, ref);
+        note.id = response.id
 
-          that.state.filters.forEach((filter) => {
-            that.noteRefs[noteReply.id].current.applyFilter(filter)
-          });
-        }
+        note.content = response;
+        model.addAll(note);
+        engine.setDiagramModel(model);
+        that.forceUpdate();
+
+        that.updateListView();
+        that.noteRefs[note.id] = ref;
+
+        that.state.filters.forEach((filter) => {
+          that.noteRefs[noteReply.id].current.applyFilter(filter)
+        });
+      })
+
+      call.on('error', function(err) {
+        console.log(err)
       })
     })
   }

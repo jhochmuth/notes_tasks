@@ -1,4 +1,5 @@
-from api.uid import UID
+from uuid import uuid1
+
 
 default_container = dict()
 default_search_order = tuple()
@@ -7,7 +8,7 @@ default_search_order = tuple()
 class Container:
     """Holds collections of notes and other data."""
     def __init__(self, attrs=default_container, notes=None, data=None):
-        self.id = UID().assign_uid()
+        self.id = uuid1()
 
         if attrs is None:
             self.attrs = default_container

@@ -6,8 +6,7 @@ import os
 
 import PyPDF2
 
-from api.uid import UID
-from utils.onedrive_authentication import client
+from uuid import uuid1
 
 
 RESERVED_ATTRS = {"title",
@@ -52,7 +51,7 @@ class Note:
 
         """
         if not id:
-            self.id = UID().assign_uid()
+            self.id = str(uuid1())
         else:
             self.id = id
 
@@ -262,18 +261,27 @@ class Note:
 
     @classmethod
     def from_file(cls, path, id=None):
-        filename, file_extension = os.path.splitext(path)
+        filepath, filename = os.path.split(path)
+        name, file_extension = os.path.splitext(filename)
 
-        if file_extension == ".pdf":
-            reader = PyPDF2.PdfFileReader(path)
-            file_info = PyPDF2.PdfFileReader(path).getDocumentInfo()
-            title = file_info.title
+        try:
+            if file_extension == ".pdf":
+                reader = PyPDF2.PdfFileReader(path)
+                file_info = PyPDF2.PdfFileReader(path).getDocumentInfo()
+                title = file_info.title or name
+                author = file_info.author or "could not extract"
+                pages = reader.getNumPages()
+                attrs = {"author": author, "pages": str(pages), "path": path}
 
-            author = file_info.author
-            pages = reader.getNumPages()
-            attrs = {"author": author, "pages": str(pages), "path": path}
+                return cls(id=id, title=title, text="", attrs=attrs)
 
-            return cls(id=id, title=title, text="", attrs=attrs)
+            elif file_extension == ".txt":
+                with open(path, 'r') as f:
+                    text = f.read()
+                    return cls(id=id, title=name, text=text)
+
+        except:
+            return
 
     def __str__(self):
         return self.attrs["title"]

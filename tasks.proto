@@ -99,9 +99,8 @@ message DriveRequest {
 }
 
 message NoteFromFileRequest {
-    string note_id = 1;
     string document_id = 2;
-    string path = 3;
+    repeated string paths = 3;
 }
 
 message ContainerRequest {
@@ -193,7 +192,7 @@ service NoteManager {
     rpc CreateDescendantNote (DescendantNoteRequest) returns (NoteReply) {}
     rpc DeleteNoteAttr (DeleteAttrRequest) returns (BoolWrapper) {}
     rpc DeleteNote (NoteRequest) returns (DeleteNoteReply) {}
-    rpc CreateNoteFromFile (NoteFromFileRequest) returns (NoteReply) {}
+    rpc CreateNoteFromFile (NoteFromFileRequest) returns (stream NoteReply) {}
 
     rpc CreateArchetype (ArchetypeRequest) returns (ArchetypeReply) {}
     rpc EditArchetypeName (ArchetypeRequest) returns (ArchetypeReply) {}

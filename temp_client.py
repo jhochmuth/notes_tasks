@@ -21,9 +21,9 @@ def run():
 
         print("Creating note from file.")
         response = note_stub.CreateNoteFromFile(tasks_pb2.NoteFromFileRequest(document_id=document_id,
-                                                                              note_id="123",
-                                                                              path="/Users/juliushochmuth/Documents/Textbooks/Clean Architecture.pdf"))
-        print(response)
+                                                                              paths=["/Users/juliushochmuth/Documents/Textbooks"]))
+        for note in response:
+            print(note)
         """
         print("Syncing with onedrive.")
         response = document_stub.SyncOneDrive(tasks_pb2.DriveRequest(document_id=document_id,

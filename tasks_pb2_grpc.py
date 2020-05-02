@@ -166,7 +166,7 @@ class NoteManagerStub(object):
         request_serializer=tasks__pb2.NoteRequest.SerializeToString,
         response_deserializer=tasks__pb2.DeleteNoteReply.FromString,
         )
-    self.CreateNoteFromFile = channel.unary_unary(
+    self.CreateNoteFromFile = channel.unary_stream(
         '/NoteManager/CreateNoteFromFile',
         request_serializer=tasks__pb2.NoteFromFileRequest.SerializeToString,
         response_deserializer=tasks__pb2.NoteReply.FromString,
@@ -295,7 +295,7 @@ def add_NoteManagerServicer_to_server(servicer, server):
           request_deserializer=tasks__pb2.NoteRequest.FromString,
           response_serializer=tasks__pb2.DeleteNoteReply.SerializeToString,
       ),
-      'CreateNoteFromFile': grpc.unary_unary_rpc_method_handler(
+      'CreateNoteFromFile': grpc.unary_stream_rpc_method_handler(
           servicer.CreateNoteFromFile,
           request_deserializer=tasks__pb2.NoteFromFileRequest.FromString,
           response_serializer=tasks__pb2.NoteReply.SerializeToString,
