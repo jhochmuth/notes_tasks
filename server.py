@@ -43,10 +43,11 @@ class DocumentServicer(tasks_pb2_grpc.DocumentManagerServicer):
             yield tasks_pb2.NoteReply(id=note.id,
                                       attrs=note.attrs)
 
-    def UploadToOneDrive(self, request, context):
+    def UploadToDrive(self, request, context):
         document = documents[request.document_id]
-        document.upload_notes_to_one_drive()
-        return tasks_pb2.BoolWrapper(val=True)
+        for note in document.upload_notes_to_drive(request.drive):
+            yield tasks_pb2.NoteReply(id=note.id,
+                                      attrs=note.attrs)
 
 
 class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):

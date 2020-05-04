@@ -268,7 +268,7 @@ class Note:
             if file_extension == ".pdf":
                 reader = PyPDF2.PdfFileReader(path)
                 file_info = PyPDF2.PdfFileReader(path).getDocumentInfo()
-                title = file_info.title or name
+                title = file_info.title.replace(".pdf", "") or name
                 author = file_info.author or "could not extract"
                 pages = reader.getNumPages()
                 attrs = {"author": author, "pages": str(pages), "path": path}
@@ -279,6 +279,9 @@ class Note:
                 with open(path, 'r') as f:
                     text = f.read()
                     return cls(id=id, title=name, text=text)
+
+            else:
+                return cls(id=id, title=name)
 
         except:
             return

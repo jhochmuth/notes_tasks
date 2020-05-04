@@ -1,6 +1,7 @@
-import json
+from googleapiclient.discovery import build
+from googleapiclient.http import MediaFileUpload
 
-import onedrivesdk_fork as onedrivesdk
+import json
 
 import os
 
@@ -8,7 +9,12 @@ import uuid
 
 from api.note import Note
 from api.connection import Connection
+from utils.gdrive_authentication import gdrive
 from utils.onedrive_authentication import client
+
+
+def prepare_string_for_gdrive(string):
+    return string.replace(" ", "%20").replace("#", "%23").replace(":", "%3A")
 
 
 class Document:
@@ -67,12 +73,17 @@ class Document:
 
         return new_notes
 
-    def upload_notes_to_one_drive(self):
+    def upload_notes_to_drive(self, drive):
         for item in self.children.values():
             if isinstance(item, Note):
-                if item.attrs["Source"] != "OneDrive":
-                    name = item.attrs["title"]
 
+                # todo: remove this and handle case where no path provided
+                if "path" not in item.attrs:
+                    pass
+
+                # todo: handle update case for items already uploaded
+                if "drive_link" not in item.attrs:
+                    name = item.attrs["title"]
                     if "extension" in item.attrs:
                         name += item.attrs["extension"]
                     else:
@@ -85,10 +96,24 @@ class Document:
                         #Create txt file from text, upload, and delete file
                         path = ""
 
-                    parent = "root"
-                    if "OneDrive parent id" in item.attrs:
-                        parent = item.attrs["OneDrive parent id"]
+                    if drive == "onedrive":
+                        parent = "root"
+                        if "OneDrive parent id" in item.attrs:
+                            parent = item.attrs["OneDrive parent id"]
 
-                    drive_item = client.item(drive="me", id=parent).children[name].upload(path)
+                        response = client.item(drive="me", id=parent).children[name].upload(path)
+                        item.attrs["drive_link"] = response.web_url
+                        yield item
 
-                    item.attrs["link"] = drive_item.web_url
+                    elif drive == "gdrive":
+                        attrs = dict()
+                        for key, val in item.attrs.items():
+                            new_key = prepare_string_for_gdrive(key)
+                            attrs[new_key] = prepare_string_for_gdrive(val)
+
+                        file_metadata = {'name': name,
+                                         'appProperties': attrs}
+
+                        response = gdrive.files().create(media_body=path, body=file_metadata, fields="*").execute()
+                        item.attrs["drive_link"] = response["webViewLink"]
+                        yield item

@@ -39,10 +39,10 @@ class DocumentManagerStub(object):
         request_serializer=tasks__pb2.DriveRequest.SerializeToString,
         response_deserializer=tasks__pb2.NoteReply.FromString,
         )
-    self.UploadToOneDrive = channel.unary_unary(
-        '/DocumentManager/UploadToOneDrive',
+    self.UploadToDrive = channel.unary_stream(
+        '/DocumentManager/UploadToDrive',
         request_serializer=tasks__pb2.DriveRequest.SerializeToString,
-        response_deserializer=tasks__pb2.BoolWrapper.FromString,
+        response_deserializer=tasks__pb2.NoteReply.FromString,
         )
 
 
@@ -85,7 +85,7 @@ class DocumentManagerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def UploadToOneDrive(self, request, context):
+  def UploadToDrive(self, request, context):
     # missing associated documentation comment in .proto file
     pass
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -120,10 +120,10 @@ def add_DocumentManagerServicer_to_server(servicer, server):
           request_deserializer=tasks__pb2.DriveRequest.FromString,
           response_serializer=tasks__pb2.NoteReply.SerializeToString,
       ),
-      'UploadToOneDrive': grpc.unary_unary_rpc_method_handler(
-          servicer.UploadToOneDrive,
+      'UploadToDrive': grpc.unary_stream_rpc_method_handler(
+          servicer.UploadToDrive,
           request_deserializer=tasks__pb2.DriveRequest.FromString,
-          response_serializer=tasks__pb2.BoolWrapper.SerializeToString,
+          response_serializer=tasks__pb2.NoteReply.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

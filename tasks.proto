@@ -96,6 +96,7 @@ message UpdateArchetypeReply {
 message DriveRequest {
     string document_id = 1;
     string item_id = 2;
+    string drive = 3;
 }
 
 message NoteFromFileRequest {
@@ -183,7 +184,7 @@ service DocumentManager {
     rpc LoadDocument (LoadRequest) returns (CreateDocumentReply) {}
 
     rpc SyncOneDrive (DriveRequest) returns (stream NoteReply) {}
-    rpc UploadToOneDrive (DriveRequest) returns (BoolWrapper) {}
+    rpc UploadToDrive (DriveRequest) returns (stream NoteReply) {}
 }
 
 service NoteManager {

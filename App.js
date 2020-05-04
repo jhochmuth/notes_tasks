@@ -425,20 +425,33 @@ class App extends React.Component {
     });
   }
 
-  uploadToOneDrive() {
+  uploadToDrive() {
     const that = this;
 
     const request = {
-      document_id: this.documentId
+      document_id: this.documentId,
+      drive: "gdrive"
     }
 
-    stubs.documentStub.uploadToOneDrive(request, function(err, response) {
-      if (err) console.log(err);
-      else alert('Notes uploaded.');
+    let call = stubs.documentStub.uploadToDrive(request);
+
+    call.on('data', function(noteReply) {
+      const note = that.noteRefs[noteReply.id].current;
+      const attrs = noteReply.attrs;
+      const newState = Object.assign({}, note.state);
+      newState.attrs = attrs;
+
+      note.setState(newState);
+      note.props.node.content = noteReply;
+
+      that.state.filters.forEach((filter) => {
+        note.applyFilter(filter)
+      });
+
+      note.props.node.app.updateListView();
     })
   }
 
-  // todo: make streaming method for multiple notes at one time
   // note: Windows and Linux does not allow selectors to be both file and dir.
   createNoteFromFile() {
     const that = this;
@@ -470,10 +483,6 @@ class App extends React.Component {
           that.noteRefs[noteReply.id].current.applyFilter(filter)
         });
       })
-
-      call.on('error', function(err) {
-        console.log(err)
-      })
     })
   }
 
@@ -488,7 +497,7 @@ class App extends React.Component {
             load={this.onLoadButtonClick}
             syncOneDrive={(event) => this.syncOneDrive(event)}
             openListView={this.openListView}
-            uploadToOneDrive={() => this.uploadToOneDrive()}
+            uploadToDrive={() => this.uploadToDrive()}
             createNoteFromFile={() => this.createNoteFromFile()}
           />
         </div>

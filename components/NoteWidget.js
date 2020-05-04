@@ -149,7 +149,7 @@ class NoteWidget extends React.Component {
   }
 
   attrDoubleClick(attr, val) {
-    if (attr === "link") {
+    if (attr.includes("link")) {
       electron.shell.openExternal(val)
     }
   }

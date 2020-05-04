@@ -97,7 +97,7 @@ class Toolbar extends React.Component {
         <Button
           className="toolbar-button"
           style={{left: '20%'}}
-          onClick={() => this.props.uploadToOneDrive()}
+          onClick={() => this.props.uploadToDrive()}
         >
           Upload
         </Button>
