@@ -5,7 +5,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 const React = require('react');
 const ReactDOM = require('react-dom');
 const SRD = require('@projectstorm/react-diagrams');
-const Toolbar = require('./components/Toolbar.js');
+const AppToolbar = require('./components/Toolbar.js');
 const FilterDisplay = require('./components/FilterDisplay.js');
 const NoteModel = require('./components/NoteModel.js');
 const NoteFactory = require('./components/NoteFactory.js');
@@ -382,11 +382,12 @@ class App extends React.Component {
     const that = this;
 
     const request = {
+      drive: "gdrive",
       item_id: event.target.drive.value,
       document_id: this.documentId
     }
 
-    let call = stubs.documentStub.syncOneDrive(request);
+    let call = stubs.documentStub.syncDrive(request);
 
     call.on('data', function(noteReply) {
       if (noteReply.id in that.noteRefs) {
@@ -423,6 +424,8 @@ class App extends React.Component {
         })
       }
     });
+
+  call.on("error", function(err) {console.log(err)})
   }
 
   uploadToDrive() {
@@ -486,11 +489,15 @@ class App extends React.Component {
     })
   }
 
+  showFileManager() {
+
+  }
+
   render() {
     return (
       <div className="app">
         <div className="toolbar">
-          <Toolbar addNote={this.addNote}
+          <AppToolbar addNote={this.addNote}
             addContainer={this.addContainer}
             addFilter={(event) => this.addFilter(event)}
             save={this.save}
@@ -499,6 +506,7 @@ class App extends React.Component {
             openListView={this.openListView}
             uploadToDrive={() => this.uploadToDrive()}
             createNoteFromFile={() => this.createNoteFromFile()}
+            showFileManager={() => this.showFileManager()}
           />
         </div>
         <div

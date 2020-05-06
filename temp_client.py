@@ -19,14 +19,10 @@ def run():
         document_id = response.id
         print(document_id)
 
-        print("Creating note from file.")
-        response = note_stub.CreateNoteFromFile(tasks_pb2.NoteFromFileRequest(document_id=document_id,
-                                                                              paths=["/Users/juliushochmuth/Documents/Books/panzer38t.pdf"]))
+        print("Listing google files.")
+        response = document_stub.SyncGDrive(tasks_pb2.DriveRequest(document_id=document_id))
         for note in response:
             print(note)
-
-        print("Uploading to gdrive.")
-        response = document_stub.UploadToDrive(tasks_pb2.DriveRequest(document_id=document_id, drive="gdrive"))
 
         """
         print("Syncing with onedrive.")

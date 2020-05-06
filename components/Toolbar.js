@@ -1,7 +1,18 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const stubs = require('../stubs.js');
-import {Button, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Popover, PopoverBody, PopoverHeader} from 'reactstrap';
+import {
+  Button,
+  Form,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  Label,
+  Popover,
+  PopoverBody,
+  PopoverHeader
+} from 'reactstrap';
 
 /*
 React component for the toolbar of the main app page.
@@ -108,6 +119,13 @@ class Toolbar extends React.Component {
         >
           From File
         </Button>
+        <Button
+          className="toolbar-button"
+          style={{left: "30%"}}
+          onClick={() => this.props.showFileManager()}
+        >
+          Files
+        </Button>
         <Popover
           trigger="legacy"
           placement="bottom"
@@ -186,12 +204,4 @@ For Later use:
 <Button className="toolbar-button" style={{left: '10%'}} onClick={this.props.addContainer}>
   Container
 </Button>
-
-  getAuthenticationToken() {
-    return Promise.resolve('M6ed6c579-2085-fefb-dbeb-0bee7eb33ceb');
-  }
-
-
-        <GraphFileBrowser
-          getAuthenticationToken={() => this.getAuthenticationToken()} />
 */

@@ -54,6 +54,8 @@ class MainMenu extends React.Component {
         <div className="mainmenu-title">Bibbit</div>
         <button id="new-document-button" className="mainmenu-button" onClick={this.createDiagram}>Create new mindmap</button>
         <button id="load-document-button" className="mainmenu-button" onClick={this.loadDiagram}>Load saved mindmap</button>
+        <div style={{position: "absolute", zIndex: 20}}>
+        </div>
       </div>
     )
   }

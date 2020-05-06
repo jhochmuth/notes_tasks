@@ -48,7 +48,8 @@ class Document:
 
         return document
 
-    def create_notes_from_drive_folder(self, item_id):
+    def create_notes_from_onedrive_folder(self, item_id):
+        # todo: change to yield notes
         collection = client.item(drive="me", id=item_id).children.request().get()
 
         new_notes = dict()
@@ -64,7 +65,7 @@ class Document:
                 attrs["Date created"] = item.created_date_time
                 attrs["OneDrive parent id"] = item_id
                 attrs["OneDrive id"] = item.id
-                attrs["link"] = item.web_url
+                attrs["drive_link"] = item.web_url
                 attrs["source"] = "OneDrive"
                 id = item.id.replace("!", "")
 
@@ -72,6 +73,25 @@ class Document:
                 self.children.update(new_notes)
 
         return new_notes
+
+    def create_notes_from_gdrive(self):
+        #todo: method also creates notes from trashed files
+        response = gdrive.files().list(corpus="user", fields='*').execute()
+
+        for file in response['files']:
+            if file['id'] in self.children:
+                note = self.children[file['id']]
+                note.update_title(file['name'])
+            else:
+                attrs = dict()
+                attrs['drive_link'] = file['webViewLink']
+                attrs['source'] = "Google Drive"
+                note = Note(id=file["id"],
+                            title=file["name"],
+                            text="",
+                            attrs=attrs)
+                self.children[note.id] = note
+            yield note
 
     def upload_notes_to_drive(self, drive):
         for item in self.children.values():
@@ -117,3 +137,16 @@ class Document:
                         response = gdrive.files().create(media_body=path, body=file_metadata, fields="*").execute()
                         item.attrs["drive_link"] = response["webViewLink"]
                         yield item
+
+    def sync_with_drive(self, drive, methods=['upload', 'download']):
+        if drive == "gdrive":
+            if 'upload' in methods:
+                yield from self.upload_notes_to_drive(drive)
+            if 'download' in methods:
+                yield from self.create_notes_from_gdrive()
+
+        elif drive == 'onedrive':
+            if 'upload' in methods:
+                yield from self.upload_notes_to_drive(drive)
+            if 'download' in methods:
+                yield from self.create_notes_from_onedrive_folder("root")
