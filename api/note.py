@@ -64,7 +64,8 @@ class Note:
         self.attrs["text"] = text
 
         if "Date created" in self.attrs:
-            self.attrs["Date created"] = self.attrs["Date created"].strftime("%Y/%m/%d %I:%M %p")
+            if type(self.attrs["Date created"]) != str:
+                self.attrs["Date created"] = self.attrs["Date created"].strftime("%Y/%m/%d %I:%M %p")
         else:
             self.attrs["Date created"] = get_current_time()
 
@@ -119,6 +120,9 @@ class Note:
     def delete_attr(self, attr):
         self.update_last_changed()
 
+        if attr in self.inherited_attrs:
+            self.inherited_attrs.remove(attr)
+
         del self.attrs[attr]
 
         for descendant in self.descendant_notes:
@@ -149,9 +153,11 @@ class Note:
 
         yield self
 
+    # todo: update to allow for optional creation of new attr in existing inheritors if new attr added to archetype
     def update_attr_archetype(self, attr, val):
-        if attr in self.inherited_attrs:
+        if attr in self.inherited_attrs or attr not in self.attrs:
             self.attrs[attr] = val
+            self.inherited_attrs.add(attr)
 
         self.update_last_changed()
 

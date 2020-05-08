@@ -17,6 +17,30 @@ def prepare_string_for_gdrive(string):
     return string.replace(" ", "%20").replace("#", "%23").replace(":", "%3A")
 
 
+def prepare_string_from_gdrive(string):
+    return string.replace("%20", " ").replace("%23", "#").replace("%3A", ":")
+
+
+def prepare_dict_for_gdrive(d):
+    new_dict = dict()
+
+    for key, val in d.items():
+        new_key = prepare_string_for_gdrive(key)
+        new_dict[new_key] = prepare_string_for_gdrive(val)
+
+    return new_dict
+
+
+def prepare_dict_from_gdrive(d):
+    new_dict = dict()
+
+    for key, val in d.items():
+        new_key = prepare_string_from_gdrive(key)
+        new_dict[new_key] = prepare_string_from_gdrive(val)
+
+    return new_dict
+
+
 class Document:
     def __init__(self):
         self.children = dict()
@@ -65,7 +89,7 @@ class Document:
                 attrs["Date created"] = item.created_date_time
                 attrs["OneDrive parent id"] = item_id
                 attrs["OneDrive id"] = item.id
-                attrs["drive_link"] = item.web_url
+                attrs["drive link"] = item.web_url
                 attrs["source"] = "OneDrive"
                 id = item.id.replace("!", "")
 
@@ -75,8 +99,8 @@ class Document:
         return new_notes
 
     def create_notes_from_gdrive(self):
-        #todo: method also creates notes from trashed files
-        response = gdrive.files().list(corpus="user", fields='*').execute()
+        # todo: method also creates notes from trashed files
+        response = gdrive.files().list(corpora="user", fields='*', q='trashed=false').execute()
 
         for file in response['files']:
             if file['id'] in self.children:
@@ -84,8 +108,13 @@ class Document:
                 note.update_title(file['name'])
             else:
                 attrs = dict()
-                attrs['drive_link'] = file['webViewLink']
+                attrs['drive link'] = file['webViewLink']
+                attrs['drive id'] = file['id']
                 attrs['source'] = "Google Drive"
+
+                if 'appProperties' in file:
+                    attrs.update(prepare_dict_from_gdrive(file['appProperties']))
+
                 note = Note(id=file["id"],
                             title=file["name"],
                             text="",
@@ -94,6 +123,7 @@ class Document:
             yield note
 
     def upload_notes_to_drive(self, drive):
+        # todo: handle case where item deleted in gdrive or locally
         for item in self.children.values():
             if isinstance(item, Note):
 
@@ -101,8 +131,7 @@ class Document:
                 if "path" not in item.attrs:
                     pass
 
-                # todo: handle update case for items already uploaded
-                if "drive_link" not in item.attrs:
+                if "drive link" not in item.attrs:
                     name = item.attrs["title"]
                     if "extension" in item.attrs:
                         name += item.attrs["extension"]
@@ -122,21 +151,26 @@ class Document:
                             parent = item.attrs["OneDrive parent id"]
 
                         response = client.item(drive="me", id=parent).children[name].upload(path)
-                        item.attrs["drive_link"] = response.web_url
+                        item.attrs["drive link"] = response.web_url
                         yield item
 
                     elif drive == "gdrive":
-                        attrs = dict()
-                        for key, val in item.attrs.items():
-                            new_key = prepare_string_for_gdrive(key)
-                            attrs[new_key] = prepare_string_for_gdrive(val)
+                        attrs = prepare_dict_for_gdrive(item.attrs)
 
                         file_metadata = {'name': name,
                                          'appProperties': attrs}
 
                         response = gdrive.files().create(media_body=path, body=file_metadata, fields="*").execute()
-                        item.attrs["drive_link"] = response["webViewLink"]
+                        item.attrs["drive link"] = response["webViewLink"]
+                        item.attrs["drive id"] = response["id"]
                         yield item
+
+                else:
+                    # todo: handle files that user does not have permission to access/modify
+                    if drive == "gdrive":
+                        file_metadata = {'appProperties': prepare_dict_for_gdrive(item.attrs)}
+
+                        response = gdrive.files().update(fileId=item.attrs['drive id'], body=file_metadata).execute()
 
     def sync_with_drive(self, drive, methods=['upload', 'download']):
         if drive == "gdrive":

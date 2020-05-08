@@ -8,3 +8,4 @@ onedrive_authentication.py
 session.pickle
 credentials.json
 token.pickle
+token.json

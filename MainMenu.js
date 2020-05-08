@@ -5,6 +5,7 @@ const electron = require('electron');
 const remote = electron.remote;
 const BrowserWindow = remote.BrowserWindow;
 const path = require('path');
+const fs = require('fs');
 
 /*
 React component for the main menu.
@@ -54,8 +55,6 @@ class MainMenu extends React.Component {
         <div className="mainmenu-title">Bibbit</div>
         <button id="new-document-button" className="mainmenu-button" onClick={this.createDiagram}>Create new mindmap</button>
         <button id="load-document-button" className="mainmenu-button" onClick={this.loadDiagram}>Load saved mindmap</button>
-        <div style={{position: "absolute", zIndex: 20}}>
-        </div>
       </div>
     )
   }

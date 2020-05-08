@@ -94,11 +94,13 @@ class FilterDisplay extends React.Component {
   }
 
   updateInheritors(request) {
+    const that = this;
+
     let call = stubs.noteStub.updateArchetypeAttr(request)
 
     call.on('data', function(reply) {
-      that.props.updateNoteAttr(reply.note_id, reply.attrs);
-    })
+      that.props.updateNoteAttr(reply.id, reply.attrs, reply.inherited_attrs);
+    });
   }
 
   render() {

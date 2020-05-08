@@ -18,12 +18,22 @@ def run():
         response = document_stub.CreateDocument(tasks_pb2.Empty())
         document_id = response.id
         print(document_id)
-
-        print("Listing google files.")
-        response = document_stub.SyncGDrive(tasks_pb2.DriveRequest(document_id=document_id))
+        """
+        print("Creating note from file.")
+        response = note_stub.CreateNoteFromFile(tasks_pb2.NoteFromFileRequest(document_id=document_id,
+                                                                              paths=['/Users/juliushochmuth/Documents/Books/panzer38t.pdf']))
+        for item in response:
+            print(item)
+        
+        print("Sync with Google Drive.")
+        response = document_stub.SyncDrive(tasks_pb2.DriveRequest(document_id=document_id, drive="gdrive"))
         for note in response:
             print(note)
 
+        response = document_stub.SyncDrive(tasks_pb2.DriveRequest(document_id=document_id, drive="gdrive"))
+        for note in response:
+            print(note)
+        """
         """
         print("Syncing with onedrive.")
         response = document_stub.SyncOneDrive(tasks_pb2.DriveRequest(document_id=document_id,
@@ -68,7 +78,7 @@ def run():
         for response in responses:
             print(response.id)
             print(response.attrs)
-        
+        """
         print("Creating archetype.")
         attrs = {"type": "blah"}
         response = note_stub.CreateArchetype(tasks_pb2.ArchetypeRequest(attrs=attrs,
@@ -82,11 +92,13 @@ def run():
                                                                               document_id=document_id))
         print(response)
 
-        print("Creating second note from archetype.")
-        response = note_stub.CreateInheritor(tasks_pb2.CreateInheritorRequest(archetype_id=archetype_id,
-                                                                              document_id=document_id))
-        print(response)
-        """
+        print("Updating archetype.")
+        response = note_stub.UpdateArchetypeAttr(tasks_pb2.UpdateArchetypeRequest(archetype_id=archetype_id,
+                                                                                  document_id=document_id,
+                                                                                  attr="blah",
+                                                                                  val="blah"))
+        for item in response:
+            print(item)
 
 
 run()

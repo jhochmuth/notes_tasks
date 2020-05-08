@@ -88,11 +88,6 @@ message UpdateArchetypeRequest {
     string document_id = 4;
 }
 
-message UpdateArchetypeReply {
-    string note_id = 1;
-    map<string, string> attrs = 2;
-}
-
 message DriveRequest {
     string document_id = 1;
     string item_id = 2;
@@ -192,14 +187,14 @@ service NoteManager {
     rpc CreateNote (NoteRequest) returns (NoteReply) {}
     rpc UpdateNoteAttr (UpdateAttrRequest) returns (stream NoteReply) {}
     rpc CreateDescendantNote (DescendantNoteRequest) returns (NoteReply) {}
-    rpc DeleteNoteAttr (DeleteAttrRequest) returns (BoolWrapper) {}
+    rpc DeleteNoteAttr (DeleteAttrRequest) returns (NoteReply) {}
     rpc DeleteNote (NoteRequest) returns (DeleteNoteReply) {}
     rpc CreateNoteFromFile (NoteFromFileRequest) returns (stream NoteReply) {}
 
     rpc CreateArchetype (ArchetypeRequest) returns (ArchetypeReply) {}
     rpc EditArchetypeName (ArchetypeRequest) returns (ArchetypeReply) {}
     rpc CreateInheritor (CreateInheritorRequest) returns (NoteReply) {}
-    rpc UpdateArchetypeAttr (UpdateArchetypeRequest) returns (stream UpdateArchetypeReply) {}
+    rpc UpdateArchetypeAttr (UpdateArchetypeRequest) returns (stream NoteReply) {}
 }
 
 service ConnectionManager {

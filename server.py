@@ -98,7 +98,8 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
 
         note.delete_attr(request.attr)
 
-        return tasks_pb2.BoolWrapper(val=True)
+        return tasks_pb2.NoteReply(attrs=note.attrs,
+                                   inherited_attrs=list(note.inherited_attrs))
 
     def DeleteNote(self, request, context):
         note = documents[request.document_id].children[request.id]
@@ -134,7 +135,9 @@ class NoteServicer(tasks_pb2_grpc.NoteManagerServicer):
         updated = archetype.update_attr(attr=request.attr, val=request.val)
 
         for note in updated:
-            yield tasks_pb2.UpdateArchetypeReply(note_id=note.id, attrs=note.attrs)
+            yield tasks_pb2.NoteReply(id=note.id,
+                                      attrs=note.attrs,
+                                      inherited_attrs=list(note.inherited_attrs))
 
     def CreateNoteFromFile(self, request, context):
         document = documents[request.document_id]

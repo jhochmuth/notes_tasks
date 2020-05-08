@@ -17,6 +17,9 @@ const stubs = require('./stubs.js');
 const Filter = require('./utils/filter.js');
 const path = require('path');
 import {Button} from 'reactstrap';
+const {google} = require('googleapis');
+import ReactModal from 'react-modal';
+import {TreeViewComponent} from '@syncfusion/ej2-react-navigations';
 
 const engine = new SRD.DiagramEngine();
 engine.installDefaultFactories();
@@ -38,7 +41,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {filters: []};
+    this.state = {filters: [], files: [], displayDriveFiles: false};
 
     this.listWin = null;
     this.documentId = props.documentId;
@@ -170,8 +173,7 @@ class App extends React.Component {
       const attrs = noteReply.attrs;
       const newState = Object.assign({}, note.state);
       newState.attrs = attrs;
-
-      newState.inherited_attrs = noteReply.inherited_attrs;
+      newState.inheritedAttrs = noteReply.inherited_attrs;
       note.setState(newState);
       note.props.node.content = noteReply;
 
@@ -183,10 +185,11 @@ class App extends React.Component {
     });
   }
 
-  updateNoteAttrArchetype(id, attrs) {
+  updateNoteAttrArchetype(id, attrs, inheritedAttrs) {
     const note = this.noteRefs[id].current;
     const newState = Object.assign({}, note.state);
     newState.attrs = attrs;
+    newState.inheritedAttrs = inheritedAttrs;
     note.setState(newState);
 
     this.state.filters.forEach((filter) => {
@@ -426,6 +429,8 @@ class App extends React.Component {
     });
 
   call.on("error", function(err) {console.log(err)})
+
+  call.on("end", function() {alert("end")})
   }
 
   uploadToDrive() {
@@ -489,11 +494,58 @@ class App extends React.Component {
     })
   }
 
-  showFileManager() {
+  populateDriveFileManager() {
+    const that = this;
 
+    fs.readFile('credentials.json', (err, content) => {
+      if (err) return console.log('Error loading client secret file:', err);
+      authorize(JSON.parse(content), getFiles);
+    });
+
+    function authorize(credentials, callback) {
+      const {client_secret, client_id, redirect_uris} = credentials.installed;
+      const oAuth2Client = new google.auth.OAuth2(
+          client_id, client_secret, redirect_uris[0]);
+
+      // Check if we have previously stored a token.
+      fs.readFile('token.json', (err, token) => {
+        if (err) return getAccessToken(oAuth2Client, callback);
+        oAuth2Client.setCredentials(JSON.parse(token));
+        callback(oAuth2Client);
+      });
+    }
+
+    function getFiles(auth) {
+      const drive = google.drive({version: 'v3', auth});
+      drive.files.list({q: "trashed: false"}, (err, res) => {
+        if (err) return console.log('The API returned an error: ' + err);
+        const files = res.data.files;
+        let id = 1;
+        let newFiles = [];
+        files.forEach((file) => {
+          newFiles.push({id: id, name: file.name});
+          id += 1;
+        })
+        const newState = Object.assign({}, that.state);
+        newState.files = newFiles;
+        that.setState(newState);
+      });
+    }
+  }
+
+  toggleDriveFiles() {
+    if (!this.state.displayDriveFiles) {
+      this.populateDriveFileManager()
+    }
+
+    const newState = {...this.state};
+    newState.displayDriveFiles = !newState.displayDriveFiles;
+    this.setState(newState);
   }
 
   render() {
+    console.log(this.state.files)
+    const fields = {dataSource: this.state.files, id: 'id', text: 'name'};
     return (
       <div className="app">
         <div className="toolbar">
@@ -506,7 +558,7 @@ class App extends React.Component {
             openListView={this.openListView}
             uploadToDrive={() => this.uploadToDrive()}
             createNoteFromFile={() => this.createNoteFromFile()}
-            showFileManager={() => this.showFileManager()}
+            toggleDriveFiles={() => this.toggleDriveFiles()}
           />
         </div>
         <div
@@ -526,8 +578,22 @@ class App extends React.Component {
           filters={this.state.filters}
           deleteFilter={(filter) => this.deleteFilter(filter)}
           documentId={this.documentId}
-          updateNoteAttr={(id, attrs) => this.updateNoteAttrArchetype(id, attrs)}
+          updateNoteAttr={(id, attrs, inheritedAttrs) => this.updateNoteAttrArchetype(id, attrs, inheritedAttrs)}
         />
+        <ReactModal
+          isOpen={this.state.displayDriveFiles}
+          onRequestClose={() => this.toggleDriveFiles()}
+          style={{
+            content: {
+              backgroundColor: "#F5F5F5",
+              height: "40%",
+              width: "40%"
+            }
+          }}
+          ariaHideApp={false}
+        >
+          <TreeViewComponent id="treeview" fields={fields} />
+        </ReactModal>
       </div>
     );
   }

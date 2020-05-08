@@ -122,7 +122,7 @@ class Toolbar extends React.Component {
         <Button
           className="toolbar-button"
           style={{left: "30%"}}
-          onClick={() => this.props.showFileManager()}
+          onClick={() => this.props.toggleDriveFiles()}
         >
           Files
         </Button>

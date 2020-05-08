@@ -140,7 +140,8 @@ class NoteWidget extends React.Component {
 
       else {
         const newState = Object.assign({}, that.state);
-        delete newState.attrs[attr];
+        newState.attrs = noteReply.attrs;
+        newState.inheritedAttrs = noteReply.inherited_attrs;
         that.setState(newState);
         that.props.node.content.attrs = newState.attrs;
         that.props.node.app.updateListView();

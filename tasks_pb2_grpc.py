@@ -176,7 +176,7 @@ class NoteManagerStub(object):
     self.DeleteNoteAttr = channel.unary_unary(
         '/NoteManager/DeleteNoteAttr',
         request_serializer=tasks__pb2.DeleteAttrRequest.SerializeToString,
-        response_deserializer=tasks__pb2.BoolWrapper.FromString,
+        response_deserializer=tasks__pb2.NoteReply.FromString,
         )
     self.DeleteNote = channel.unary_unary(
         '/NoteManager/DeleteNote',
@@ -206,7 +206,7 @@ class NoteManagerStub(object):
     self.UpdateArchetypeAttr = channel.unary_stream(
         '/NoteManager/UpdateArchetypeAttr',
         request_serializer=tasks__pb2.UpdateArchetypeRequest.SerializeToString,
-        response_deserializer=tasks__pb2.UpdateArchetypeReply.FromString,
+        response_deserializer=tasks__pb2.NoteReply.FromString,
         )
 
 
@@ -305,7 +305,7 @@ def add_NoteManagerServicer_to_server(servicer, server):
       'DeleteNoteAttr': grpc.unary_unary_rpc_method_handler(
           servicer.DeleteNoteAttr,
           request_deserializer=tasks__pb2.DeleteAttrRequest.FromString,
-          response_serializer=tasks__pb2.BoolWrapper.SerializeToString,
+          response_serializer=tasks__pb2.NoteReply.SerializeToString,
       ),
       'DeleteNote': grpc.unary_unary_rpc_method_handler(
           servicer.DeleteNote,
@@ -335,7 +335,7 @@ def add_NoteManagerServicer_to_server(servicer, server):
       'UpdateArchetypeAttr': grpc.unary_stream_rpc_method_handler(
           servicer.UpdateArchetypeAttr,
           request_deserializer=tasks__pb2.UpdateArchetypeRequest.FromString,
-          response_serializer=tasks__pb2.UpdateArchetypeReply.SerializeToString,
+          response_serializer=tasks__pb2.NoteReply.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
