@@ -6,7 +6,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const SRD = require('@projectstorm/react-diagrams');
 const AppToolbar = require('./components/Toolbar2.js');
-const FilterDisplay = require('./components/FilterDisplay.js');
+const DrawerDisplay = require('./components/DrawerDisplay.js');
 const NoteModel = require('./components/NoteModel.js');
 const NoteFactory = require('./components/NoteFactory.js');
 const NoteLinkFactory = require('./components/NoteLinkFactory.js');
@@ -43,7 +43,7 @@ class App extends React.Component {
 
     this.state = {filters: [], files: [], displayDriveFiles: false};
 
-    this.listWin = null;
+    this.treeWin = null;
     this.documentId = props.documentId;
     this.diagramRef = React.createRef();
     this.noteRefs = {};
@@ -80,7 +80,7 @@ class App extends React.Component {
         engine.setDiagramModel(model);
         that.forceUpdate();
 
-        that.updateListView();
+        that.updateTreeView();
         that.noteRefs[note.id] = ref;
 
         that.state.filters.forEach((filter) => {
@@ -111,7 +111,7 @@ class App extends React.Component {
         engine.setDiagramModel(model);
         that.forceUpdate();
 
-        that.updateListView();
+        that.updateTreeView();
         that.noteRefs[note.id] = ref;
 
         that.state.filters.forEach((filter) => {
@@ -147,7 +147,7 @@ class App extends React.Component {
         engine.setDiagramModel(model);
         that.forceUpdate();
 
-        that.updateListView();
+        that.updateTreeView();
         that.noteRefs[note.id] = ref;
 
         that.state.filters.forEach((filter) => {
@@ -179,7 +179,7 @@ class App extends React.Component {
       engine.setDiagramModel(model);
       that.forceUpdate();
 
-      that.updateListView();
+      that.updateTreeView();
       that.noteRefs[note.id] = ref;
 
       that.state.filters.forEach((filter) => {
@@ -208,7 +208,7 @@ class App extends React.Component {
         note.applyFilter(filter)
       });
 
-      note.props.node.app.updateListView();
+      note.props.node.app.updateTreeView();
     });
   }
 
@@ -223,7 +223,7 @@ class App extends React.Component {
       note.applyFilter(filter)
     });
 
-    note.props.node.app.updateListView();
+    note.props.node.app.updateTreeView();
   }
 
   removePrototypes(descendantIds) {
@@ -328,44 +328,44 @@ class App extends React.Component {
     });
   }
 
-  updateListView() {
+  updateTreeView() {
     let data = {};
     const that = this;
 
-    if (that.listWin) {
+    if (that.treeWin) {
       for (let id in model.nodes) {
         data[id] = model.nodes[id].content;
       }
 
-    that.listWin.webContents.send('listView', data);
+    that.treeWin.webContents.send('treeView', data);
     }
   }
 
-  openListView() {
+  openTreeView() {
     const that = this;
 
-    if (!that.listWin) {
-      that.listWin = new BrowserWindow({width: 800, height: 800, show: false});
-      that.listWin.setMenu(null);
-      that.listWin.on('closed', () => {
-        that.listWin = null;
+    if (!that.treeWin) {
+      that.treeWin = new BrowserWindow({width: 800, height: 800, show: false});
+      that.treeWin.setMenu(null);
+      that.treeWin.on('closed', () => {
+        that.treeWin = null;
       });
 
-      that.listWin.loadURL(require('url').format({
-        pathname: path.join(__dirname, 'html/indexList.html'),
+      that.treeWin.loadURL(require('url').format({
+        pathname: path.join(__dirname, 'html/indexTreeView.html'),
         protocol: 'file:',
         slashes: true
       }));
 
-      that.listWin.once('ready-to-show', function() {
-        that.listWin.webContents.openDevTools();
-        that.listWin.show();
-        that.updateListView();
+      that.treeWin.once('ready-to-show', function() {
+        that.treeWin.webContents.openDevTools();
+        that.treeWin.show();
+        that.updateTreeView();
       });
     }
 
     else {
-      that.listWin.focus();
+      that.treeWin.focus();
     }
   }
 
@@ -433,7 +433,7 @@ class App extends React.Component {
           note.applyFilter(filter)
         });
 
-        note.props.node.app.updateListView();
+        note.props.node.app.updateTreeView();
       }
 
       else {
@@ -446,7 +446,7 @@ class App extends React.Component {
         engine.setDiagramModel(model);
         that.forceUpdate();
 
-        that.updateListView();
+        that.updateTreeView();
         that.noteRefs[note.id] = ref;
 
         that.state.filters.forEach((filter) => {
@@ -483,7 +483,7 @@ class App extends React.Component {
         note.applyFilter(filter)
       });
 
-      note.props.node.app.updateListView();
+      note.props.node.app.updateTreeView();
     })
 
     call.on('end', () => alert("end"));
@@ -513,7 +513,7 @@ class App extends React.Component {
         engine.setDiagramModel(model);
         that.forceUpdate();
 
-        that.updateListView();
+        that.updateTreeView();
         that.noteRefs[note.id] = ref;
 
         that.state.filters.forEach((filter) => {
@@ -615,7 +615,7 @@ class App extends React.Component {
             save={() => this.save()}
             load={() => this.onLoadButtonClick()}
             syncOneDrive={(event) => this.syncDrive(event)}
-            openListView={() => this.openListView()}
+            openTreeView={() => this.openTreeView()}
             uploadToDrive={() => this.uploadToDrive()}
             createNoteFromFile={() => this.createNoteFromFile()}
             toggleDriveFiles={() => this.toggleDriveFiles()}
@@ -634,7 +634,7 @@ class App extends React.Component {
             ref={this.diagramRef}
           />
         </div>
-        <FilterDisplay
+        <DrawerDisplay
           filters={this.state.filters}
           deleteFilter={(filter) => this.deleteFilter(filter)}
           documentId={this.documentId}

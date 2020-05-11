@@ -8,6 +8,7 @@ import {ButtonComponent} from '@syncfusion/ej2-react-buttons';
 import {
   FolderOpenOutlined,
   FormOutlined,
+  PartitionOutlined,
   SaveOutlined
 } from '@ant-design/icons';
 
@@ -49,14 +50,23 @@ class AppToolbar extends React.Component {
             },
             {
               icon: <SaveOutlined />,
-              onClick: () => console.log('save'),
+              onClick: () => this.props.save(),
               key: 'save'
             },
             {
               icon: <FolderOpenOutlined />,
-              onClick: () => console.log('load'),
+              onClick: () => this.props.load(),
               key: 'load'
-            }
+            },
+            {
+              key: 'divider-2',
+              kind: 'divider'
+            },
+            {
+              icon: <PartitionOutlined />,
+              onClick: () => this.props.openTreeView(),
+              key: 'treeView'
+            },
           ]}
         />
         <ReactModal

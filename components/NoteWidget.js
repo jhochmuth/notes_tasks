@@ -135,7 +135,7 @@ class NoteWidget extends React.Component {
         newState.inheritedAttrs = noteReply.inherited_attrs;
         that.setState(newState);
         that.props.node.content.attrs = newState.attrs;
-        that.props.node.app.updateListView();
+        that.props.node.app.updateTreeView();
       }
     })
   }

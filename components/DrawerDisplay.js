@@ -8,7 +8,7 @@ import {Menu, Popover} from 'antd';
 import {MinusCircleOutlined, PartitionOutlined} from '@ant-design/icons';
 
 // todo: add archetype attr delete functionality
-class FilterDisplay extends React.Component {
+class DrawerDisplay extends React.Component {
   constructor(props) {
     super(props);
 
@@ -134,4 +134,4 @@ class FilterDisplay extends React.Component {
   }
 }
 
-module.exports = FilterDisplay;
+module.exports = DrawerDisplay;
