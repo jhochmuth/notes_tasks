@@ -15,13 +15,13 @@ const remote = electron.remote;
 
 const RESERVED_ATTRS = new Set(["Color", "Text char len", "Text word len", "Date created", "Last updated"]);
 
-// todo: delete prototype functionality, make archetype show
-// todo: make ability to break prototype relationship
-// todo: deleteNoteAttr must send stream for prototypes
-// todo: creating new attr in prototype should update descendants
+// todo: delete prototype functionality, show archetype
+// todo: make ability to break archetype relationship
+// todo: separate into multiple child components
+// todo: create functionality to hide reserved attributes such as text len, prevent deletion
+// todo: user can still move diagram by dragging inside of color picker
+  // fix by using modal instead of popup
 class NoteWidget extends React.Component {
-  // todo: refactor attributes into separate component
-  // todo: create functionality to hide reserved attributes such as text len
   constructor(props) {
     super(props);
 
@@ -31,12 +31,13 @@ class NoteWidget extends React.Component {
       height: 80,
       displayData: false,
       displayColorSelector: false,
-      showButtons: false,
+      displayButtons: false,
       showTextForm: false,
       selected: false,
       prototypeId: this.props.node.content.prototype_id,
       inheritedAttrs: this.props.node.content.inherited_attrs,
-      filters: new Set()
+      filters: new Set(),
+      noteColor: this.props.node.content.attrs.Color
     };
 
     this.textData = null;
@@ -45,10 +46,6 @@ class NoteWidget extends React.Component {
     this.props.node.addListener({
       selectionChanged: (event) => this.toggleSelection(event)
     })
-
-    this.showButtons = this.showButtons.bind(this);
-    this.hideButtons = this.hideButtons.bind(this);
-    this.deleteNote = this.deleteNote.bind(this);
   }
 
   toggleSelection(event) {
@@ -57,15 +54,9 @@ class NoteWidget extends React.Component {
     this.setState(newState);
   }
 
-  showButtons() {
+  toggleButtons(val) {
     const newState = Object.assign({}, this.state);
-    newState.showButtons = true;
-    this.setState(newState);
-  }
-
-  hideButtons() {
-    const newState = Object.assign({}, this.state);
-    newState.showButtons = false;
+    newState.displayButtons = val;
     this.setState(newState);
   }
 
@@ -241,12 +232,12 @@ class NoteWidget extends React.Component {
     this.props.node.remove();
   }
 
-  onResizeStart() {
+  lockDiagram() {
     this.props.node.app.diagramRef.current.stopFiringAction();
     this.props.node.model.setLocked();
   }
 
-  onResizeStop() {
+  unlockDiagram() {
     this.props.node.model.setLocked(false);
   }
 
@@ -258,6 +249,14 @@ class NoteWidget extends React.Component {
   }
 
   colorSelectorChange(color) {
+    this.lockDiagram();
+    const newState = Object.assign({}, this.state);
+    newState.noteColor = color.hex;
+    this.setState(newState);
+  }
+
+  colorSelectorChangeFinish(color) {
+    this.unlockDiagram();
     const newState = Object.assign({}, this.state);
     newState.noteColor = color.hex;
     this.setState(newState);
@@ -297,7 +296,7 @@ class NoteWidget extends React.Component {
       border: this.state.selected ? "lightskyblue solid" : "none",
       width: this.state.width,
       height: this.state.height,
-      backgroundColor: attrs.Color
+      backgroundColor: this.state.noteColor
     }
 
     if (this.state.filters.size > 0) return null;
@@ -307,14 +306,14 @@ class NoteWidget extends React.Component {
         width={this.state.width}
         height={this.state.height}
         className="note"
-        onResizeStart={(event, data) => this.onResizeStart()}
-        onResizeStop={(event, data) => this.onResizeStop()}
+        onResizeStart={() => this.lockDiagram()}
+        onResizeStop={() => this.unlockDiagram()}
         onResize={(event, data) => this.onResize(data)}
       >
         <div
           style={noteDivStyling}
-          onMouseEnter={this.showButtons}
-          onMouseLeave={this.hideButtons}>
+          onMouseEnter={() => this.toggleButtons(true)}
+          onMouseLeave={() => this.toggleButtons(false)}>
           <ScaleText>
             <p className="note-title">{attrs.title}</p>
           </ScaleText>
@@ -322,23 +321,23 @@ class NoteWidget extends React.Component {
             id={"toggleDisplayData" + this.props.node.content.id}
             className="edit-note-button"
             onClick={() => this.toggleDisplayData(true)}
-            style={{visibility: this.state.showButtons ? "visible" : "hidden"}}>⚙</button>
+            style={{visibility: this.state.displayButtons ? "visible" : "hidden"}}>⚙</button>
           <button
             id={"colorButton" + this.props.node.content.id}
             className="color-selector-button"
-            style={{visibility: this.state.showButtons ? "visible" : "hidden"}}
+            style={{visibility: this.state.displayButtons ? "visible" : "hidden"}}
             onClick={() => this.toggleColorSelector(true)}>{String.fromCharCode(55356, 57256)}</button>
           <Button close
             className="delete-note-button"
             style={{
               color: "crimson",
               textShadow: "0px 0px",
-              visibility: this.state.showButtons ? "visible" : "hidden"
+              visibility: this.state.displayButtons ? "visible" : "hidden"
             }}
-            onClick={this.deleteNote}/>
+            onClick={() => this.deleteNote()}/>
           <ReactModal
             isOpen={this.state.displayData}
-            onAfterOpen={() => this.hideButtons()}
+            onAfterOpen={() => this.toggleButtons(false)}
             onRequestClose={() => this.toggleDisplayData(false)}
             style={{
               content: {
@@ -428,7 +427,8 @@ class NoteWidget extends React.Component {
             <PopoverBody>
               <ChromePicker
                 color={this.state.noteColor}
-                onChangeComplete={(color, event) => this.colorSelectorChange(color)}
+                onChange={(color) => this.colorSelectorChange(color)}
+                onChangeComplete={(color) => this.colorSelectorChangeFinish(color)}
               />
             </PopoverBody>
           </Popover>

@@ -180,6 +180,7 @@ service DocumentManager {
 
     rpc SyncOneDrive (DriveRequest) returns (stream NoteReply) {}
     rpc SyncDrive (DriveRequest) returns (stream NoteReply) {}
+    rpc CreateNotesFromDrive (DriveRequest) returns (stream NoteReply) {}
     rpc UploadToDrive (DriveRequest) returns (stream NoteReply) {}
 }
 

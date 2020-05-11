@@ -66,22 +66,12 @@
 }
 
 .toolbar {
-	border-bottom: thin solid;
-	position: relative;
-	top: 0;
-	height: 8%;
-	background-color: #C0C0C0;
-	width: 100%;
+  background-color: #B6B6B6;
+  border-bottom: thin solid;
 }
 
-.toolbar-button {
-	position: relative;
-	top: 10;
-	height: 80%;
-}
-
-.toolbar-icon {
-	height: 80%;
+#new-note-modal-header {
+  text-align: center;
 }
 
 .srd-diagram {
@@ -242,6 +232,8 @@
 	position: absolute;
 	right: 5;
 }
+
+
 
 
 

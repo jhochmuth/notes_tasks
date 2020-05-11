@@ -44,6 +44,11 @@ class DocumentManagerStub(object):
         request_serializer=tasks__pb2.DriveRequest.SerializeToString,
         response_deserializer=tasks__pb2.NoteReply.FromString,
         )
+    self.CreateNotesFromDrive = channel.unary_stream(
+        '/DocumentManager/CreateNotesFromDrive',
+        request_serializer=tasks__pb2.DriveRequest.SerializeToString,
+        response_deserializer=tasks__pb2.NoteReply.FromString,
+        )
     self.UploadToDrive = channel.unary_stream(
         '/DocumentManager/UploadToDrive',
         request_serializer=tasks__pb2.DriveRequest.SerializeToString,
@@ -97,6 +102,13 @@ class DocumentManagerServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def CreateNotesFromDrive(self, request, context):
+    # missing associated documentation comment in .proto file
+    pass
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def UploadToDrive(self, request, context):
     # missing associated documentation comment in .proto file
     pass
@@ -134,6 +146,11 @@ def add_DocumentManagerServicer_to_server(servicer, server):
       ),
       'SyncDrive': grpc.unary_stream_rpc_method_handler(
           servicer.SyncDrive,
+          request_deserializer=tasks__pb2.DriveRequest.FromString,
+          response_serializer=tasks__pb2.NoteReply.SerializeToString,
+      ),
+      'CreateNotesFromDrive': grpc.unary_stream_rpc_method_handler(
+          servicer.CreateNotesFromDrive,
           request_deserializer=tasks__pb2.DriveRequest.FromString,
           response_serializer=tasks__pb2.NoteReply.SerializeToString,
       ),

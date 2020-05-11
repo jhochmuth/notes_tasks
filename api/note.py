@@ -76,7 +76,7 @@ class Note:
 
         self.attrs["Color"] = attrs["Color"] if "Color" in self.attrs else "#686868"
 
-        self.attrs["Source"] = attrs["Source"] if "Source" in self.attrs else "Manual"
+        self.attrs["Source"] = attrs["Source"] if "Source" in self.attrs else "manual"
 
         self.connections = list()
 

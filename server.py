@@ -43,6 +43,13 @@ class DocumentServicer(tasks_pb2_grpc.DocumentManagerServicer):
             yield tasks_pb2.NoteReply(id=note.id,
                                       attrs=note.attrs)
 
+    def CreateNotesFromDrive(self, request, context):
+        document = documents[request.document_id]
+        new_notes = document.create_notes_from_gdrive(request.item_id)
+        for note in new_notes:
+            yield tasks_pb2.NoteReply(id=note.id,
+                                      attrs=note.attrs)
+
     def UploadToDrive(self, request, context):
         document = documents[request.document_id]
         for note in document.upload_notes_to_drive(request.drive):

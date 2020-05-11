@@ -5,7 +5,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 const React = require('react');
 const ReactDOM = require('react-dom');
 const SRD = require('@projectstorm/react-diagrams');
-const AppToolbar = require('./components/Toolbar.js');
+const AppToolbar = require('./components/Toolbar2.js');
 const FilterDisplay = require('./components/FilterDisplay.js');
 const NoteModel = require('./components/NoteModel.js');
 const NoteFactory = require('./components/NoteFactory.js');
@@ -47,13 +47,7 @@ class App extends React.Component {
     this.documentId = props.documentId;
     this.diagramRef = React.createRef();
     this.noteRefs = {};
-
-    this.addNote = this.addNote.bind(this);
-    this.addContainer = this.addContainer.bind(this);
-    this.save = this.save.bind(this);
-    this.load = this.load.bind(this);
-    this.onLoadButtonClick = this.onLoadButtonClick.bind(this);
-    this.openListView = this.openListView.bind(this);
+    this.treeIdToDriveId = {};
   }
 
   componentDidMount() {
@@ -68,12 +62,12 @@ class App extends React.Component {
     });
   }
 
-  addNote(event) {
+  addNote(title) {
     const that = this;
     const ref = React.createRef();
     const note = new NoteModel(null, model, this, ref);
 
-    const attrs = {title: event.target.title.value};
+    const attrs = {title: title};
     const noteRequest = {id: note.id, attrs: attrs, document_id: this.documentId};
 
     stubs.noteStub.createNote(noteRequest, function(err, noteReply) {
@@ -161,6 +155,39 @@ class App extends React.Component {
         });
       }
     });
+  }
+
+  createNoteFromDriveFile(event) {
+    // todo: do not create note if note already exists for that item
+    const that = this;
+    let id = this.treeIdToDriveId[event.nodeData.id];
+
+    const request = {
+      item_id: id,
+      document_id: this.documentId
+    };
+
+    let call = stubs.documentStub.createNotesFromDrive(request);
+
+    call.on('data', function(noteReply) {
+      const ref = React.createRef();
+      const note = new NoteModel(null, model, that, ref);
+      note.id = noteReply.id
+
+      note.content = noteReply;
+      model.addAll(note);
+      engine.setDiagramModel(model);
+      that.forceUpdate();
+
+      that.updateListView();
+      that.noteRefs[note.id] = ref;
+
+      that.state.filters.forEach((filter) => {
+        that.noteRefs[noteReply.id].current.applyFilter(filter);
+      });
+    });
+
+    call.on('error', (err) => console.log(err))
   }
 
   updateNoteAttr(updateAttrRequest) {
@@ -379,7 +406,7 @@ class App extends React.Component {
     }
   }
 
-  syncOneDrive(event) {
+  syncDrive(event) {
     event.preventDefault();
 
     const that = this;
@@ -428,9 +455,9 @@ class App extends React.Component {
       }
     });
 
-  call.on("error", function(err) {console.log(err)})
+  call.on("error", (err) => alert(err));
 
-  call.on("end", function() {alert("end")})
+  call.on("end", () => alert("end"));
   }
 
   uploadToDrive() {
@@ -458,6 +485,8 @@ class App extends React.Component {
 
       note.props.node.app.updateListView();
     })
+
+    call.on('end', () => alert("end"));
   }
 
   // note: Windows and Linux does not allow selectors to be both file and dir.
@@ -517,15 +546,39 @@ class App extends React.Component {
 
     function getFiles(auth) {
       const drive = google.drive({version: 'v3', auth});
-      drive.files.list({q: "trashed: false"}, (err, res) => {
+      drive.files.list({q: "trashed: false", fields: "*"}, (err, res) => {
         if (err) return console.log('The API returned an error: ' + err);
         const files = res.data.files;
         let id = 1;
         let newFiles = [];
+        let folderIds = {};
+        that.treeIdToDriveId = {};
+
         files.forEach((file) => {
-          newFiles.push({id: id, name: file.name});
+          that.treeIdToDriveId[id] = file.id;
+          let fileObj = {id: id, driveId: file.id, name: file.name};
+          fileObj.kind = file.capabilities.canAddChildren ? "folder" : "file";
+
+          if (fileObj.kind == "file") {
+            fileObj.pid = file.parents[0]
+            fileObj.hasChildren = false;
+          }
+          else {
+            folderIds[file.id] = id;
+            fileObj.hasChildren = true;
+          }
+
+          fileObj.imageUrl = file.iconLink;
+          newFiles.push(fileObj);
           id += 1;
-        })
+        });
+
+        newFiles.forEach((file) => {
+          if (file.kind == "file") {
+            file.pid = folderIds[file.pid];
+          }
+        });
+
         const newState = Object.assign({}, that.state);
         newState.files = newFiles;
         that.setState(newState);
@@ -544,18 +597,25 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state.files)
-    const fields = {dataSource: this.state.files, id: 'id', text: 'name'};
+    const fields = {
+      dataSource: this.state.files,
+      id: 'id',
+      text: 'name',
+      parentID: 'pid',
+      hasChildren: 'hasChildren'
+    };
+
     return (
       <div className="app">
-        <div className="toolbar">
-          <AppToolbar addNote={this.addNote}
-            addContainer={this.addContainer}
+        <div id="toolbar">
+          <AppToolbar
+            addNote={(event) => this.addNote(event)}
+            addContainer={() => this.addContainer()}
             addFilter={(event) => this.addFilter(event)}
-            save={this.save}
-            load={this.onLoadButtonClick}
-            syncOneDrive={(event) => this.syncOneDrive(event)}
-            openListView={this.openListView}
+            save={() => this.save()}
+            load={() => this.onLoadButtonClick()}
+            syncOneDrive={(event) => this.syncDrive(event)}
+            openListView={() => this.openListView()}
             uploadToDrive={() => this.uploadToDrive()}
             createNoteFromFile={() => this.createNoteFromFile()}
             toggleDriveFiles={() => this.toggleDriveFiles()}
@@ -585,14 +645,21 @@ class App extends React.Component {
           onRequestClose={() => this.toggleDriveFiles()}
           style={{
             content: {
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
               backgroundColor: "#F5F5F5",
-              height: "40%",
-              width: "40%"
+              height: "60%",
+              width: "75%"
             }
           }}
           ariaHideApp={false}
         >
-          <TreeViewComponent id="treeview" fields={fields} />
+          <TreeViewComponent
+            id="treeview"
+            fields={fields}
+            nodeSelected={(event) => this.createNoteFromDriveFile(event)}
+          />
         </ReactModal>
       </div>
     );

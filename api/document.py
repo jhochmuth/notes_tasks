@@ -1,9 +1,8 @@
-from googleapiclient.discovery import build
-from googleapiclient.http import MediaFileUpload
-
 import json
 
 import os
+
+import pypandoc
 
 import uuid
 
@@ -44,6 +43,7 @@ def prepare_dict_from_gdrive(d):
 class Document:
     def __init__(self):
         self.children = dict()
+        self.drive_id_mappings = dict()
         self.id = str(uuid.uuid1())
 
     def save_document(self, filename):
@@ -89,8 +89,8 @@ class Document:
                 attrs["Date created"] = item.created_date_time
                 attrs["OneDrive parent id"] = item_id
                 attrs["OneDrive id"] = item.id
-                attrs["drive link"] = item.web_url
-                attrs["source"] = "OneDrive"
+                attrs["Drive link"] = item.web_url
+                attrs["Source"] = "OneDrive"
                 id = item.id.replace("!", "")
 
                 new_notes[item.id] = Note(id=id, title=item.name, text="", attrs=attrs)
@@ -98,52 +98,59 @@ class Document:
 
         return new_notes
 
-    def create_notes_from_gdrive(self):
-        # todo: method also creates notes from trashed files
-        response = gdrive.files().list(corpora="user", fields='*', q='trashed=false').execute()
+    def create_notes_from_gdrive(self, id=None):
+        if id:
+            response = gdrive.files().get(fileId=id, fields="*").execute()
+            response = {'files': [response]}
+        else:
+            response = gdrive.files().list(corpora="user", fields='*', q='trashed=false').execute()
 
         for file in response['files']:
-            if file['id'] in self.children:
-                note = self.children[file['id']]
+            if file['id'] in self.drive_id_mappings:
+                note = self.children[self.drive_id_mappings[file['id']]]
                 note.update_title(file['name'])
             else:
                 attrs = dict()
-                attrs['drive link'] = file['webViewLink']
-                attrs['drive id'] = file['id']
-                attrs['source'] = "Google Drive"
-
+                attrs['Drive link'] = file['webViewLink']
+                attrs['Drive id'] = file['id']
+                attrs['Source'] = "Google Drive"
                 if 'appProperties' in file:
                     attrs.update(prepare_dict_from_gdrive(file['appProperties']))
 
+                text = ""
+                if attrs['Source'] == "manual":
+                    text_data = gdrive.files().get_media(fileId=file['id']).execute()
+                    text = pypandoc.convert_text(text_data, 'html', format='odt')
+
                 note = Note(id=file["id"],
                             title=file["name"],
-                            text="",
+                            text=text,
                             attrs=attrs)
                 self.children[note.id] = note
+
             yield note
 
     def upload_notes_to_drive(self, drive):
         # todo: handle case where item deleted in gdrive or locally
+        # todo: handle changes with associated file - if 'drive link' in attrs but path changed
         for item in self.children.values():
             if isinstance(item, Note):
-
-                # todo: remove this and handle case where no path provided
-                if "path" not in item.attrs:
-                    pass
-
-                if "drive link" not in item.attrs:
+                if "Drive link" not in item.attrs:
                     name = item.attrs["title"]
-                    if "extension" in item.attrs:
-                        name += item.attrs["extension"]
-                    else:
-                        filename, file_extension = os.path.splitext(item.attrs["path"])
-                        name += file_extension
 
                     if "path" in item.attrs:
                         path = item.attrs["path"]
+
+                        _, ext_in_title = os.path.splitext(item.attrs['title'])
+
+                        if not ext_in_title:
+                            filename, file_extension = os.path.splitext(item.attrs["path"])
+                            name += file_extension
                     else:
-                        #Create txt file from text, upload, and delete file
-                        path = ""
+                        pypandoc.convert_text(item.attrs['text'], 'odt', format='html', outputfile='./temp.odt')
+                        path = './temp.odt'
+                        if name[-4:] != ".odt":
+                            name += ".odt"
 
                     if drive == "onedrive":
                         parent = "root"
@@ -151,7 +158,7 @@ class Document:
                             parent = item.attrs["OneDrive parent id"]
 
                         response = client.item(drive="me", id=parent).children[name].upload(path)
-                        item.attrs["drive link"] = response.web_url
+                        item.attrs["Drive link"] = response.web_url
                         yield item
 
                     elif drive == "gdrive":
@@ -161,8 +168,10 @@ class Document:
                                          'appProperties': attrs}
 
                         response = gdrive.files().create(media_body=path, body=file_metadata, fields="*").execute()
-                        item.attrs["drive link"] = response["webViewLink"]
-                        item.attrs["drive id"] = response["id"]
+                        item.attrs["Drive link"] = response["webViewLink"]
+                        item.attrs["Drive id"] = response["id"]
+                        self.drive_id_mappings[response["id"]] = item.id
+                        os.remove("./temp.odt")
                         yield item
 
                 else:
@@ -170,7 +179,7 @@ class Document:
                     if drive == "gdrive":
                         file_metadata = {'appProperties': prepare_dict_for_gdrive(item.attrs)}
 
-                        response = gdrive.files().update(fileId=item.attrs['drive id'], body=file_metadata).execute()
+                        response = gdrive.files().update(fileId=item.attrs['Drive id'], body=file_metadata).execute()
 
     def sync_with_drive(self, drive, methods=['upload', 'download']):
         if drive == "gdrive":
