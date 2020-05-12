@@ -488,7 +488,6 @@ class App extends React.Component {
   }
 
   // note: Windows and Linux does not allow selectors to be both file and dir.
-  // todo: still buggy, does not work with manufacturing consent
   createNoteFromFile() {
     const that = this;
 

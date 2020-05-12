@@ -270,27 +270,28 @@ class Note:
         filepath, filename = os.path.split(path)
         name, file_extension = os.path.splitext(filename)
 
-        try:
-            if file_extension == ".pdf":
-                reader = PyPDF2.PdfFileReader(path)
-                file_info = PyPDF2.PdfFileReader(path).getDocumentInfo()
-                title = file_info.title.replace(".pdf", "") or name
-                author = file_info.author or "could not extract"
-                pages = reader.getNumPages()
-                attrs = {"author": author, "pages": str(pages), "path": path}
+        if file_extension == ".pdf":
+            reader = PyPDF2.PdfFileReader(path)
+            file_info = PyPDF2.PdfFileReader(path).getDocumentInfo()
 
-                return cls(id=id, title=title, text="", attrs=attrs)
-
-            elif file_extension == ".txt":
-                with open(path, 'r') as f:
-                    text = f.read()
-                    return cls(id=id, title=name, text=text)
-
+            if file_info.title:
+                title = file_info.title.replace(".pdf", "")
             else:
-                return cls(id=id, title=name)
+                title = name
 
-        except:
-            return
+            author = file_info.author or "could not extract"
+            pages = reader.getNumPages()
+            attrs = {"author": author, "pages": str(pages), "path": path}
+
+            return cls(id=id, title=title, text="", attrs=attrs)
+
+        elif file_extension == ".txt":
+            with open(path, 'r') as f:
+                text = f.read()
+                return cls(id=id, title=name, text=text)
+
+        else:
+            return cls(id=id, title=name)
 
     def __str__(self):
         return self.attrs["title"]

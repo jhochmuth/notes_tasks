@@ -18,19 +18,20 @@ def run():
         response = document_stub.CreateDocument(tasks_pb2.Empty())
         document_id = response.id
         print(document_id)
-
+        """
         print("Creating note from gdrive.")
         response = document_stub.CreateNotesFromDrive(tasks_pb2.DriveRequest(document_id=document_id,
                                                                              item_id='1JNTDgs520gw_0sKqjNuWxu2-Eo4HzoRAqGGe-bqpKso'))
         for item in response:
             print(item)
         """
+
         print("Creating note from file.")
         response = note_stub.CreateNoteFromFile(tasks_pb2.NoteFromFileRequest(document_id=document_id,
-                                                                              paths=['/Users/juliushochmuth/Documents/Books/panzer38t.pdf']))
+                                                                              paths=['/Users/juliushochmuth/Documents/Journals:Other/Manufacturing Consent.pdf']))
         for item in response:
             print(item)
-        
+        """
         print("Sync with Google Drive.")
         response = document_stub.SyncDrive(tasks_pb2.DriveRequest(document_id=document_id, drive="gdrive"))
         for note in response:

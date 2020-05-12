@@ -2,7 +2,10 @@ const React = require('react');
 const stubs = require('../stubs.js');
 const Filter = require('../utils/filter.js');
 import {PortWidget} from '@projectstorm/react-diagrams';
-import {Button, Form, FormGroup, Input, InputGroup, InputGroupAddon, InputGroupText, Label, Popover, PopoverBody, PopoverHeader, UncontrolledTooltip} from 'reactstrap';
+import {TextBoxComponent} from '@syncfusion/ej2-react-inputs';
+import {ButtonComponent} from '@syncfusion/ej2-react-buttons';
+import {DialogComponent} from '@syncfusion/ej2-react-popups';
+import {Button, Popover, PopoverBody} from 'reactstrap';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import ReactModal from 'react-modal';
@@ -87,8 +90,8 @@ class NoteWidget extends React.Component {
 
     if (event) {
       event.preventDefault();
-      attr = event.target.key.value;
-      val = event.target.value.value;
+      attr = event.target.attr.value;
+      val = event.target.val.value;
     }
     else {
       attr = attr_obj.attr;
@@ -334,7 +337,8 @@ class NoteWidget extends React.Component {
               textShadow: "0px 0px",
               visibility: this.state.displayButtons ? "visible" : "hidden"
             }}
-            onClick={() => this.deleteNote()}/>
+            onClick={() => this.deleteNote()}
+          />
           <ReactModal
             isOpen={this.state.displayData}
             onAfterOpen={() => this.toggleButtons(false)}
@@ -351,34 +355,30 @@ class NoteWidget extends React.Component {
             <h2 className="note-data-title">{attrs.title}</h2>
             <h4 style={{marginTop: 10}}>Attributes</h4>
             <div>{this.renderAttrs()}</div>
-            <Form
+            <form
               className="attr-form"
               onSubmit={(event) => this.updateNoteAttr(event)}
             >
               <h5>Create new attribute</h5>
-              <InputGroup className="attr-form-group">
-                <InputGroupAddon addonType="prepend" className="attr-form-label">
-                  <InputGroupText className="attr-form-text">Attr</InputGroupText>
-                </InputGroupAddon>
-                <Input name="key" className="attr-form-input"/>
-              </InputGroup>
-              <InputGroup className="attr-form-group">
-                <InputGroupAddon addonType="prepend" className="attr-form-label">
-                  <InputGroupText className="attr-form-text">Value</InputGroupText>
-                </InputGroupAddon>
-                <Input name="value" className="attr-form-input"/>
-              </InputGroup>
-              <Button>Add</Button>
-            </Form>
-            <Button
+              <TextBoxComponent
+                placeholder="Attribute"
+                name="attr"
+                width="80%"
+                cssClass="x-centered"
+              />
+              <TextBoxComponent
+                placeholder="Value"
+                name="val"
+                width="80%"
+                cssClass="x-centered"
+              />
+              <ButtonComponent content="Submit" cssClass="form-submit-button e-success" />
+            </form>
+            <ButtonComponent
+              content="Edit text"
               className="edit-text-button"
               onClick={() => this.toggleEditText()}
-            >Edit Text</Button>
-            <Button
-              className="protoype-button"
-              onClick={() => this.props.node.app.createDescendantNote(this.props.node.id)}
-            >Create Descendant</Button>
-            {this.renderPrototype()}
+            />
           </ReactModal>
           <ReactModal
             isOpen={this.state.showTextForm}
@@ -400,14 +400,16 @@ class NoteWidget extends React.Component {
               }}
               data={attrs.text}
             />
-            <Button
-              className="text-form-submit-button"
+            <ButtonComponent
+              content="Save"
+              cssClass="e-success text-form-submit-button"
               onClick={() => {this.updateText()}}
-            >Save</Button>
-            <Button
+            />
+            <ButtonComponent
+              content="Cancel"
               className="text-form-cancel-button"
               onClick={() => this.toggleEditText()}
-            >Cancel</Button>
+            />
           </ReactModal>
           <button
             id={"textEditControl" + this.props.node.content.id}
@@ -444,16 +446,16 @@ class NoteWidget extends React.Component {
             }}
             ariaHideApp={false}
           >
-            <Form onSubmit={(event) => this.editLabel(this.props.node.selectedLinkId, event)}>
-              <InputGroup className="attr-form-group">
-                <InputGroupAddon addonType="prepend" className="attr-form-label">
-                  <InputGroupText className="attr-form-text">Label</InputGroupText>
-                </InputGroupAddon>
-                <Input name="label" className="attr-form-input"/>
-              </InputGroup>
-              <Button className="app-button">Submit</Button>
-              <Button className="app-button" onClick={() => this.toggleEditLabel()}>Cancel</Button>
-            </Form>
+            <form onSubmit={(event) => this.editLabel(this.props.node.selectedLinkId, event)}>
+              <TextBoxComponent
+                placeholder="Label"
+                name="label"
+                width="80%"
+                cssClass="x-centered"
+              />
+              <ButtonComponent content="Submit" className="app-button" />
+              <ButtonComponent content="Cancel" className="app-button" onClick={() => this.toggleEditLabel()} />
+            </form>
           </ReactModal>
         </div>
       </ResizableBox>
