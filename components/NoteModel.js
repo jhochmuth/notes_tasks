@@ -14,8 +14,8 @@ class NoteModel extends SRD.NodeModel {
     this.selectedLinkId = null;
     this.addPort(new NotePortModel("bottom", this));
 
-    this.x = Math.random() * 400;
-    this.y = Math.random() * 400;
+    this.x = Math.random() * 800;
+    this.y = Math.random() * 800;
   }
 
   // todo: fix popover so that clicking outside of popover closes it
@@ -55,7 +55,7 @@ class NoteModel extends SRD.NodeModel {
       else {
         that.model.removeNode(that);
         that.app.forceUpdate();
-        that.app.updateListView();
+        that.app.updateTreeView();
         if (response.descendant_notes) {
           that.app.removePrototypes(response.descendant_notes);
         }

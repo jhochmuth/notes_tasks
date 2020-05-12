@@ -3,6 +3,8 @@ import {Menu} from 'antd';
 import {Button, Form, FormGroup, Input, InputGroup, Label} from 'reactstrap';
 import Drawer from 'rc-drawer';
 const stubs = require('../stubs.js');
+import {TextBoxComponent} from '@syncfusion/ej2-react-inputs';
+import {ButtonComponent} from '@syncfusion/ej2-react-buttons';
 
 
 class Archetype extends React.Component {
@@ -70,12 +72,20 @@ class Archetype extends React.Component {
 
     const that = this;
 
+    if (event.target.attr.value == "" || event.target.val.value == "") {
+      alert("Must enter values for attribute and value.");
+      return;
+    }
+
     const request = {
       archetype_id: this.id,
       attr: event.target.attr.value,
       val: event.target.val.value,
       document_id: this.props.documentId
     }
+
+    event.target.attr.value = "";
+    event.target.val.value = "";
 
     const newState = Object.assign({}, this.state);
     newState.attrs[request.attr] = request.val;
@@ -126,21 +136,25 @@ class Archetype extends React.Component {
             id="archetype-name"
             onDoubleClick={() => this.toggleEditNameDrawer()}
           >{this.state.name}</h3>
-          <div id="archetype-attrs">
+          <div className="archetype-display archetype-display-header">
             <h4>Attributes</h4>
             {this.renderArchetypeAttrs()}
-            <Form onSubmit={(event) => this.addAttribute(event)}>
-              <FormGroup>
-                <Label>Attribute</Label>
-                <Input name="attr" />
-              </FormGroup>
-              <FormGroup>
-                <Label>Value</Label>
-                <Input name="val" />
-              </FormGroup>
-              <Button>Add attribute</Button>
-            </Form>
           </div>
+          <form onSubmit={(event) => this.addAttribute(event)}>
+            <TextBoxComponent
+              placeholder="Attribute"
+              name="attr"
+              width="80%"
+              cssClass="x-centered"
+            />
+            <TextBoxComponent
+              placeholder="Value"
+              name="val"
+              width="80%"
+              cssClass="x-centered"
+            />
+            <ButtonComponent content="Add attribute" cssClass="form-submit-button e-success" />
+          </form>
           <Drawer
             width="30%"
             handler={false}
@@ -148,13 +162,16 @@ class Archetype extends React.Component {
             onClose={() => this.toggleEditNameDrawer()}
             placement="left"
           >
-            <Form onSubmit={(event) => this.editName(event)}>
-              <FormGroup>
-                <Label>Name</Label>
-                <Input name="name" placeholder={this.state.name} />
-              </FormGroup>
-              <Button>Change name</Button>
-            </Form>
+            <form onSubmit={(event) => this.editName(event)}>
+              <h4 className="text-centered margin">Change name</h4>
+              <TextBoxComponent
+                placeholder="Name"
+                name="name"
+                width="80%"
+                cssClass="x-centered"
+              />
+              <ButtonComponent content="Submit" cssClass="form-submit-button e-success" />
+            </form>
           </Drawer>
         </Drawer>
       </div>

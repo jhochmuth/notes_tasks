@@ -1,207 +1,138 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const stubs = require('../stubs.js');
+import {Toolbar, Provider, themes} from '@fluentui/react-northstar';
+import {DialogComponent} from '@syncfusion/ej2-react-popups';
+import {TextBoxComponent} from '@syncfusion/ej2-react-inputs';
+import {ButtonComponent} from '@syncfusion/ej2-react-buttons';
 import {
-  Button,
-  Form,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  Label,
-  Popover,
-  PopoverBody,
-  PopoverHeader
-} from 'reactstrap';
+  CloudSyncOutlined,
+  FileSearchOutlined,
+  FolderOpenOutlined,
+  FormOutlined,
+  GoogleOutlined,
+  ImportOutlined,
+  PartitionOutlined,
+  SaveOutlined
+} from '@ant-design/icons';
 
-/*
-React component for the toolbar of the main app page.
-*/
-class Toolbar extends React.Component {
-  constructor() {
-    super();
+
+class AppToolbar extends React.Component {
+  constructor(props) {
+    super(props);
 
     this.state = {
-      title: "Title",
-      text: "Text",
-      displayNoteForm: false,
-      displayFilterForm: false,
-      displayLoadForm: false,
-      displaySyncPopover: false
+      displayNoteModal: false,
+      noteModalTitle: "",
+      googleActions: false
     };
+
+    this.noteModalButtons = [{
+      buttonModel: {
+        content: "Submit",
+        cssClass: "e-submit"
+      },
+      click: () => this.handleNoteFormSubmit()
+    }];
   }
 
-  addNote(event) {
-    event.preventDefault();
-
-    if (!event.target.title.value) {
-      alert('You must specify at least a title for all notes.')
-      return;
-    }
-
-    this.props.addNote(event);
-    this.toggleNoteForm();
+  handleNoteFormSubmit() {
+    this.props.addNote(this.state.noteModalTitle);
+    this.state.noteModalTitle = "";
+    this.toggleDisplay('displayNoteModal');
   }
 
-  addFilter(event) {
-    event.preventDefault();
-
-    this.props.addFilter(event);
-    this.toggleFilterForm();
-  }
-
-  toggleNoteForm() {
-    const newState = Object.assign({}, this.state);
-    newState.displayNoteForm = !this.state.displayNoteForm;
-    this.setState(newState);
-  }
-
-  toggleFilterForm() {
-    const newState = Object.assign({}, this.state);
-    newState.displayFilterForm = !this.state.displayFilterForm;
-    this.setState(newState);
-  }
-
-  toggleSyncPopover() {
-    const newState = Object.assign({}, this.state);
-    newState.displaySyncPopover = !this.state.displaySyncPopover;
+  toggleDisplay(key) {
+    const newState = {...this.state};
+    newState[key] = !newState[key];
     this.setState(newState);
   }
 
   render() {
     return (
-      <div>
-        <Button
-          id="noteFormButton"
-          className="toolbar-button"
-          color="secondary"
-          style={{left: '3%'}}
-          onClick={() => this.toggleNoteForm()}
+      <Provider theme={themes.teams}>
+        <Toolbar
+          className="toolbar"
+          items={[
+            {
+              icon: <FormOutlined />,
+              onClick: () => this.toggleDisplay('displayNoteModal'),
+              key: 'newNote'
+            },
+            {
+              icon: <ImportOutlined />,
+              onClick: () => this.props.createNoteFromFile(),
+              key: 'noteFromFile'
+            },
+            {
+              key: 'divider-1',
+              kind: 'divider'
+            },
+            {
+              icon: <SaveOutlined />,
+              onClick: () => this.props.save(),
+              key: 'save'
+            },
+            {
+              icon: <FolderOpenOutlined />,
+              onClick: () => this.props.load(),
+              key: 'load'
+            },
+            {
+              key: 'divider-2',
+              kind: 'divider'
+            },
+            {
+              icon: <PartitionOutlined />,
+              onClick: () => this.props.openTreeView(),
+              key: 'treeView'
+            },
+            {
+              key: 'divider-3',
+              kind: 'divider'
+            },
+            {
+              icon: <GoogleOutlined />,
+              menuOpen: this.state.googleActions,
+              onMenuOpenChange: () => this.toggleDisplay('googleActions'),
+              key: 'googleActions',
+              menu: [
+                {
+                  icon: <CloudSyncOutlined />,
+                  onClick: () => this.props.syncDrive(),
+                  key: 'sync',
+                  content: 'Sync with drive'
+                },
+                {
+                  icon: <FileSearchOutlined />,
+                  onClick: () => this.props.toggleDriveFiles(),
+                  key: 'viewDrive',
+                  content: 'View drive files'
+                }
+              ]
+            },
+          ]}
+        />
+        <DialogComponent
+          visible={this.state.displayNoteModal}
+          close={(event) => event.container.children.namedItem("_dialog-content").children[0].children.title.value = ""}
+          width="50%"
+          height="20%"
+          header="Create new note"
+          showCloseIcon={true}
+          allowDragging={true}
+          buttons={this.noteModalButtons}
         >
-          <img src="../icons/note.png" className="toolbar-icon" />
-        </Button>
-        <Button
-          id="filterFormButton"
-          className="toolbar-button"
-          style={{left: '10%'}}
-          onClick={() => this.toggleFilterForm()}
-        >
-          Filter
-        </Button>
-        <Button id="saveButton" className="toolbar-button" style={{left: '80%'}} onClick={this.props.save}>
-          <img src="../icons/save.png" className="toolbar-icon" />
-        </Button>
-        <Button id="loadButton" className="toolbar-button" style={{left: '82%'}} onClick={this.props.load}>
-          <img src="../icons/load.png" className="toolbar-icon" />
-        </Button>
-        <Button className="toolbar-button" style={{left: '5%'}} onClick={this.props.openListView}>
-          <img src="../icons/list.png" className="toolbar-icon" />
-        </Button>
-        <Button
-          id="syncFormButton"
-          className="toolbar-button"
-          style={{left: '15%'}}
-          onClick={() => this.toggleSyncPopover()}
-        >
-          Sync
-        </Button>
-        <Button
-          className="toolbar-button"
-          style={{left: '20%'}}
-          onClick={() => this.props.uploadToDrive()}
-        >
-          Upload
-        </Button>
-        <Button
-          className="toolbar-button"
-          style={{left: "25%"}}
-          onClick={() => this.props.createNoteFromFile()}
-        >
-          From File
-        </Button>
-        <Button
-          className="toolbar-button"
-          style={{left: "30%"}}
-          onClick={() => this.props.toggleDriveFiles()}
-        >
-          Files
-        </Button>
-        <Popover
-          trigger="legacy"
-          placement="bottom"
-          target="noteFormButton"
-          isOpen={this.state.displayNoteForm}
-          toggle={() => this.toggleNoteForm()}
-        >
-          <PopoverHeader>Create new note</PopoverHeader>
-          <PopoverBody>
-            <Form onSubmit={(event) => this.addNote(event)}>
-              <InputGroup className="attr-form-group">
-                <InputGroupAddon addonType="prepend" className="attr-form-label">
-                  <InputGroupText className="attr-form-text">Title</InputGroupText>
-                </InputGroupAddon>
-                <Input name="title" className="attr-form-input"/>
-              </InputGroup>
-              <Button>Submit</Button>
-            </Form>
-          </PopoverBody>
-        </Popover>
-        <Popover
-          trigger="legacy"
-          placement="bottom"
-          target="filterFormButton"
-          isOpen={this.state.displayFilterForm}
-          toggle={() => this.toggleFilterForm()}
-        >
-          <PopoverHeader>Create new filter</PopoverHeader>
-          <PopoverBody>
-            <Form onSubmit={(event) => this.addFilter(event)}>
-              <InputGroup className="attr-form-group">
-                <InputGroupAddon addonType="prepend" className="attr-form-label">
-                  <InputGroupText className="attr-form-text">Attribute</InputGroupText>
-                </InputGroupAddon>
-                <Input name="attr" className="attr-form-input"/>
-              </InputGroup>
-              <InputGroup className="attr-form-group">
-                <InputGroupAddon addonType="prepend" className="attr-form-label">
-                  <InputGroupText className="attr-form-text">Value</InputGroupText>
-                </InputGroupAddon>
-                <Input name="value" className="attr-form-input"/>
-              </InputGroup>
-              <Button>Submit</Button>
-            </Form>
-          </PopoverBody>
-        </Popover>
-        <Popover
-          trigger="legacy"
-          placement="bottom"
-          target="syncFormButton"
-          isOpen={this.state.displaySyncPopover}
-          toggle={() => this.toggleSyncPopover()}
-        >
-          <PopoverHeader>Sync with OneDrive</PopoverHeader>
-          <PopoverBody>
-            <Form onSubmit={(event) => {this.toggleSyncPopover(); this.props.syncOneDrive(event)}}>
-              <InputGroup className="attr-form-group">
-                <InputGroupAddon addonType="prepend" className="attr-form-label">
-                  <InputGroupText className="attr-form-text">Folder ID</InputGroupText>
-                </InputGroupAddon>
-                <Input name="drive" className="attr-form-input"/>
-              </InputGroup>
-              <Button>Submit</Button>
-            </Form>
-          </PopoverBody>
-        </Popover>
-      </div>
+          <TextBoxComponent
+            placeholder="Title"
+            name="title"
+            width="60%"
+            input={(event) => this.state.noteModalTitle = event.value}
+          />
+        </DialogComponent>
+      </Provider>
     )
   }
 }
 
-module.exports = Toolbar;
-
-/*
-For Later use:
-<Button className="toolbar-button" style={{left: '10%'}} onClick={this.props.addContainer}>
-  Container
-</Button>
-*/
+module.exports = AppToolbar;

@@ -5,7 +5,7 @@ const ipcRenderer = require('electron').ipcRenderer;
 const React = require('react');
 const ReactDOM = require('react-dom');
 const SRD = require('@projectstorm/react-diagrams');
-const AppToolbar = require('./components/Toolbar2.js');
+const AppToolbar = require('./components/Toolbar.js');
 const DrawerDisplay = require('./components/DrawerDisplay.js');
 const NoteModel = require('./components/NoteModel.js');
 const NoteFactory = require('./components/NoteFactory.js');
@@ -20,6 +20,7 @@ import {Button} from 'reactstrap';
 const {google} = require('googleapis');
 import ReactModal from 'react-modal';
 import {TreeViewComponent} from '@syncfusion/ej2-react-navigations';
+import {createSpinner, hideSpinner, showSpinner} from '@syncfusion/ej2-react-popups'
 
 const engine = new SRD.DiagramEngine();
 engine.installDefaultFactories();
@@ -29,15 +30,13 @@ engine.registerPortFactory(new NotePortFactory());
 engine.registerNodeFactory(new ContainerFactory());
 let model = new SRD.DiagramModel();
 
-/*
-React component for the main app page.
-*/
+
+// todo: add change title button
+// todo: connection remove() method does not activate when esc button pressed
+// todo: find solution for removing documents from dict when window is closed
+// todo: add way to delete connection labels
+// TODO: CHECK BACKEND FOR OBJECT COPIES/REFS
 class App extends React.Component {
-  // todo: add change title button
-  // todo: connection remove() method does not activate when esc button pressed
-  // todo: find solution for removing documents from dict when window is closed
-  // todo: add way to delete connection labels
-  // TODO: CHECK BACKEND FOR OBJECT COPIES/REFS
   constructor(props) {
     super(props);
 
@@ -379,10 +378,10 @@ class App extends React.Component {
     });
   }
 
-  addFilter(event) {
+  addFilter(attr, val) {
     const that = this;
 
-    const filter = new Filter(event.target.attr.value, event.target.value.value, "contains");
+    const filter = new Filter(attr, val, "contains");
 
     for (let ref in that.noteRefs) {
       that.noteRefs[ref].current.applyFilter(filter);
@@ -407,13 +406,12 @@ class App extends React.Component {
   }
 
   syncDrive(event) {
-    event.preventDefault();
-
+    createSpinner({target: document.getElementById('app'), type: 'Fabric'});
+    showSpinner(document.getElementById('app'));
     const that = this;
 
     const request = {
       drive: "gdrive",
-      item_id: event.target.drive.value,
       document_id: this.documentId
     }
 
@@ -457,7 +455,7 @@ class App extends React.Component {
 
   call.on("error", (err) => alert(err));
 
-  call.on("end", () => alert("end"));
+  call.on("end", () => hideSpinner(document.getElementById('app')));
   }
 
   uploadToDrive() {
@@ -490,6 +488,7 @@ class App extends React.Component {
   }
 
   // note: Windows and Linux does not allow selectors to be both file and dir.
+  // todo: still buggy, does not work with manufacturing consent
   createNoteFromFile() {
     const that = this;
 
@@ -500,10 +499,11 @@ class App extends React.Component {
         document_id: that.documentId,
         paths: result
       }
-
+      console.log(request)
       let call = stubs.noteStub.createNoteFromFile(request);
 
       call.on('data', function(response) {
+        console.log(response)
         const ref = React.createRef();
         const note = new NoteModel(null, model, that, ref);
         note.id = response.id
@@ -520,6 +520,8 @@ class App extends React.Component {
           that.noteRefs[noteReply.id].current.applyFilter(filter)
         });
       })
+
+      call.on('error', (err) => console.log(err));
     })
   }
 
@@ -611,10 +613,9 @@ class App extends React.Component {
           <AppToolbar
             addNote={(event) => this.addNote(event)}
             addContainer={() => this.addContainer()}
-            addFilter={(event) => this.addFilter(event)}
             save={() => this.save()}
             load={() => this.onLoadButtonClick()}
-            syncOneDrive={(event) => this.syncDrive(event)}
+            syncDrive={() => this.syncDrive()}
             openTreeView={() => this.openTreeView()}
             uploadToDrive={() => this.uploadToDrive()}
             createNoteFromFile={() => this.createNoteFromFile()}
@@ -639,6 +640,7 @@ class App extends React.Component {
           deleteFilter={(filter) => this.deleteFilter(filter)}
           documentId={this.documentId}
           updateNoteAttr={(id, attrs, inheritedAttrs) => this.updateNoteAttrArchetype(id, attrs, inheritedAttrs)}
+          addFilter={(attr, val) => this.addFilter(attr, val)}
         />
         <ReactModal
           isOpen={this.state.displayDriveFiles}

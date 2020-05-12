@@ -4,6 +4,7 @@
 @import "../node_modules/@syncfusion/ej2-react-navigations/styles/material.css";
 @import "../node_modules/@syncfusion/ej2-inputs/styles/material.css";
 @import "../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-react-popups/styles/material.css";
 
 #nav-tabs-add {
 	visibility: hidden;
@@ -70,8 +71,19 @@
   border-bottom: thin solid;
 }
 
-#new-note-modal-header {
+.text-centered {
   text-align: center;
+}
+
+.x-centered {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.form-submit-button {
+  position: relative;
+  left: 10%;
+  margin-top: 10;
 }
 
 .srd-diagram {
@@ -79,7 +91,7 @@
 	position: relative;
 }
 
-.app-button {
+.margin {
 	margin: 10;
 }
 
@@ -90,13 +102,6 @@
 	transform: translateY(-50%);
 }
 
-#archetype-button {
-	position: absolute;
-	bottom: 10;
-	left: 50%;
-	transform: translateX(-50%);
-}
-
 #archetype-name {
 	position: relative;
 	top: 20;
@@ -104,11 +109,17 @@
 	text-decoration: underline;
 }
 
-#archetype-attrs {
-	position: relative;
-	top: 100;
-	text-align: center;
+.archetype-display {
+  left: 10%;
+  position: relative;
+  margin-bottom: 10;
 }
+
+.archetype-display-header {
+  margin-top: 40;
+}
+
+
 
 .note {
 	position: relative;

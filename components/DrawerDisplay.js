@@ -2,10 +2,13 @@ const React = require('react');
 const DrawerHandle = require('./DrawerHandle.js');
 const Archetype = require('./Archetype.js');
 const stubs = require('../stubs.js');
-import {Button, Form, FormGroup, Input, InputGroup, Label} from 'reactstrap';
 import Drawer from 'rc-drawer';
+import {Button} from 'reactstrap';
 import {Menu, Popover} from 'antd';
-import {MinusCircleOutlined, PartitionOutlined} from '@ant-design/icons';
+import {MinusCircleOutlined, ClusterOutlined} from '@ant-design/icons';
+import {Toolbar, Provider, themes} from '@fluentui/react-northstar';
+import {TextBoxComponent} from '@syncfusion/ej2-react-inputs';
+import {ButtonComponent} from '@syncfusion/ej2-react-buttons';
 
 // todo: add archetype attr delete functionality
 class DrawerDisplay extends React.Component {
@@ -19,6 +22,7 @@ class DrawerDisplay extends React.Component {
       filters: this.props.filters,
       open: false,
       archetypes: {},
+      displayFilterDrawer: false
     };
   }
 
@@ -93,6 +97,22 @@ class DrawerDisplay extends React.Component {
     this.setState(newState);
   }
 
+  toggleFilterDrawer() {
+    const newState = Object.assign({}, this.state);
+    newState.displayFilterDrawer = !newState.displayFilterDrawer;
+    this.setState(newState);
+  }
+
+  addFilter(event) {
+    event.preventDefault();
+    const attr = event.target.attr.value;
+    const val = event.target.val.value;
+    event.target.attr.value = "";
+    event.target.val.value = "";
+    this.toggleFilterDrawer();
+    this.props.addFilter(attr, val);
+  }
+
   updateInheritors(request) {
     const that = this;
 
@@ -110,6 +130,23 @@ class DrawerDisplay extends React.Component {
         open={this.state.open}
         onClose={() => this.toggle()}
       >
+        <Provider theme={themes.teams}>
+          <Toolbar
+            className="toolbar"
+            items={[
+              {
+                icon: <MinusCircleOutlined />,
+                onClick: () => this.toggleFilterDrawer(),
+                key: 'newFilter'
+              },
+              {
+                icon: <ClusterOutlined />,
+                onClick: () => this.createArchetype(),
+                key: 'newArchetype'
+              },
+            ]}
+          />
+        </Provider>
         <Menu mode="inline" selectable={false} >
           <Menu.SubMenu
             key="subFilters"
@@ -122,13 +159,34 @@ class DrawerDisplay extends React.Component {
           <Menu.SubMenu
             key="subArchetypes"
             title={
-              <span><PartitionOutlined />Archetypes</span>
+              <span><ClusterOutlined />Archetypes</span>
             }
           >
           {this.renderArchetypes()}
           </Menu.SubMenu>
         </Menu>
-        <Button onClick={() => this.createArchetype()}>Create archetype</Button>
+        <Drawer width="20%"
+          handler={false}
+          open={this.state.displayFilterDrawer}
+          onClose={() => this.toggleFilterDrawer()}
+        >
+          <form onSubmit={(event) => this.addFilter(event)}>
+            <h4 className="text-centered">Create filter</h4>
+            <TextBoxComponent
+              placeholder="Attribute"
+              name="attr"
+              width="80%"
+              cssClass="x-centered"
+            />
+            <TextBoxComponent
+              placeholder="Value"
+              name="val"
+              width="80%"
+              cssClass="x-centered"
+            />
+            <ButtonComponent content="Submit" cssClass="form-submit-button e-success" />
+          </form>
+        </Drawer>
       </Drawer>
     )
   }

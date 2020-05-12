@@ -19,6 +19,7 @@
     "@syncfusion/ej2-react-buttons": "^18.1.48",
     "@syncfusion/ej2-react-inputs": "^18.1.45",
     "@syncfusion/ej2-react-navigations": "^18.1.45",
+    "@syncfusion/ej2-react-popups": "^18.1.46",
     "amd-loader": "0.0.8",
     "amdefine": "^1.0.1",
     "antd": "^4.1.4",
