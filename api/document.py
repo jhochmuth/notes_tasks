@@ -106,6 +106,9 @@ class Document:
             response = gdrive.files().list(corpora="user", fields='*', q='trashed=false').execute()
 
         for file in response['files']:
+            if file['mimeType'] == 'application/vnd.google-apps.folder':
+                continue
+
             if file['id'] in self.drive_id_mappings:
                 note = self.children[self.drive_id_mappings[file['id']]]
                 note.update_title(file['name'])

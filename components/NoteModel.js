@@ -14,8 +14,8 @@ class NoteModel extends SRD.NodeModel {
     this.selectedLinkId = null;
     this.addPort(new NotePortModel("bottom", this));
 
-    this.x = Math.random() * 800;
-    this.y = Math.random() * 800;
+    this.x = Math.random() * 700;
+    this.y = Math.random() * 700;
   }
 
   // todo: fix popover so that clicking outside of popover closes it

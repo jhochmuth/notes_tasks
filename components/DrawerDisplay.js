@@ -6,7 +6,7 @@ import Drawer from 'rc-drawer';
 import {Button} from 'reactstrap';
 import {Menu, Popover} from 'antd';
 import {MinusCircleOutlined, ClusterOutlined} from '@ant-design/icons';
-import {Toolbar, Provider, themes} from '@fluentui/react-northstar';
+import {Toolbar} from '@fluentui/react-northstar';
 import {TextBoxComponent} from '@syncfusion/ej2-react-inputs';
 import {ButtonComponent} from '@syncfusion/ej2-react-buttons';
 
@@ -130,23 +130,21 @@ class DrawerDisplay extends React.Component {
         open={this.state.open}
         onClose={() => this.toggle()}
       >
-        <Provider theme={themes.teams}>
-          <Toolbar
-            className="toolbar"
-            items={[
-              {
-                icon: <MinusCircleOutlined />,
-                onClick: () => this.toggleFilterDrawer(),
-                key: 'newFilter'
-              },
-              {
-                icon: <ClusterOutlined />,
-                onClick: () => this.createArchetype(),
-                key: 'newArchetype'
-              },
-            ]}
-          />
-        </Provider>
+        <Toolbar
+          className="toolbar"
+          items={[
+            {
+              icon: <MinusCircleOutlined />,
+              onClick: () => this.toggleFilterDrawer(),
+              key: 'newFilter'
+            },
+            {
+              icon: <ClusterOutlined />,
+              onClick: () => this.createArchetype(),
+              key: 'newArchetype'
+            },
+          ]}
+        />
         <Menu mode="inline" selectable={false} >
           <Menu.SubMenu
             key="subFilters"
@@ -184,7 +182,10 @@ class DrawerDisplay extends React.Component {
               width="80%"
               cssClass="x-centered"
             />
-            <ButtonComponent content="Submit" cssClass="form-submit-button e-success" />
+            <ButtonComponent
+              content="Submit"
+              cssClass="form-submit-button e-success"
+            />
           </form>
         </Drawer>
       </Drawer>

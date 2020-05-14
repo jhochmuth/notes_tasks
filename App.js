@@ -21,6 +21,7 @@ const {google} = require('googleapis');
 import ReactModal from 'react-modal';
 import {TreeViewComponent} from '@syncfusion/ej2-react-navigations';
 import {createSpinner, hideSpinner, showSpinner} from '@syncfusion/ej2-react-popups'
+import {Provider, themes} from '@fluentui/react-northstar';
 
 const engine = new SRD.DiagramEngine();
 engine.installDefaultFactories();
@@ -196,12 +197,12 @@ class App extends React.Component {
 
     call.on('data', function(noteReply) {
       const note = that.noteRefs[noteReply.id].current;
+      note.props.node.content = noteReply;
       const attrs = noteReply.attrs;
       const newState = Object.assign({}, note.state);
       newState.attrs = attrs;
       newState.inheritedAttrs = noteReply.inherited_attrs;
       note.setState(newState);
-      note.props.node.content = noteReply;
 
       that.state.filters.forEach((filter) => {
         note.applyFilter(filter)
@@ -608,60 +609,62 @@ class App extends React.Component {
 
     return (
       <div className="app">
-        <div id="toolbar">
-          <AppToolbar
-            addNote={(event) => this.addNote(event)}
-            addContainer={() => this.addContainer()}
-            save={() => this.save()}
-            load={() => this.onLoadButtonClick()}
-            syncDrive={() => this.syncDrive()}
-            openTreeView={() => this.openTreeView()}
-            uploadToDrive={() => this.uploadToDrive()}
-            createNoteFromFile={() => this.createNoteFromFile()}
-            toggleDriveFiles={() => this.toggleDriveFiles()}
+        <Provider theme={themes.teams}>
+          <div id="toolbar">
+            <AppToolbar
+              addNote={(event) => this.addNote(event)}
+              addContainer={() => this.addContainer()}
+              save={() => this.save()}
+              load={() => this.onLoadButtonClick()}
+              syncDrive={() => this.syncDrive()}
+              openTreeView={() => this.openTreeView()}
+              uploadToDrive={() => this.uploadToDrive()}
+              createNoteFromFile={() => this.createNoteFromFile()}
+              toggleDriveFiles={() => this.toggleDriveFiles()}
+            />
+          </div>
+          <div
+            onDrop={(event) => this.createInheritorNote(event)}
+            onDragOver={(event) => event.preventDefault()}
+          >
+            <SRD.DiagramWidget
+              diagramEngine={engine}
+              smartRouting={false}
+              className="srd-diagram"
+              maxNumberPointsPerLink="0"
+              deleteKeys={[27]}
+              ref={this.diagramRef}
+            />
+          </div>
+          <DrawerDisplay
+            filters={this.state.filters}
+            deleteFilter={(filter) => this.deleteFilter(filter)}
+            documentId={this.documentId}
+            updateNoteAttr={(id, attrs, inheritedAttrs) => this.updateNoteAttrArchetype(id, attrs, inheritedAttrs)}
+            addFilter={(attr, val) => this.addFilter(attr, val)}
           />
-        </div>
-        <div
-          onDrop={(event) => this.createInheritorNote(event)}
-          onDragOver={(event) => event.preventDefault()}
-        >
-          <SRD.DiagramWidget
-            diagramEngine={engine}
-            smartRouting={false}
-            className="srd-diagram"
-            maxNumberPointsPerLink="0"
-            deleteKeys={[27]}
-            ref={this.diagramRef}
-          />
-        </div>
-        <DrawerDisplay
-          filters={this.state.filters}
-          deleteFilter={(filter) => this.deleteFilter(filter)}
-          documentId={this.documentId}
-          updateNoteAttr={(id, attrs, inheritedAttrs) => this.updateNoteAttrArchetype(id, attrs, inheritedAttrs)}
-          addFilter={(attr, val) => this.addFilter(attr, val)}
-        />
-        <ReactModal
-          isOpen={this.state.displayDriveFiles}
-          onRequestClose={() => this.toggleDriveFiles()}
-          style={{
-            content: {
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              backgroundColor: "#F5F5F5",
-              height: "60%",
-              width: "75%"
-            }
-          }}
-          ariaHideApp={false}
-        >
-          <TreeViewComponent
-            id="treeview"
-            fields={fields}
-            nodeSelected={(event) => this.createNoteFromDriveFile(event)}
-          />
-        </ReactModal>
+          <ReactModal
+            isOpen={this.state.displayDriveFiles}
+            onRequestClose={() => this.toggleDriveFiles()}
+            style={{
+              content: {
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: "#F5F5F5",
+                height: "60%",
+                width: "75%"
+              }
+            }}
+            ariaHideApp={false}
+          >
+            <TreeViewComponent
+              id="treeview"
+              fields={fields}
+              nodeSelected={(event) => this.createNoteFromDriveFile(event)}
+            />
+          </ReactModal>
+        </Provider>
       </div>
     );
   }

@@ -4,6 +4,7 @@
 @import "../node_modules/@syncfusion/ej2-react-navigations/styles/material.css";
 @import "../node_modules/@syncfusion/ej2-inputs/styles/material.css";
 @import "../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import "../node_modules/@syncfusion/ej2-lists/styles/material.css";
 @import "../node_modules/@syncfusion/ej2-react-popups/styles/material.css";
 
 #nav-tabs-add {
@@ -64,6 +65,7 @@
 
 .app {
 	background-color: #F5F5F5;
+	height: 100%;
 }
 
 .toolbar {
@@ -87,8 +89,8 @@
 }
 
 .srd-diagram {
-	height: 100%;
 	position: relative;
+	height: 95%;
 }
 
 .margin {
@@ -139,11 +141,6 @@
 	overflow: hidden;
 }
 
-.note-data-title {
-	text-align: center;
-	text-decoration: underline;
-}
-
 .color-selector-button {
 	position: absolute;
 	bottom: 10;
@@ -162,6 +159,13 @@
 	white-space: nowrap;
 	text-align: left;
 	grid-column: 1;
+	text-size: 12;
+}
+
+.attrs-list {
+  margin-top: 40;
+  max-height: 40%;
+  overflow: auto;
 }
 
 .delete-attr-button {
@@ -172,35 +176,11 @@
 .attr-form {
 	position: absolute;
 	bottom: 200px;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 80%;
-}
-
-.attr-form h5 {
-	text-align: center;
-}
-
-.attr-form-group {
-	width: 90%;
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
-
-.attr-form-label {
-	width: 20%;
-}
-
-.attr-form-text {
-	width: 100%;
 }
 
 .edit-text-button {
 	position: absolute;
-	margin: 10px;
 	bottom: 50px;
-	left: 50%;
-	transform: translateX(-50%);
 }
 
 .edit-note-button {
@@ -216,32 +196,20 @@
 	padding: 1cm 2cm 2cm;
 }
 
-.text-form-submit-button {
-	margin: 10px;
-}
-
-.text-form-cancel-button {
-	margin: 10px;
-}
-
 .delete-note-button {
 	position: absolute;
 	top: 5;
 	right: 5;
 }
 
-.list-view-toolbar {
-	border-bottom: thin solid;
-	position: relative;
-	top: 0;
-	height: 8%;
-	background-color: #C0C0C0;
-	width: 100%;
-}
-
 .delete-sort-attr-button {
 	position: absolute;
 	right: 5;
+}
+
+.left-10 {
+  left: 10%;
+  position: relative;
 }
 
 

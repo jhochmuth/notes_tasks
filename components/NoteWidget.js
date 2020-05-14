@@ -5,6 +5,7 @@ import {PortWidget} from '@projectstorm/react-diagrams';
 import {TextBoxComponent} from '@syncfusion/ej2-react-inputs';
 import {ButtonComponent} from '@syncfusion/ej2-react-buttons';
 import {DialogComponent} from '@syncfusion/ej2-react-popups';
+import {ListViewComponent} from '@syncfusion/ej2-react-lists';
 import {Button, Popover, PopoverBody} from 'reactstrap';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -43,6 +44,7 @@ class NoteWidget extends React.Component {
       noteColor: this.props.node.content.attrs.Color
     };
 
+    this.listviewinstance = null;
     this.textData = null;
     this.diagramListenerId = null;
 
@@ -111,7 +113,9 @@ class NoteWidget extends React.Component {
     else if (RESERVED_ATTRS.has(attr) && event) {
       alert('Can not update reserved attributes manually.')
     }
-    else this.props.node.app.updateNoteAttr(updateAttrRequest);
+    else {
+      this.props.node.app.updateNoteAttr(updateAttrRequest);
+    }
   }
 
   deleteNoteAttr(attr) {
@@ -267,7 +271,7 @@ class NoteWidget extends React.Component {
   }
 
   applyFilter(filter) {
-    if (filter.doesFilter(this.state.attrs)) {
+    if (!filter.doesFilter(this.state.attrs)) {
       const newState = Object.assign({}, this.state);
       newState.filters.add(filter);
       this.setState(newState);
@@ -290,7 +294,7 @@ class NoteWidget extends React.Component {
       <h4>Prototype: {this.props.node.model.nodes[this.state.prototypeId].content.attrs.title}</h4>
     )
   }
-
+  // todo: clean up renderAttrs
   render() {
     const attrs = this.state.attrs;
 
@@ -352,9 +356,10 @@ class NoteWidget extends React.Component {
             }}
             ariaHideApp={false}
           >
-            <h2 className="note-data-title">{attrs.title}</h2>
-            <h4 style={{marginTop: 10}}>Attributes</h4>
-            <div>{this.renderAttrs()}</div>
+            <h3 className="text-centered">{attrs.title}</h3>
+            <div className="attrs-list">
+              {this.renderAttrs()}
+            </div>
             <form
               className="attr-form"
               onSubmit={(event) => this.updateNoteAttr(event)}
@@ -364,15 +369,13 @@ class NoteWidget extends React.Component {
                 placeholder="Attribute"
                 name="attr"
                 width="80%"
-                cssClass="x-centered"
               />
               <TextBoxComponent
                 placeholder="Value"
                 name="val"
                 width="80%"
-                cssClass="x-centered"
               />
-              <ButtonComponent content="Submit" cssClass="form-submit-button e-success" />
+              <ButtonComponent content="Submit" cssClass="e-success" />
             </form>
             <ButtonComponent
               content="Edit text"
@@ -402,12 +405,12 @@ class NoteWidget extends React.Component {
             />
             <ButtonComponent
               content="Save"
-              cssClass="e-success text-form-submit-button"
+              cssClass="e-success margin"
               onClick={() => {this.updateText()}}
             />
             <ButtonComponent
               content="Cancel"
-              className="text-form-cancel-button"
+              className="margin"
               onClick={() => this.toggleEditText()}
             />
           </ReactModal>
@@ -441,7 +444,10 @@ class NoteWidget extends React.Component {
               content: {
                 backgroundColor: "#F5F5F5",
                 height: "40%",
-                width: "40%"
+                width: "40%",
+                transform: "translate(-50%, -50%)",
+                left: "50%",
+                top: "50%"
               }
             }}
             ariaHideApp={false}

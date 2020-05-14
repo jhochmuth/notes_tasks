@@ -1,7 +1,7 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const stubs = require('../stubs.js');
-import {Toolbar, Provider, themes} from '@fluentui/react-northstar';
+import {Toolbar} from '@fluentui/react-northstar';
 import {DialogComponent} from '@syncfusion/ej2-react-popups';
 import {TextBoxComponent} from '@syncfusion/ej2-react-inputs';
 import {ButtonComponent} from '@syncfusion/ej2-react-buttons';
@@ -50,7 +50,7 @@ class AppToolbar extends React.Component {
 
   render() {
     return (
-      <Provider theme={themes.teams}>
+      <div>
         <Toolbar
           className="toolbar"
           items={[
@@ -130,7 +130,7 @@ class AppToolbar extends React.Component {
             input={(event) => this.state.noteModalTitle = event.value}
           />
         </DialogComponent>
-      </Provider>
+      </div>
     )
   }
 }

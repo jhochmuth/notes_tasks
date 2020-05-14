@@ -1,20 +1,20 @@
 const React = require('react');
 import {
   Button,
-  Form,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  Label,
-  ListGroup,
-  ListGroupItem,
-  ListGroupItemHeading,
-  ListGroupItemText,
   Popover,
   PopoverHeader,
   PopoverBody
 } from 'reactstrap';
 import {TreeViewComponent} from '@syncfusion/ej2-react-navigations';
+import {TextBoxComponent} from '@syncfusion/ej2-react-inputs';
+import {ButtonComponent} from '@syncfusion/ej2-react-buttons';
+import {Input, Provider, Toolbar, themes} from '@fluentui/react-northstar';
+import {
+  ClusterOutlined,
+  MinusCircleOutlined,
+  SearchOutlined,
+  SortAscendingOutlined
+} from '@ant-design/icons';
 import Drawer from 'rc-drawer';
 const ipcRenderer = require('electron').ipcRenderer;
 
@@ -162,8 +162,12 @@ class TreeView extends React.Component {
 
   addSortAttr(event) {
     event.preventDefault();
-    this.sortAttr.push(event.target.attr.value);
-    this.updateRenderedData();
+    if (!this.sortAttr.includes(event.target.attr.value)) {
+      this.sortAttr.push(event.target.attr.value);
+      this.updateRenderedData();
+      event.target.attr.value = "";
+    }
+    else alert('You are already sorting by this attribute.');
   }
 
   deleteSortAttr(deleteAttr) {
@@ -214,7 +218,7 @@ class TreeView extends React.Component {
   }
 
   renderHierarchy() {
-    if (this.state.hierarchy.length == 0) return <h4>No hierarchy specified.</h4>
+    if (this.state.hierarchy.length == 0) return <p>No hierarchy specified.</p>
 
     return this.state.hierarchy.map((attr) => {
       return (
@@ -227,12 +231,16 @@ class TreeView extends React.Component {
 
   addHierarchyAttr(event) {
     event.preventDefault();
+
     if (!this.state.hierarchy.includes(event.target.attr.value)) {
       const newState = {...this.state};
       newState.hierarchy.push(event.target.attr.value);
       this.setState(newState);
       this.updateRenderedData();
+      event.target.attr.value = "";
     }
+
+    else alert('Hierarchy already contains that attribute.');
   }
 
   deleteFromHierarchy(attr) {
@@ -249,6 +257,17 @@ class TreeView extends React.Component {
     this.setState(newState);
   }
 
+  renderSearchBar() {
+    return (
+      <Input
+        icon={<SearchOutlined />}
+        placeholder="Search..."
+        iconPosition="start"
+        name="search"
+      />
+    )
+  }
+
   render() {
     let fields = {
       dataSource: this.state.renderedData,
@@ -259,47 +278,57 @@ class TreeView extends React.Component {
     };
 
     return (
-      <div>
-        <div className="list-view-toolbar">
-          <Button
-            className="toolbar-button"
-            onClick={() => this.toggleAttrs()}
-            style={{top: "10%", left: 20}}
-          >Show Attrs</Button>
-          <Button
-            id="sortPopover"
-            className="toolbar-button"
-            style={{top: "10%", left: "10%"}}
-          >Sort Options</Button>
-          <Button
-            className="toolbar-button"
-            style={{top: "10%", left: "20%"}}
-            onClick={() => this.toggleHierarchyDrawer()}
-          >Hierarchy</Button>
-          <Popover
-            trigger="legacy"
-            placement="bottom"
-            target="sortPopover"
-            isOpen={this.state.displaySortInfo}
-            toggle={() => this.toggleSortInfo()}
-          >
-            <PopoverHeader>Attribute sort order</PopoverHeader>
-            <PopoverBody>
-              {this.renderSortAttrs()}
-              <Form onSubmit={(event) => this.addSortAttr(event)}>
-                <Label>Sort by another attribute</Label>
-                <Input type="textarea" name="attr" />
-                <Button>Submit</Button>
-              </Form>
-            </PopoverBody>
-          </Popover>
-          <Form onChange={(event) => this.search(event)}>
-            <InputGroup style={{position: "absolute", top: "20%", right: 20, width: "33%"}}>
-              <InputGroupAddon addonType="prepend">🔎</InputGroupAddon>
-              <Input name="search" />
-            </InputGroup>
-          </Form>
-        </div>
+      <Provider theme={themes.teams}>
+        <Toolbar
+          className="toolbar"
+          items={[
+            {
+              icon: <ClusterOutlined />,
+              onClick: () => this.toggleHierarchyDrawer(),
+              key: 'addLevel'
+            },
+            {
+              icon: <SortAscendingOutlined />,
+              onClick: () => this.toggleSortInfo(),
+              key: 'showSortInfo',
+              id: 'sortButton'
+            },
+            {
+              icon: <MinusCircleOutlined />,
+              onClick: () => this.toggleAttrs(),
+              key: 'showAttrs UNIMPLEMENTED'
+            },
+            {
+              content: this.renderSearchBar(),
+              kind: 'custom',
+              key: 'search'
+            }
+          ]}
+        />
+        <Popover
+          trigger="legacy"
+          placement="bottom"
+          target="sortButton"
+          isOpen={this.state.displaySortInfo}
+          toggle={() => this.toggleSortInfo()}
+        >
+          <PopoverHeader>Attribute sort order</PopoverHeader>
+          <PopoverBody>
+            {this.renderSortAttrs()}
+            <form onSubmit={(event) => this.addSortAttr(event)}>
+              <TextBoxComponent
+                name="attr"
+                placeholder="Add sorting attribute"
+                width="80%"
+                cssClass="x-centered"
+              />
+              <ButtonComponent
+                content="Submit"
+                cssClass="form-submit-button e-success"
+              />
+            </form>
+          </PopoverBody>
+        </Popover>
         <Drawer
           width="30%"
           handler={false}
@@ -307,16 +336,25 @@ class TreeView extends React.Component {
           onClose={() => this.toggleHierarchyDrawer()}
           placement="left"
         >
-          <h3>Hierarchy</h3>
-          {this.renderHierarchy()}
-          <Form onSubmit={(event) => this.addHierarchyAttr(event)}>
-            <Label>Add to the hierarchy</Label>
-            <Input type="textarea" name="attr" />
-            <Button>Submit</Button>
-          </Form>
+          <div className="left-10">
+            <h4>Hierarchy</h4>
+            {this.renderHierarchy()}
+          </div>
+          <form onSubmit={(event) => this.addHierarchyAttr(event)}>
+            <TextBoxComponent
+              name="attr"
+              placeholder="Add hierarchy level"
+              width="80%"
+              cssClass="x-centered"
+            />
+            <ButtonComponent
+              content="Submit"
+              cssClass="form-submit-button e-success"
+            />
+          </form>
         </Drawer>
         {this.renderNotes(fields)}
-      </div>
+      </Provider>
     )
   }
 }
